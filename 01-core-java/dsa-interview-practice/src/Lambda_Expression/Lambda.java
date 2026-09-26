@@ -1,6 +1,6 @@
 package Lambda_Expression;
 
-public class Lamda {
+public class Lambda {
 	
 	
 	/* <Lambda Expression >  ********************{ It can be only used with Functional Interface } 
@@ -9,9 +9,9 @@ public class Lamda {
 	 *  > No name
 	 *  > No Modifier
 	 *  > No Return Type
-	 * <Benifits of Lambda function >
+	 * <Benefits of Lambda function >
 	 * >Reduce lines of code
-	 * >Sequencial and Parallel Execution support by passing behaviour as an argument in methods.
+	 * >Sequential and Parallel Execution support by passing behaviour as an argument in methods.
 	 * >To call APIs very Effectively.
 	 * >To write more Readable, Maintainable and Concise Code.
 	 * 

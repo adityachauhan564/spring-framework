@@ -10,7 +10,6 @@ public class Employee {
 	int id;
 	String name;
 	
-	Employee e1=new Employee();
 	
 	
 	
