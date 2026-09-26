@@ -1,1 +1,24 @@
-/.metadata/
+# Eclipse workspace + IDE files
+.metadata/
+.settings/
+.classpath
+.project
+.factorypath
+.idea/
+.vscode/
+*.iml
+
+# Build output
+bin/
+target/
+build/
+.gradle/
+*.class
+
+# Node / Angular
+node_modules/
+.angular/
+dist/
+
+# Misc
+HELP.md

@@ -1,0 +1,45 @@
+package com.gfg.showtime.service;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.gfg.showtime.domain.User;
+import com.gfg.showtime.repository.UserRepository;
+
+/**
+ * This service will create an implementation of a UserDetailsService Bean and same will be
+ * used by spring to call get the user details from the custom implementation (here our mysql).*/
+
+@Service
+public class UserAuthService implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder encoder;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserDetails user = userRepository.findByName(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found: " + username); // Spring Security contract: never return null
+        }
+        return user;
+    }
+
+
+    /**
+     * Encoding the user password before storing in the DB.
+     * Encoder bean will be provided with the one mentioned in our Security Configuration bean.
+     * */
+    public void addUser(User user){
+        user.setPassword(encoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+}
