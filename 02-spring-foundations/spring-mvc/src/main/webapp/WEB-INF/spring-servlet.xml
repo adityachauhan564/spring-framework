@@ -5,12 +5,15 @@
 		xmlns:context="http://www.springframework.org/schema/context"
 		xmlns:mvc="http://www.springframework.org/schema/mvc"
 		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:tx="http://www.springframework.org/schema/tx"
 		xsi:schemaLocation="http://www.springframework.org/schema/beans
            https://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/context
            https://www.springframework.org/schema/context/spring-context.xsd
             http://www.springframework.org/schema/mvc
-           https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+           https://www.springframework.org/schema/mvc/spring-mvc.xsd
+           http://www.springframework.org/schema/tx
+           https://www.springframework.org/schema/tx/spring-tx.xsd">
            
            <!-- Enable @Controller, @RequestMapping, etc -->
               <mvc:annotation-driven  />
@@ -26,18 +29,27 @@
 		</bean>
 		
 		
-		<bean class="org.springframework.orm.hibernate7.LocalSessionFactoryBean" name="factory">
+		<!-- Resolves ${...} from environment variables, e.g. DB_PASSWORD -->
+		<context:property-placeholder/>
+
+		<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" name="ds">
+			<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+			<property name="url" value="jdbc:mysql://localhost:3306/springmvc?createDatabaseIfNotExist=true"/>
+			<property name="username" value="${DB_USERNAME:root}"/>
+			<property name="password" value="${DB_PASSWORD}"/>
+		</bean>
+
+		<bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" name="factory">
 		<!--data source-->
 		<property name="dataSource" ref="ds"></property>
 		
 		<!--hibernate properties-->
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
-				<!-- <prop key="hibernate.hbm2ddl.auto">update</prop> -->
 				<prop key="hibernate.format_sql">true</prop>
-				<prop key="jakarta.persistence.schema-generation.database.action">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
 		</property>
 		
@@ -51,10 +63,16 @@
 		
 		
 		<bean 
-		     class="org.springframework.orm.hibernate7.HibernateTemplate"
+		     class="org.springframework.orm.hibernate5.HibernateTemplate"
 		     name="hibernateTemplate">
 		     <property name="sessionFactory" ref="factory"/>
 		     </bean>
+
+		<!-- HibernateTemplate writes need a transaction -->
+		<bean class="org.springframework.orm.hibernate5.HibernateTransactionManager" name="transactionManager">
+			<property name="sessionFactory" ref="factory"/>
+		</bean>
+		<tx:annotation-driven/>
 </beans>
 
 <!--   example /WEB-INF/views/hello.jsp -->

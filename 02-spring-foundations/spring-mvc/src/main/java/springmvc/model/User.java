@@ -35,7 +35,7 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [email=" + email + ", userName=" + userName + ", password=" + password + "]";
+		return "User [email=" + email + ", userName=" + userName + "]"; // never log passwords
 	}
 	
 	
