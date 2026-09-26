@@ -1,5 +1,6 @@
 package com.gfg.showtime.service;
 
+import com.gfg.showtime.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class ReviewService {
     public ReviewResource getReviewById(Long reviewId) {
 
         Optional<Review> review= reviewRepository.findById(reviewId);
-        return review.map(Review::toResource).orElse(null);
+        return review.map(Review::toResource).orElseThrow(() -> new NotFoundException("Review Not Found with ID: " + reviewId));
 
     }
 }

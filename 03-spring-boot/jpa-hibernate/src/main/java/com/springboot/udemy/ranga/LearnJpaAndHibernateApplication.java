@@ -1,4 +1,4 @@
-package com.springboot.udemy.rnga;
+package com.springboot.udemy.ranga;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

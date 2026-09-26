@@ -1,4 +1,4 @@
-package com.springboot.udemy.rnga.course.jdbc;
+package com.springboot.udemy.ranga.course.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,7 +14,7 @@ public class CourseJdbcRepository {
 			
 			"""
 			INSERT INTO course (id,name,author) 
-            values (2,'Head first Desing Pattern','Eric Freeman');
+            values (2,'Head first Design Pattern','Eric Freeman');
 			
 			""";
 	

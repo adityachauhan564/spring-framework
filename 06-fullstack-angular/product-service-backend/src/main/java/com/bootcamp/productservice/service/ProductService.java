@@ -2,7 +2,8 @@ package com.bootcamp.productservice.service;
 
 import java.util.List;
 
-import org.jspecify.annotations.Nullable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class ProductService {
 	public Product findByPName(String pName) {
 		
 		return prRepo.findBypName(pName)
-				.orElseThrow(()->new RuntimeException("Product Not Found "));
+				.orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found "));
 	}
 	
 	//save product
@@ -38,7 +39,7 @@ public class ProductService {
 	public Product updateProduct(Integer  pId, Product pr) {
 		
 	   Product existing=	prRepo.findById(pId)
-		.orElseThrow(()->new RuntimeException("No Product Available with ID :: "+pId));
+		.orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "No Product Available with ID :: "+pId));
 	   
 	   if(pr.getPName()!=null)
 		   existing.setPName(pr.getPName());
@@ -54,7 +55,7 @@ public class ProductService {
 	public String deleteProduct(Integer pId) {
 		
 		Product existing=	prRepo.findById(pId)
-				.orElseThrow(()->new RuntimeException("No Product Available with ID :: "+pId));
+				.orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "No Product Available with ID :: "+pId));
 		
 		//since product is already fetched so I am deleting it
 		prRepo.delete(existing);

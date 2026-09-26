@@ -27,7 +27,9 @@ public class AuthorService {
 
     public Author fetchAuthorDetailsByName(String authorName) {
         Author byAuthorName = authorRepository.findByAuthorName(authorName);
-//        log.info("msg:{}",byAuthorName);
+        if (byAuthorName == null) {
+            throw new DataNotFoundException("Author not found: " + authorName);
+        }
         return byAuthorName;
     }
 
@@ -43,6 +45,9 @@ public class AuthorService {
             author.setAuthorAddress(updateAuthorDto.getAddress());
             return authorRepository.save(author);
         }
+        catch(DataNotFoundException e) {
+            throw e; // keep it a 404, not a 400
+        }
         catch(RuntimeException e) {
             log.error("Error is occurred while working with update operations with exception : {}", e.getMessage());
             throw new BadRequestException("Update Operation is Failed due to Exception :" + e.getMessage());
@@ -57,14 +62,18 @@ public class AuthorService {
     }
 
     public void uploadAuthorsDataToDatabase(String fileContent) {
-        List<String> authorsData = List.of(fileContent.split("\n"));
+        List<String> authorsData = List.of(fileContent.split("\\r?\\n")); // handles Windows line endings
         List<Author> authors = new ArrayList<>();
         for(int i = 1; i < authorsData.size(); i++) {
+            if (authorsData.get(i).isBlank()) continue;
             String[] row = authorsData.get(i).split(",");
+            if (row.length < 3) {
+                throw new BadRequestException("Line " + (i + 1) + " needs 3 columns: authorId,authorName,authorAddress");
+            }
             authors.add(Author.builder()
-                            .authorId(Integer.valueOf(row[0]))
-                            .authorName(row[1])
-                            .authorAddress(row[2])
+                            .authorId(Integer.valueOf(row[0].trim()))
+                            .authorName(row[1].trim())
+                            .authorAddress(row[2].trim())
                     .build());
         }
         authorRepository.saveAll(authors);

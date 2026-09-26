@@ -54,7 +54,7 @@ public class TicketService {
 		Optional<Show> optionalShow = showRepository.findById(bookingResource.getShowId());
 
 		if (optionalShow.isEmpty()) {
-			throw new NotFoundException("Show Not Found with ID: " + bookingResource.getUserId() + " to book ticket");
+			throw new NotFoundException("Show Not Found with ID: " + bookingResource.getShowId() + " to book ticket");
 		}
 
 		Set<String> requestedSeats = bookingResource.getSeatsNumbers();

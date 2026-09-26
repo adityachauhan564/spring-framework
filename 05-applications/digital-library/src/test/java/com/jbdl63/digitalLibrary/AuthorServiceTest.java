@@ -1,6 +1,7 @@
 package com.jbdl63.digitalLibrary;
 
 import com.jbdl63.digitalLibrary.Exceptions.BadRequestException;
+import com.jbdl63.digitalLibrary.Exceptions.DataNotFoundException;
 import com.jbdl63.digitalLibrary.Model.Author;
 import com.jbdl63.digitalLibrary.Repository.AuthorRepository;
 import com.jbdl63.digitalLibrary.Service.AuthorService;
@@ -66,6 +67,18 @@ public class AuthorServiceTest {
         when(authorRepository.save(any())).thenReturn(author);
         Author a = authorService.updateAuthorAddress(UpdateAuthorDto.builder().address("Mumbai").authorId(1111).build());
         Assertions.assertThat(a).isEqualTo(author);
+    }
+
+    @Test
+    public void testUpdateAuthor_NotFoundStaysNotFound() {
+        when(authorRepository.findById(2)).thenReturn(Optional.empty());
+        assertThrows(DataNotFoundException.class, () -> authorService.updateAuthorAddress(UpdateAuthorDto.builder().address("abc").authorId(2).build()));
+    }
+
+    @Test
+    public void testUploadAuthorsHandlesWindowsLineEndings() {
+        authorService.uploadAuthorsDataToDatabase("authorId,authorName,authorAddress\r\n11,ABC,Kolkata\r\n");
+        verify(authorRepository).saveAll(argThat(list -> ((java.util.List<Author>) list).get(0).getAuthorAddress().equals("Kolkata")));
     }
 
     // any() can be use with only mock objects and not to call actual functions

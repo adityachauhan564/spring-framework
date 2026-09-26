@@ -26,7 +26,11 @@ public class UserAuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByName(username);
+        UserDetails user = userRepository.findByName(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found: " + username); // Spring Security contract: never return null
+        }
+        return user;
     }
 
 

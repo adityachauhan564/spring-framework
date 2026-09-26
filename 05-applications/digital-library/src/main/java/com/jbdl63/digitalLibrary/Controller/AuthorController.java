@@ -30,13 +30,10 @@ public class AuthorController {
     @PostMapping
     public ResponseEntity<Author> addNewAuthor(@RequestBody @Valid Author author) {
         try {
-            if (author != null) {
-                return new ResponseEntity<>(authorService.addNewAuthor(author), HttpStatus.CREATED);
-            }
+            return new ResponseEntity<>(authorService.addNewAuthor(author), HttpStatus.CREATED);
         } catch(Exception e){
             throw new BadRequestException(e.getMessage());
         }
-        return null;
     }
 
     @GetMapping("/{authorName}")
@@ -64,7 +61,7 @@ public class AuthorController {
     }
 
     @PutMapping
-    @CachePut(value="authors", key = "#authorName")
+    @CachePut(value="authors", key = "#result.authorName") // same key as @Cacheable above
     public Author updateAuthorAddress(@RequestBody @Valid UpdateAuthorDto updateAuthorDto) {
         return authorService.updateAuthorAddress(updateAuthorDto);
     }
