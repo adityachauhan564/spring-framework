@@ -1,6 +1,8 @@
 package Fast_And_Slow_Pointers;
 
-public class MiddleOfLinekdinList {
+// TODO: not implemented yet (practice stub) - this is NOT a working solution.
+
+public class MiddleOfLinkedList {
 
 	
 	

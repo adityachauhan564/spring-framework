@@ -9,7 +9,7 @@ public class FP01Exercise {
 //		  printAllEvenInFunctional(List.of(12,9,6,13,19,27,31));
 		  
 		  
-		List<String> courses =List.of("Spring","Spring Boot","API","Microservices","System Design","Dockor","Kubernities");
+		List<String> courses =List.of("Spring","Spring Boot","API","Microservices","System Design","Docker","Kubernetes");
 		
 //		courses.stream()
 //		.forEach(System.out :: println);
@@ -18,7 +18,7 @@ public class FP01Exercise {
 		.filter(course->course.contains("Spring"))
 		.forEach(System.out :: println);
 
-		  System.out.println("Here are the course having more than 4 letters");
+		  System.out.println("Here are the course having at least 4 letters");
 		courses.stream()
 		.filter(course->course.length() >=4)
 		.forEach(System.out :: println);
