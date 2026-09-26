@@ -15,23 +15,23 @@ No build file - plain `javac`/`java` from this folder:
 
 ```bash
 javac -d out $(find src -name "*.java")
-java -cp out Chapter_2.GameLauncher
-java -cp out Oops_Abstraction_Realworld_Example.Main
-java -cp out Stream_API_Interview.Filter_phone_Numbers
-java -cp out Exception.UncheckedException
+java -cp out chapter_2.GameLauncher
+java -cp out oops_abstraction_realworld_example.Main
+java -cp out stream_api_interview.Filter_phone_Numbers
+java -cp out exception.UncheckedException
 ```
 
 In Eclipse: *File > New > Java Project*, untick "use default location" and point it at this folder (the `.classpath`/`.project` files are no longer tracked in git).
 
 ## Read the code in this order
-1. `src/Chapter_2/GameLauncher.java`, `GuessGame.java`, `Player.java` - objects talking to objects
-2. `src/Chapter_4/Song.java` - what "instance variables" and methods are (see Status)
-3. `src/Chapter_6_Using_the_Java_Library/Egg.java` - first `ArrayList`
-4. `src/Exception/Checked_Exception.java`, `UncheckedException.java` - compile-time vs runtime exceptions
-5. `src/Oops_Abstraction_Realworld_Example/` - `PaymentService` interface, `UPIPayment`/`CreditCardPayment`, `OrderService` depends on the interface
-6. `src/Java_Full_stack_Basics_11_Hours_Youtube/Collections_important.java` - `Map.Entry` loop, `null` keys, `Optional`
-7. `src/Stream_API_Interview/Filter_phone_Numbers.java` - `filter` / `map` / `distinct` / `collect`
-8. `src/D_Intrvw_Q/abs.java`, `abc_do.java` - abstract class + polymorphic reference
+1. `src/chapter_2/GameLauncher.java`, `GuessGame.java`, `Player.java` - objects talking to objects
+2. `src/chapter_4/Song.java` - what "instance variables" and methods are (see Status)
+3. `src/chapter_6_using_the_java_library/Egg.java` - first `ArrayList`
+4. `src/exception/Checked_Exception.java`, `UncheckedException.java` - compile-time vs runtime exceptions
+5. `src/oops_abstraction_realworld_example/` - `PaymentService` interface, `UPIPayment`/`CreditCardPayment`, `OrderService` depends on the interface
+6. `src/java_full_stack_basics_11_hours_youtube/Collections_important.java` - `Map.Entry` loop, `null` keys, `Optional`
+7. `src/stream_api_interview/Filter_phone_Numbers.java` - `filter` / `map` / `distinct` / `collect`
+8. `src/d_intrvw_q/abs.java`, `abc_do.java` - abstract class + polymorphic reference
 
 ## Revision notes
 - `OrderService` only knows `PaymentService`: swap `UPIPayment` for `CreditCardPayment` in `Main` without touching business logic - this is abstraction + dependency injection by hand (the idea Spring automates later).
@@ -45,6 +45,6 @@ In Eclipse: *File > New > Java Project*, untick "use default location" and point
 
 ## Status
 🚧 Partial - most programs run.
-- `Chapter_4/Song.java`: setters are empty and `title`/`artist` are local variables in `main`, not instance variables - finish it as an exercise.
-- 📝 Practice stubs (marked `// TODO: not implemented yet`): `D_Intrvw_Q/TargetSum.java`, `D_Intrvw_Q/h_Map.java`, `Chapter_6_Using_the_Java_Library/Something_you_can_do_With_ArrayList.java`.
-- `D_Intrvw_Q/Employee.java` is only two fields (its self-creating field that caused a `StackOverflowError` was removed).
+- `chapter_4/Song.java`: setters are empty and `title`/`artist` are local variables in `main`, not instance variables - finish it as an exercise.
+- 📝 Practice stubs (marked `// TODO: not implemented yet`): `d_intrvw_q/TargetSum.java`, `d_intrvw_q/h_Map.java`, `chapter_6_using_the_java_library/Something_you_can_do_With_ArrayList.java`.
+- `d_intrvw_q/Employee.java` is only two fields (its self-creating field that caused a `StackOverflowError` was removed).

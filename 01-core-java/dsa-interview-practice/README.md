@@ -15,23 +15,23 @@ No build file. There are two source roots: `src/` (Java 8 topics) and `cracking-
 ```bash
 javac -d out $(find src cracking-the-coding-interview_DSA_Patterns -name "*.java")
 java -ea -cp out kadane.MaximumSubarray          # -ea turns on the assert checks
-java -cp out Chapter_1_Arrays_And_Strings.sub_array
-java -cp out Chapter_2_Linked_Lists.Main
-java -cp out Lambda_Expression.Lambda
-java -cp out Lambda_Expression.ThreadDemo
-java -cp out StreamAPI.StreamMain1
+java -cp out chapter_1_arrays_and_strings.sub_array
+java -cp out chapter_2_linked_lists.Main
+java -cp out lambda_expression.Lambda
+java -cp out lambda_expression.ThreadDemo
+java -cp out streamapi.StreamMain1
 ```
 
 In Eclipse, add both folders as source folders (*Build Path > Use as Source Folder*).
 
 ## Read the code in this order
 1. `cracking-the-coding-interview_DSA_Patterns/kadane/MaximumSubarray.java` - Kadane, O(n) time / O(1) space, with asserts
-2. `cracking-the-coding-interview_DSA_Patterns/Chapter_1_Arrays_And_Strings/sub_array.java` - max product subarray (track max **and** min)
-3. `cracking-the-coding-interview_DSA_Patterns/Chapter_2_Linked_Lists/LinkedListNode.java`, `RemoveDupes.java`, `Main.java`
-4. `cracking-the-coding-interview_DSA_Patterns/Fast_And_Slow_Pointers/LinkedList_Cycle.java` - problem statement (LeetCode 141)
-5. `src/Lambda_Expression/MyInterface.java`, `Lambda.java` - functional interface -> impl class -> anonymous class -> lambda
-6. `src/Lambda_Expression/ThreadDemo.java` - `Runnable` as a lambda
-7. `src/StreamAPI/StreamMain1.java` - `List.of` vs `ArrayList` vs `Arrays.asList`, then `filter`/`collect`
+2. `cracking-the-coding-interview_DSA_Patterns/chapter_1_arrays_and_strings/sub_array.java` - max product subarray (track max **and** min)
+3. `cracking-the-coding-interview_DSA_Patterns/chapter_2_linked_lists/LinkedListNode.java`, `RemoveDupes.java`, `Main.java`
+4. `cracking-the-coding-interview_DSA_Patterns/fast_and_slow_pointers/LinkedList_Cycle.java` - problem statement (LeetCode 141)
+5. `src/lambda_expression/MyInterface.java`, `Lambda.java` - functional interface -> impl class -> anonymous class -> lambda
+6. `src/lambda_expression/ThreadDemo.java` - `Runnable` as a lambda
+7. `src/streamapi/StreamMain1.java` - `List.of` vs `ArrayList` vs `Arrays.asList`, then `filter`/`collect`
 
 ## Revision notes
 - Kadane: `current = max(arr[i], current + arr[i])`, `best = max(best, current)`. Start both at `arr[0]` so all-negative arrays work.
@@ -45,6 +45,6 @@ In Eclipse, add both folders as source folders (*Build Path > Use as Source Fold
 ## Status
 🚧 Partial.
 - ✅ `kadane/MaximumSubarray` (fixed, asserts pass), `sub_array`, `RemoveDupes`, all `src/` examples.
-- 📝 Practice stubs (marked `// TODO: not implemented yet`): `Chapter_1_Arrays_And_Strings/sortColours.java`, `Fast_And_Slow_Pointers/LinkedList_Cycle.java`, `Fast_And_Slow_Pointers/MiddleOfLinkedList.java`.
-- `Chapter_2_Linked_Lists/Main.printList` uses `println`, so each node prints on its own line.
+- 📝 Practice stubs (marked `// TODO: not implemented yet`): `chapter_1_arrays_and_strings/sortColours.java`, `fast_and_slow_pointers/LinkedList_Cycle.java`, `fast_and_slow_pointers/MiddleOfLinkedList.java`.
+- `chapter_2_linked_lists/Main.printList` uses `println`, so each node prints on its own line.
 - There is no Sliding Window section yet.
