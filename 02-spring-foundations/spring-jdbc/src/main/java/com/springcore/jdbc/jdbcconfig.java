@@ -18,8 +18,8 @@ public class jdbcconfig {
 		DriverManagerDataSource ds=new DriverManagerDataSource();
 	    ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
 	    ds.setUrl("jdbc:mysql://localhost:3306/springjdbc");
-	    ds.setUsername("root");
-	    ds.setPassword("******Your Passsword");
+	    ds.setUsername(System.getenv().getOrDefault("DB_USERNAME", "root"));
+	    ds.setPassword(System.getenv("DB_PASSWORD")); // set DB_PASSWORD env var, never commit it
 	    
 	    return ds;
 	}
