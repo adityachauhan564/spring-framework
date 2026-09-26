@@ -1,50 +1,89 @@
 # Head First Java - Hands On
 
-> Chapter exercises from *Head First Java*, plus small OOP, exception, collection and Stream interview snippets.
-
-## What it teaches
-- Classes, objects and instance variables (Chapter 2 guessing game, Chapter 4 `Song`)
-- `ArrayList` basics: `add`, `size`, `contains` (Chapter 6)
-- Abstraction with an interface + constructor injection (payment example)
-- Checked vs unchecked exceptions
-- `HashMap` iteration and `Optional.ofNullable`
-- A real-world Stream pipeline: cleaning and de-duplicating phone numbers
+> Core Java, one topic at a time: examples from *Head First Java* plus common interview questions.
+> Every package is one topic, numbered in study order. Every file opens with a header comment: **Topic, Key idea, Run, Try this**.
 
 ## Run it
-No build file - plain `javac`/`java` from this folder:
+There's no build file. Run these with plain `javac`/`java` from this folder (Git Bash, macOS or Linux):
 
 ```bash
 javac -d out $(find src -name "*.java")
-java -cp out chapter_2.GameLauncher
-java -cp out oops_abstraction_realworld_example.Main
-java -cp out stream_api_interview.Filter_phone_Numbers
-java -cp out exception.UncheckedException
+java -ea -cp out topic02_classes_and_objects.GameLauncher     # -ea turns on the assert self-checks
 ```
 
-In Eclipse: *File > New > Java Project*, untick "use default location" and point it at this folder (the `.classpath`/`.project` files are no longer tracked in git).
+To run every topic at once:
 
-## Read the code in this order
-1. `src/chapter_2/GameLauncher.java`, `GuessGame.java`, `Player.java` - objects talking to objects
-2. `src/chapter_4/Song.java` - what "instance variables" and methods are (see Status)
-3. `src/chapter_6_using_the_java_library/Egg.java` - first `ArrayList`
-4. `src/exception/Checked_Exception.java`, `UncheckedException.java` - compile-time vs runtime exceptions
-5. `src/oops_abstraction_realworld_example/` - `PaymentService` interface, `UPIPayment`/`CreditCardPayment`, `OrderService` depends on the interface
-6. `src/java_full_stack_basics_11_hours_youtube/Collections_important.java` - `Map.Entry` loop, `null` keys, `Optional`
-7. `src/stream_api_interview/Filter_phone_Numbers.java` - `filter` / `map` / `distinct` / `collect`
-8. `src/d_intrvw_q/abs.java`, `abc_do.java` - abstract class + polymorphic reference
+```bash
+for c in topic01_loops_and_conditions.BottleSong topic02_classes_and_objects.GameLauncher \
+         topic02_classes_and_objects.Song topic02_classes_and_objects.Employee \
+         topic03_arraylist.ArrayListBasics topic03_arraylist.ArrayListOperations \
+         topic04_abstract_classes.AbstractClassDemo topic05_interfaces_and_dependency_injection.Main \
+         topic06_exceptions.CheckedExceptionDemo topic06_exceptions.UncheckedExceptionDemo \
+         topic07_hashmap_and_optional.HashMapAndOptional topic07_hashmap_and_optional.MyHashMap \
+         topic08_streams.PhoneNumberCleaner topic09_interview_problems.TwoSum; do
+  echo "== $c"; java -ea -cp out "$c"
+done
+```
 
-## Revision notes
-- `OrderService` only knows `PaymentService`: swap `UPIPayment` for `CreditCardPayment` in `Main` without touching business logic - this is abstraction + dependency injection by hand (the idea Spring automates later).
-- Checked exceptions (`FileNotFoundException`) must be caught or declared; unchecked ones (`NullPointerException`) need not be.
-- `HashMap` allows one `null` key and `null` values; iteration order is not guaranteed.
-- `Optional.ofNullable(map.get(k))` avoids a null check but prefer `ifPresentOrElse` over `isPresent()` + empty branch.
-- The phone-number pipeline order matters: drop `null`s before `trim`, strip non-digits before checking length.
-- `01` in `Collections_important.java` is an octal literal in Java - harmless here, a classic gotcha.
-- `abs run = new abc_do();` - the reference type is the abstract class, the object is the subclass (runtime polymorphism).
-- `FileReader` in `Checked_Exception.java` is never closed; real code should use try-with-resources.
+In Eclipse: *File > New > Java Project*, untick "use default location" and point it at this folder. Right-click any file with a `main` method and choose *Run As > Java Application*.
+
+## Topics (study in this order)
+
+| # | Package (`src/`) | Read these files in order | What you learn |
+| :- | :--- | :--- | :--- |
+| 1 | `topic01_loops_and_conditions` | `BottleSong` | `while` loop, `if/else`, a small helper method |
+| 2 | `topic02_classes_and_objects` | `GameLauncher` → `GuessGame` → `Player`, then `Song`, `Employee` | Objects have state + behaviour; instance vs local variables; `this`; a good class template |
+| 3 | `topic03_arraylist` | `ArrayListBasics` → `ArrayListOperations` | `List` vs `ArrayList`, add/get/set/remove/indexOf, safe removal with `removeIf` |
+| 4 | `topic04_abstract_classes` | `Printer` → `ConsolePrinter` → `AbstractClassDemo` | Abstract methods, shared code, polymorphism |
+| 5 | `topic05_interfaces_and_dependency_injection` | `PaymentService` → `UPIPayment` / `CreditCardPayment` → `OrderService` → `Main` | Program to an interface, constructor injection (what Spring automates later) |
+| 6 | `topic06_exceptions` | `CheckedExceptionDemo` → `UncheckedExceptionDemo` | Checked vs unchecked, try-with-resources, prevent rather than catch |
+| 7 | `topic07_hashmap_and_optional` | `HashMapAndOptional` → `MyHashMap` | Map basics, `null` keys, `Optional`; how a HashMap works inside (buckets + chaining) |
+| 8 | `topic08_streams` | `PhoneNumberCleaner` | `filter` / `map` / `distinct` / `collect`; why the order of steps matters |
+| 9 | `topic09_interview_problems` | `TwoSum` | Brute force O(n²) vs HashSet O(n) |
+
+## Revision checklist
+**1. Loops and conditions**
+- [ ] A `while` loop checks its condition *before* each pass, so it can run zero times.
+- [ ] Choose the singular or plural word from the current number each time. Don't store it once and forget to update it.
+
+**2. Classes and objects**
+- [ ] A class is the blueprint and an object is one instance built from it. Each object has its own copy of the instance variables.
+- [ ] A variable declared inside `main` is local. It is not a field, so methods can't see it.
+- [ ] `this.title = title` means the field on the left is set from the parameter on the right.
+- [ ] A good class template: `private` fields, a constructor, getters, and `toString()`. Mark fields `final` when they never change.
+
+**3. ArrayList**
+- [ ] Declare as `List<String> list = new ArrayList<>();`, using the interface type on the left.
+- [ ] `indexOf` returns `-1` when the item isn't found. `contains` compares with `equals` (for plain objects, that means "same object").
+- [ ] Calling `remove()` inside a for-each loop throws `ConcurrentModificationException`. Use `removeIf` instead.
+
+**4. Abstract classes**
+- [ ] You can't create one with `new`. It can have both abstract methods and normal methods.
+- [ ] In `Printer p = new ConsolePrinter();`, the variable's type decides what you *can* call and the object's type decides *which* code runs.
+
+**5. Interfaces and dependency injection**
+- [ ] `OrderService` only knows `PaymentService`, so you can add a new payment type without changing `OrderService`.
+- [ ] Constructor injection means the dependency is passed in, not created inside with `new`.
+
+**6. Exceptions**
+- [ ] Checked (`IOException`): you must catch it or declare `throws`. Unchecked (`NullPointerException`): the compiler doesn't force you.
+- [ ] Put the most specific `catch` first (`FileNotFoundException` before `IOException`).
+- [ ] try-with-resources closes the reader for you, even when an error happens.
+- [ ] Prevent an NPE with a null check. Catching it hides the bug.
+
+**7. HashMap and Optional**
+- [ ] `put` with an existing key replaces the value. HashMap allows one `null` key. Iteration order is not guaranteed.
+- [ ] `getOrDefault` and `Optional.ofNullable(...).orElse(...)` / `ifPresentOrElse(...)` avoid null checks. Don't call a bare `get()` on an Optional.
+- [ ] Inside a HashMap: `hashCode()` picks the bucket, `equals()` finds the key in that bucket, and collisions are chained in a list.
+- [ ] Gotcha: `01` is an octal literal (`010` == 8).
+
+**8. Streams**
+- [ ] Intermediate steps (`filter`, `map`, `distinct`) are lazy. Nothing runs until a terminal step (`collect`).
+- [ ] Order matters: drop nulls before `trim()`, and strip non-digits before checking the length.
+
+**9. Interview problems**
+- [ ] TwoSum: for each `x`, ask "have I already seen `target - x`?" That's one pass with a HashSet, O(n).
+- [ ] Always test the edge cases: no pair, and a number paired with itself.
 
 ## Status
-🚧 Partial - most programs run.
-- `chapter_4/Song.java`: setters are empty and `title`/`artist` are local variables in `main`, not instance variables - finish it as an exercise.
-- 📝 Practice stubs (marked `// TODO: not implemented yet`): `d_intrvw_q/TargetSum.java`, `d_intrvw_q/h_Map.java`, `chapter_6_using_the_java_library/Something_you_can_do_With_ArrayList.java`.
-- `d_intrvw_q/Employee.java` is only two fields (its self-creating field that caused a `StackOverflowError` was removed).
+✅ Working. Everything compiles, and every `main` runs. `MyHashMap`, `PhoneNumberCleaner` and `TwoSum` check themselves with asserts when run with `-ea`.
