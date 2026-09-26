@@ -47,7 +47,7 @@ public class UserDaoService {
 		
 		Predicate<? super User> predicate=user->user.getId().equals(id);
 		
-		return users.stream().filter(predicate).findFirst().get();
+		return users.stream().filter(predicate).findFirst().orElse(null);
 	} 
 	
 	

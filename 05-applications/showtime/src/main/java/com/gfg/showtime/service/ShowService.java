@@ -97,7 +97,7 @@ public class ShowService {
 	public List<ShowResource> searchShows(String movieName,String cityName,String theaterName) {
 
 		if(!StringUtils.hasText(cityName))
-			new ArrayList<>();
+			return new ArrayList<>(); // city is required
 		List<Show> shows=new ArrayList<>();
 		if(StringUtils.hasText(movieName))
 			shows=showsRepository.findByMovieNameAndCity(movieName,cityName);

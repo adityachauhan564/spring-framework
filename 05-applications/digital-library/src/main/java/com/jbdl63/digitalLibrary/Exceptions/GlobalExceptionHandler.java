@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataNotFoundException.class)
-    public ResponseEntity<String> handleDataNotFoundException(BadRequestException badRequestException) {
-        return new ResponseEntity<>(badRequestException.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> handleDataNotFoundException(DataNotFoundException dataNotFoundException) {
+        return new ResponseEntity<>(dataNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

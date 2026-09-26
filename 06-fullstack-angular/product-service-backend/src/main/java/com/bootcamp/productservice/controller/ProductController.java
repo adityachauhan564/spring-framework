@@ -22,7 +22,7 @@ public class ProductController {
 	@Autowired
 	ProductService ps;
 	
-	@GetMapping("/Products")
+	@GetMapping("/products")
 	public List<Product> findAll(){
 		
 		return ps.findAll();
@@ -52,7 +52,7 @@ public class ProductController {
 	@PutMapping("/update/{pId}")
 	public ResponseEntity<Product> updateProduct(@PathVariable Integer pId, @RequestBody Product pr) {
 		
-		return new ResponseEntity<Product>(ps.updateProduct(pId, pr), HttpStatus.CREATED);
+		return new ResponseEntity<Product>(ps.updateProduct(pId, pr), HttpStatus.OK);
 		
 	}
 	

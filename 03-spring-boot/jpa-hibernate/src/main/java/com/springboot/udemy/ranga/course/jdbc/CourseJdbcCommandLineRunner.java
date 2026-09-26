@@ -1,4 +1,4 @@
-package com.springboot.udemy.rnga.course.jdbc;
+package com.springboot.udemy.ranga.course.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
