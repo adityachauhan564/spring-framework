@@ -1,4 +1,4 @@
-package com.api.book.Rest_first.controllers;
+package com.api.book.rest_first.controllers;
 
 
 import java.util.List;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.book.Rest_first.entities.Book;
-import com.api.book.Rest_first.services.BookService;
+import com.api.book.rest_first.entities.Book;
+import com.api.book.rest_first.services.BookService;
 
 //@Controller
 @RestController

@@ -1,4 +1,4 @@
-package com.api.book.Rest_first;
+package com.api.book.rest_first;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,12 +1,12 @@
-package com.api.book.Rest_first.services;
+package com.api.book.rest_first.services;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.api.book.Rest_first.dao.BookRepository;
-import com.api.book.Rest_first.entities.Book;
+import com.api.book.rest_first.dao.BookRepository;
+import com.api.book.rest_first.entities.Book;
 
 @Component
 public class BookService {
