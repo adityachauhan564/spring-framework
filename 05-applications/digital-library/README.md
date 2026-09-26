@@ -53,7 +53,7 @@ Tests:
 - Use `Optional.orElseThrow(...)` instead of `.get()`. `.get()` on an empty Optional produces a 500.
 - When parsing uploaded text, split on `\r?\n` so Windows line endings work, trim fields, and check the column count.
 - `FetchType.EAGER` on both sides of a relationship is simple but loads a lot of data. Prefer LAZY once you understand the trade-off.
-- Style note: the packages are Capitalised (`Controller`, `Service`, ...), which is non-standard Java. Lowercase is the convention.
+- Style note: the packages are Capitalised (`Controller`, `Service`, ...), which is non-standard Java. Lowercase is the convention. They were deliberately **not** renamed: `RedisConfiguration` uses `JdkSerializationRedisSerializer`, which stores full class names (e.g. `com.jbdl63.digitalLibrary.Model.Author`) inside Redis values, so a rename would make already-stored data unreadable. Rename only together with flushing Redis or switching to a JSON serializer.
 
 ## Status
 ✅ Compiles; the unit tests pass.
