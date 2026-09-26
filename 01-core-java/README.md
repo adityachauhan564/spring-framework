@@ -4,14 +4,14 @@ Plain Java fundamentals, with no framework: OOP, collections, exceptions, lambda
 
 | # | Project | Topics | Status |
 | :- | :--- | :--- | :--- |
-| 1 | [head-first-java](./head-first-java/) | Objects, ArrayList, exceptions, abstraction, HashMap/Optional, Stream pipeline | 🚧 Partial |
+| 1 | [head-first-java](./head-first-java/) | 9 numbered topics: loops, objects, ArrayList, abstract classes, interfaces + DI, exceptions, HashMap/Optional (+ build your own), streams, TwoSum | ✅ Working |
 | 2 | [functional-programming](./functional-programming/) | Loops vs streams, lambdas, method references, Optional | ✅ Working |
 | 3 | [dsa-interview-practice](./dsa-interview-practice/) | Kadane, max product subarray, linked lists, lambdas, threads, Stream API | 🚧 Partial |
 | 4 | [junit-basics](./junit-basics/) | First JUnit 5 test, `assertEquals` | ✅ Working |
 | 5 | [multithreaded-web-server](./multithreaded-web-server/) | `ServerSocket`, try-with-resources, flushing | 🚧 Step 1 |
 
 ## Suggested study order
-1. **head-first-java**: objects, classes, collections and exceptions first.
+1. **head-first-java**: work through topic01 to topic09 in order.
 2. **functional-programming**: rewrite a loop as a stream.
 3. **dsa-interview-practice** `src/`: lambdas, functional interfaces and the Stream API in more depth.
 4. **dsa-interview-practice** DSA folder: Kadane, then linked lists. Finish the TODO stubs as practice.
