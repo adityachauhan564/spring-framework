@@ -6,7 +6,7 @@ The folders are numbered in the order to study them. Each numbered folder has a 
 
 ```mermaid
 flowchart LR
-    A["01 Core Java<br/>OOP · Streams · Lambdas · DSA · JUnit"] --> B["02 Spring Foundations<br/>IoC/DI · JDBC · ORM · MVC"]
+    A["01 Core Java<br/>24 topics: OOP · Collections · Generics<br/>Exceptions · Threads · Streams · DSA · JUnit"] --> B["02 Spring Foundations<br/>IoC/DI · JDBC · ORM · MVC"]
     B --> C["03 Spring Boot<br/>REST · JPA/Hibernate"]
     C --> D["04 Microservices<br/>Config · Eureka · Gateway"]
     C --> E["05 Applications<br/>ShowTime · Digital Library · IRCTC"]
@@ -30,6 +30,7 @@ flowchart LR
 ### Status at a glance
 - ✅ **Everything compiles.** Every Maven and Gradle project builds on JDK 21, and the Angular tests pass.
 - ✅ **Verified running:**
+  - `head-first-java`: all 24 topics, 37 programs, including the `assert` self-checks (`java -ea`)
   - `restful-web-services` (in-memory data, Swagger)
   - `jpa-hibernate` (H2)
   - `spring-core` examples
@@ -38,7 +39,7 @@ flowchart LR
 - 🚧 **Work in progress:**
   - `spring-orm`, `irctc-ticket-booking` and the Angular frontend are unfinished tutorial steps.
   - `currency-exchange-service` and `currency-conversion-service` are skeletons: their controllers were never committed. Their READMEs point to the complete versions under `reference/` to compare against.
-- 📝 **Stubs:** DSA practice files marked `// TODO: not implemented yet` are problem statements, not solutions.
+- 📝 **Stubs:** three `dsa-interview-practice` files marked `// TODO: not implemented yet` (`sortColours`, `LinkedList_Cycle`, `MiddleOfLinkedList`) are problem statements, not solutions.
 
 ---
 
@@ -74,7 +75,11 @@ Start them in the order given in [`04-microservices/README.md`](./04-microservic
 
 ### Run plain Java examples (no build file)
 ```bash
-cd 01-core-java/dsa-interview-practice
+cd 01-core-java/head-first-java
+javac -d out $(find src -name "*.java")
+java -ea -cp out topic11_strings.StringBasics      # any topicNN_<name>.<Class>
+
+cd ../dsa-interview-practice
 javac -d out $(find cracking-the-coding-interview_DSA_Patterns -name "*.java")
 java -ea -cp out kadane.MaximumSubarray
 ```
@@ -91,6 +96,8 @@ IDE files (`.project`, `.classpath`, `.settings/`, `.idea/`) are no longer track
 1. Open a stage's README and work through its **Quick revision checklist**.
 2. For any item you can't explain, open that project's README and read its **Revision notes**.
 3. Then follow **Read the code in this order**, and run the project to see it work.
+
+New to Java? Start with [head-first-java](./01-core-java/head-first-java): it has 24 numbered topics, a beginner reading path through them, and a revision checklist for each topic.
 
 ---
 
