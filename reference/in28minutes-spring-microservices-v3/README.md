@@ -1,3 +1,17 @@
+> **Attribution: this folder is not the workspace author's own work.**
+> It is a copy of the in28minutes course repository for **"Master Microservices with Spring Boot and Spring Cloud"**
+> ([github.com/in28minutes/spring-microservices-v3](https://github.com/in28minutes/spring-microservices-v3)), kept here as a reference solution.
+> All credit goes to in28minutes. Check the upstream repo for the latest version and its license.
+>
+> How it maps to this workspace:
+> | Course folder | Hands-on version in this workspace |
+> | --- | --- |
+> | `02.restful-web-services` | [`../../03-spring-boot/restful-web-services`](../../03-spring-boot/restful-web-services) |
+> | `03.microservices` | [`../../04-microservices`](../../04-microservices) |
+> | `04.docker`, `05.kubernetes`, `91.docker` | no hands-on version yet; study them here |
+
+---
+
 # Spring Microservices - REST + Microservices + Spring Boot + Spring Cloud + Docker + Kubernetes
 
 [![Image](https://www.springboottutorial.com/images/Course-Master-Microservices-with-Spring-Boot-and-Spring-Cloud.png "Master Microservices with Spring Boot and Spring Cloud")](https://links.in28minutes.com/microservices)

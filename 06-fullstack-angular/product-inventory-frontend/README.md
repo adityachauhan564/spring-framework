@@ -1,59 +1,36 @@
-# Productinventory
+# Product Inventory (Angular frontend)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.3.
+> An Angular 21 standalone-components app for the product inventory bootcamp. So far it has only the app shell and a header; it is **not yet connected** to [`../product-service-backend`](../product-service-backend).
 
-## Development server
+## What it teaches
+- The Angular CLI project layout for a standalone app (no `NgModule`): `main.ts` → `app.config.ts` → `App`
+- Building a component (`header/`) and composing it into the root template with its selector `<app-header>`
+- Signals for component state (`title = signal(...)` in `app.ts`)
+- Component tests with Angular `TestBed`, run by Vitest
 
-To start a local development server, run:
-
+## Run it
+Prerequisites: Node 20+ (tested with Node 22) and npm.
 ```bash
-ng serve
+npm ci                         # install exact versions from package-lock.json
+npx ng serve                   # http://localhost:4200
+npx ng test --watch=false      # 3 tests (App + Header), all pass
+npx ng build                   # production build into dist/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Read the code in this order
+1. `src/main.ts`: bootstraps `App` with `appConfig`.
+2. `src/app/app.config.ts`: providers (router, global error listeners).
+3. `src/app/app.ts` and `app.html`: the root component, which renders `<app-header>`.
+4. `src/app/header/header.ts` and `header.html`: the navigation markup.
+5. `src/app/app.spec.ts`: how a component is tested.
 
-## Code scaffolding
+## Revision notes
+- A component template is a **fragment**. Never put `<!DOCTYPE>`, `<html>` or `<body>` inside it; only `src/index.html` has those.
+- Standalone components list their dependencies in `imports: [...]` (here `Header`), with no `NgModule`.
+- A test that checks text (`'Hello, productinventory'`) breaks when the template changes. Test for structure or behaviour instead.
+- Next steps to call the backend: add `provideHttpClient()` to `app.config.ts`, create a `ProductService` that uses `HttpClient`, and enable CORS on the backend.
+- `app.routes.ts` is empty, so the "Home" and "Create Product" menu items don't link anywhere yet.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Status
+🚧 This is the UI shell only. There is no routing, no HTTP service and no product pages yet.
+✅ Builds, and the tests pass.
