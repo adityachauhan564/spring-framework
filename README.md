@@ -31,6 +31,7 @@ flowchart LR
 - ✅ **Everything compiles.** Every Maven and Gradle project builds on JDK 21, and the Angular tests pass.
 - ✅ **Verified running:**
   - `head-first-java`: all 24 topics, 37 programs, including the `assert` self-checks (`java -ea`)
+  - `functional-programming`: all 15 topics, including the `assert` self-checks
   - `restful-web-services` (in-memory data, Swagger)
   - `jpa-hibernate` (H2)
   - `spring-core` examples
