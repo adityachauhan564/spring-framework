@@ -26,10 +26,10 @@ curl -X POST localhost:8080/books -H "Content-Type: application/json" \
 
 ## Read the code in this order
 1. `src/main/resources/application.properties`: DB connection and Hibernate settings
-2. `src/main/java/com/api/book/Rest_first/entities/Book.java`: the table mapping
-3. `src/main/java/com/api/book/Rest_first/dao/BookRepository.java`: Spring Data interface
-4. `src/main/java/com/api/book/Rest_first/services/BookService.java`: business layer
-5. `src/main/java/com/api/book/Rest_first/controllers/BookController.java`: HTTP endpoints
+2. `src/main/java/com/api/book/rest_first/entities/Book.java`: the table mapping
+3. `src/main/java/com/api/book/rest_first/dao/BookRepository.java`: Spring Data interface
+4. `src/main/java/com/api/book/rest_first/services/BookService.java`: business layer
+5. `src/main/java/com/api/book/rest_first/controllers/BookController.java`: HTTP endpoints
 
 ## Revision notes
 - `@RestController` = `@Controller` + `@ResponseBody`, so return values are written as JSON by Jackson.

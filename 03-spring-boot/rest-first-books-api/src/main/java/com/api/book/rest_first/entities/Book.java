@@ -1,4 +1,4 @@
-package com.api.book.Rest_first.entities;
+package com.api.book.rest_first.entities;
 
 
 
