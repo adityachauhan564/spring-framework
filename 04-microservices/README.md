@@ -25,7 +25,9 @@ Needs only JDK 21.
 ./start-all.sh        # Git Bash / macOS / Linux    (Windows PowerShell: .\start-all.ps1)
 ./stop-all.sh         # stops everything            (.\stop-all.ps1)
 ```
-`start-all` builds all six services, starts them **in the right order**, waits until each is ready and until Eureka lists them (about 45-60 s), then prints URLs to try. Logs go to `logs/<service>.log`. It starts currency-exchange **twice** (ports 8000 and 8001) so you can watch load balancing.
+If PowerShell says "running scripts is disabled", run `powershell -ExecutionPolicy Bypass -File .\start-all.ps1` (this changes nothing permanently).
+
+`start-all` builds all six services, starts them **in the right order**, waits until each is ready and until Eureka lists them (about 45-80 s), then prints URLs to try. If a service doesn't come up, it stops and points you to its log. Logs go to `logs/<service>.log`. It starts currency-exchange **twice** (ports 8000 and 8001) so you can watch load balancing.
 
 Build and test everything without starting it: `./mvnw verify` (14 tests; no service needs another running).
 
