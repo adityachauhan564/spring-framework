@@ -2,11 +2,13 @@
 
 My hands-on learning path, from **Core Java and DSA**, through **Spring internals** and **Spring Boot REST APIs**, to **Spring Cloud microservices** and a **full-stack Angular + Spring Boot** app.
 
-The folders are numbered in the order to study them. Each numbered folder has a README with a study order and a revision checklist. Each project has a README with **What it teaches → Run it → Read the code in this order → Revision notes → Status**.
+The folders are numbered in the order to study them. Each numbered folder has a README with a study order and a revision checklist. Each project has a README that explains **why it matters, how to run it, the order to read the code, revision notes and its status**. The topic-based projects in stages 01-03 put the *why* in each topic.
+
+Every Spring project runs with **only JDK 21** (plus Node for the Angular app): databases default to in-memory H2 with sample data, and MySQL, Redis, Kafka and mail are optional extras.
 
 ```mermaid
 flowchart LR
-    A["01 Core Java<br/>24 topics: OOP · Collections · Generics<br/>Exceptions · Threads · Streams · DSA · JUnit"] --> B["02 Spring Foundations<br/>IoC/DI · JDBC · ORM · MVC"]
+    A["01 Core Java<br/>24 topics: OOP · Collections · Generics<br/>Exceptions · Threads · Streams · DSA · JUnit"] --> B["02 Spring Foundations<br/>IoC/DI · AOP · JDBC · ORM<br/>Transactions · MVC"]
     B --> C["03 Spring Boot<br/>Auto-config · Actuator · REST<br/>Validation · Security · Spring Data JPA"]
     C --> D["04 Microservices<br/>Config · Eureka · Feign · Gateway<br/>Resilience4j · Tracing"]
     C --> E["05 Applications<br/>Digital Library · ShowTime · IRCTC<br/>Security · Kafka · Redis"]
@@ -45,9 +47,9 @@ flowchart LR
 ## ⚡ Getting started
 
 ### Prerequisites
-- **JDK 21**. The Boot 2.7 apps also work on JDK 17.
+- **JDK 21**: every project targets it.
 - **Maven**: use the `./mvnw` wrapper included with the projects. Stages 02, 03 and 04 also have one wrapper at the stage root that builds and tests all their projects (`./mvnw verify`).
-- **Gradle**: use the included `./gradlew`.
+- **Gradle**: use the included `./gradlew` (digital-library and irctc-ticket-booking, Gradle 9.1).
 - **MySQL 8** is optional: the Spring projects default to in-memory H2, and their READMEs show how to switch to MySQL where it is supported. **Docker** is needed only for the optional Redis (digital-library) and Kafka/Mailpit (showtime) modes.
 - **Node 20+** for the Angular app.
 
@@ -67,7 +69,11 @@ Mail for showtime with a real SMTP server (optional): `MAIL_USERNAME`, `MAIL_PAS
 ```bash
 cd 03-spring-boot/restful-web-services
 ./mvnw spring-boot:run          # Windows: .\mvnw.cmd spring-boot:run
+
+cd 05-applications/digital-library
+./gradlew bootRun               # the Gradle projects: Windows gradlew.bat bootRun
 ```
+Optional profiles switch on the real infrastructure, e.g. `-Dspring-boot.run.profiles=mysql` (Maven) or `--args='--spring.profiles.active=redis'` (Gradle). Each README lists its profiles.
 
 ### Run the microservices
 ```bash
@@ -76,6 +82,13 @@ cd 04-microservices
 ./stop-all.sh
 ```
 It builds all six services, starts them in order (config server → naming server → services → gateway) and waits until they're ready. [`04-microservices/README.md`](./04-microservices/README.md) has a walkthrough of every pattern.
+
+### Run the full-stack app
+```bash
+cd 06-fullstack-angular/product-service-backend && ./mvnw spring-boot:run      # API on :8080
+cd 06-fullstack-angular/product-inventory-frontend && npm ci && npx ng serve   # UI on :4200
+```
+Then open http://localhost:4200. [`06-fullstack-angular/README.md`](./06-fullstack-angular/README.md) explains how the two halves talk (CORS).
 
 ### Run plain Java examples (no build file)
 ```bash
@@ -106,7 +119,7 @@ New to Java? Start with [head-first-java](./01-core-java/head-first-java): it ha
 ---
 
 ## 🙏 Credits
-- Course material: in28minutes (Spring Boot, JPA, Microservices, Functional Programming), Head First Java, and other courses named in each project README.
+- Course material: in28minutes (Spring Boot, JPA, Microservices, Functional Programming), Head First Java, GeeksforGeeks JBDL (digital-library, showtime), and other courses named in each project README.
 - [`reference/in28minutes-spring-microservices-v3`](./reference/in28minutes-spring-microservices-v3) is a copy of [in28minutes/spring-microservices-v3](https://github.com/in28minutes/spring-microservices-v3).
 
 ## 👨‍💻 Author
