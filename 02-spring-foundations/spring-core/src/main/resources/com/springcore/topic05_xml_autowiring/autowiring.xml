@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- the id "address" matters for byName: it must equal the property name -->
+    <bean id="address" class="com.springcore.topic05_xml_autowiring.Address">
+        <property name="street" value="Hazratganj"/>
+        <property name="city" value="Lucknow"/>
+    </bean>
+
+    <bean id="empByName" class="com.springcore.topic05_xml_autowiring.Employee" autowire="byName"/>
+    <bean id="empByType" class="com.springcore.topic05_xml_autowiring.Employee" autowire="byType"/>
+    <bean id="empByConstructor" class="com.springcore.topic05_xml_autowiring.Employee" autowire="constructor"/>
+</beans>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util
+           https://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- 1. collections defined inline, inside one bean -->
+    <bean id="employee" class="com.springcore.topic04_injecting_collections.Employee">
+        <property name="name" value="Radhe"/>
+        <property name="phones">
+            <list>
+                <value>9553581900</value>
+                <value>9658858500</value>
+            </list>
+        </property>
+        <property name="addresses">
+            <set>
+                <value>Mau</value>
+                <value>Lucknow</value>
+                <value>Lucknow</value>  <!-- duplicate: a Set keeps only one -->
+            </set>
+        </property>
+        <property name="courses">
+            <map>
+                <entry key="java" value="6 months"/>
+                <entry key="python" value="2 months"/>
+            </map>
+        </property>
+        <property name="settings">
+            <props>
+                <prop key="timezone">Asia/Kolkata</prop>
+                <prop key="language">en</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- 2. standalone collections: their own beans, with a chosen implementation class -->
+    <util:list id="memberList" list-class="java.util.LinkedList">
+        <value>Aditya</value>
+        <value>Roshan</value>
+    </util:list>
+
+    <util:map id="feeTable" map-class="java.util.TreeMap">
+        <entry key="Spring" value="9000"/>
+        <entry key="Hibernate" value="2000"/>
+        <entry key="Django" value="5000"/>
+    </util:map>
+
+    <bean id="team" class="com.springcore.topic04_injecting_collections.Team">
+        <property name="members" ref="memberList"/>
+        <property name="fees" ref="feeTable"/>
+    </bean>
+</beans>

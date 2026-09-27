@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- process @Autowired, @Qualifier, @PostConstruct... inside the beans below -->
+    <context:annotation-config/>
+
+    <!-- two beans of the same type: primary="true" is the XML form of @Primary -->
+    <bean id="emailSender" class="com.springcore.topic06_annotation_injection.EmailSender" primary="true"/>
+    <bean id="smsSender" class="com.springcore.topic06_annotation_injection.SmsSender"/>
+
+    <!-- no ref / no constructor-arg: the annotations inside the classes do the wiring -->
+    <bean id="notificationService" class="com.springcore.topic06_annotation_injection.NotificationService"/>
+    <bean id="alertService" class="com.springcore.topic06_annotation_injection.AlertService"/>
+    <bean id="reportService" class="com.springcore.topic06_annotation_injection.ReportService"/>
+</beans>
