@@ -1,37 +1,26 @@
-<%@ page import="java.util.*" %>
-<%@ page import="java.time.LocalDateTime" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@page isELIgnored="false" %>    
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>about page </title>
+  <title>Help</title>
+  <%@ include file="head.jspf" %>
 </head>
-<body>
-<h1>Hello, Welcome to Adi's Help Page</h1>
-<h2>............................</h2>
+<body class="container py-4">
+<%@ include file="nav.jspf" %>
 
- <!--  String name=(String)request.getAttribute("name");
+<h1>Help page</h1>
+<p>The data below came from a <code>ModelAndView</code> - data and view name in one object.</p>
 
-Integer rollnumber=(Integer)request.getAttribute("rollnumber");
+<p>Name: <c:out value="${name}"/></p>
+<p>Roll number: ${rollNumber}</p>
+<p>Rendered at: ${time}</p>
 
-LocalDateTime time=(LocalDateTime)request.getAttribute("time");
-//to avoid NullPointer Exception-->
-<h1>Hello my name is ${name} <%-- <%=name %> --%></h1>
-
-<h1>Hello my RollNumber is ${rollnumber } <%-- <%=rollnumber %> --%></h1>
-
-<h1>Date And Time is ${time} <%-- <%=time%> --%></h1>
-<hr>
-<c:forEach  var="item" items="${marks}"> 
-
-<h1>${item}</h1>
-
-</c:forEach>
-
-<h2>End </h2>
+<h2>Marks</h2>
+<ul>
+  <c:forEach var="mark" items="${marks}">
+    <li>${mark} <c:if test="${mark >= 40}">(pass)</c:if></li>
+  </c:forEach>
+</ul>
 </body>
 </html>

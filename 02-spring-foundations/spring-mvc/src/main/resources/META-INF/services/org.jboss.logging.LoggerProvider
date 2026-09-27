@@ -1,0 +1,2 @@
+# Route Hibernate's JBoss Logging through SLF4J, so simplelogger.properties controls it too
+org.jboss.logging.Slf4jLoggerProvider
