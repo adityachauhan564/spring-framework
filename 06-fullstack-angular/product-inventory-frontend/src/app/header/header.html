@@ -1,8 +1,8 @@
 <header>
   <nav>
-    <ul>
-      <li>Home</li>
-      <li>Create Product</li>
-    </ul>
+    <span class="brand">Product Inventory</span>
+    <!-- routerLink changes the URL without reloading the page; routerLinkActive adds a class on the current page -->
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/products/new" routerLinkActive="active">Create Product</a>
   </nav>
 </header>

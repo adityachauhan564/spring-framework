@@ -1,0 +1,33 @@
+<section>
+  <h1>{{ id() ? 'Edit product' : 'New product' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      Name
+      <input formControlName="name" />
+    </label>
+    @if (hasError('name', 'required')) { <p class="error">Name is required</p> }
+    @if (serverErrors()['name']) { <p class="error">{{ serverErrors()['name'] }}</p> }
+
+    <label>
+      Price (INR)
+      <input type="number" formControlName="price" step="0.01" />
+    </label>
+    @if (hasError('price', 'min')) { <p class="error">Price can't be negative</p> }
+    @if (serverErrors()['price']) { <p class="error">{{ serverErrors()['price'] }}</p> }
+
+    <label>
+      Quantity
+      <input type="number" formControlName="quantity" />
+    </label>
+    @if (hasError('quantity', 'min')) { <p class="error">Quantity can't be negative</p> }
+    @if (serverErrors()['quantity']) { <p class="error">{{ serverErrors()['quantity'] }}</p> }
+
+    @if (serverErrors()['form']) { <p class="error">{{ serverErrors()['form'] }}</p> }
+
+    <div class="buttons">
+      <button type="submit" [disabled]="form.invalid || saving()">Save</button>
+      <a routerLink="/">Cancel</a>
+    </div>
+  </form>
+</section>

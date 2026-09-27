@@ -1,1 +1,72 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles: plain elements used on every page. Component-specific styles live next to each component. */
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: #1f2937;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.number {
+  text-align: right;
+}
+
+form {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 420px;
+}
+
+label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+input {
+  padding: 0.4rem;
+  font: inherit;
+}
+
+button,
+.button {
+  padding: 0.4rem 0.9rem;
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #1d3557;
+  border-radius: 4px;
+  background: #1d3557;
+  color: #fff;
+  text-decoration: none;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.error {
+  color: #b42318;
+  margin: 0;
+}
