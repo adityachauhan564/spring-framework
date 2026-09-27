@@ -6,7 +6,7 @@ Plain Java fundamentals, with no framework: OOP, collections, generics, exceptio
 | :- | :--- | :--- | :--- |
 | 1 | [head-first-java](./head-first-java/) | 24 numbered topics: data types, strings, arrays, methods/static, OOP (encapsulation, inheritance, abstract classes, interfaces), equals/hashCode, enums, generics, collections, sorting, exceptions, threads, file I/O, streams, modern Java | ✅ Working |
 | 2 | [functional-programming](./functional-programming/) | 15 numbered topics: lambdas, functional interfaces, method references, stream operations, reduce, collectors, flatMap, Optional, laziness, parallel streams, capstone | ✅ Working |
-| 3 | [dsa-interview-practice](./dsa-interview-practice/) | Kadane, max product subarray, linked lists, lambdas, threads, Stream API | 🚧 Partial |
+| 3 | [dsa-interview-practice](./dsa-interview-practice/) | Kadane, max product subarray, Dutch flag, linked lists, fast & slow pointers, lambdas, threads, Stream API | ✅ Working |
 | 4 | [junit-basics](./junit-basics/) | First JUnit 5 test, `assertEquals` | ✅ Working |
 | 5 | [multithreaded-web-server](./multithreaded-web-server/) | `ServerSocket`, try-with-resources, flushing | 🚧 Step 1 |
 
@@ -14,7 +14,7 @@ Plain Java fundamentals, with no framework: OOP, collections, generics, exceptio
 1. **head-first-java**: follow the beginner path in its README (topic01 to topic24).
 2. **functional-programming**: work through its 15 topics in order, ending with the capstone.
 3. **dsa-interview-practice** `src/`: extra practice with lambdas, a thread demo and the Stream API.
-4. **dsa-interview-practice** DSA folder: Kadane, then linked lists. Finish the TODO stubs as practice.
+4. **dsa-interview-practice** DSA folder: Kadane, then sort colours, then linked lists and fast & slow pointers. Try each problem yourself before reading the solution.
 5. **junit-basics**: turn your `main`-method checks into real tests.
 6. **multithreaded-web-server**: sockets, then add a thread per client.
 
