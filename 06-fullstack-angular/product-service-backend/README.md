@@ -1,46 +1,69 @@
-# Product Service (Backend for the Angular bootcamp)
+# Product Service (backend for the Angular app)
 
-> A Spring Boot 4 REST API with CRUD for products, stored in MySQL through Spring Data JPA. It is meant to serve the [`../product-inventory-frontend`](../product-inventory-frontend) Angular app.
+> A Spring Boot 4 REST API with CRUD and search for products, built to be called from a browser app: plain JSON names, validation errors a form can show, and **CORS** for the Angular dev server.
+
+**Before this:** [03-spring-boot](../../03-spring-boot) (REST, validation, JPA). This project is the other half of [`../product-inventory-frontend`](../product-inventory-frontend).
+
+## Why it matters
+An API that works in Postman can still fail from a browser. The browser blocks cross-origin calls unless the server allows them (CORS). It also needs JSON keys that match the frontend's model, and error bodies it can show. This project is the same CRUD you know, shaped for a frontend.
 
 ## What it teaches
-- A minimal Controller → Service → `CrudRepository` stack
-- Derived query methods that return `Optional` (`findBypName`)
-- Partial update: load the entity, copy only the non-null fields, save
-- Returning the right HTTP status with `ResponseEntity` and `ResponseStatusException` (201 on create, 200 on update, 404 when missing)
+- REST paths: one resource URL (`/api/products`), where the HTTP method says what happens
+- Controller → Service → `JpaRepository`, with a derived search query
+- Bean Validation plus `ProblemDetail` errors with one message per field
+- CORS with a `WebMvcConfigurer`, and what a preflight request is
+- How Jackson turns getter names into JSON keys
 
-## Run it
-Prerequisites: JDK 21, MySQL on `localhost:3306` with a database named `spring_angular_bootcamp` (`CREATE DATABASE spring_angular_bootcamp;`).
+## Run it (nothing to install except JDK 21)
 ```bash
-export DB_PASSWORD=...        # PowerShell: $env:DB_PASSWORD="..."   (DB_USERNAME defaults to root)
 ./mvnw spring-boot:run        # Windows: mvnw.cmd spring-boot:run
+./mvnw test                   # 6 tests, including the CORS preflight
 ```
-The API runs on `http://localhost:8080`, and the table is created automatically (`ddl-auto=update`).
+The API runs on `http://localhost:8080` with 4 sample products (H2, fresh on every start).
 
 | Method | Path | Result |
 | --- | --- | --- |
-| GET | `/products` | all products |
-| GET | `/product/{pName}` | one product by name, 404 if missing |
-| POST | `/save` | create; returns 201 |
-| PUT | `/update/{pId}` | partial update; returns 200, or 404 if missing |
-| DELETE | `/delete/{pId}` | delete; returns 200, or 404 if missing |
+| GET | `/api/products?search=pen` | all products sorted by name, optionally filtered (case ignored) |
+| GET | `/api/products/{id}` | one product, or 404 |
+| POST | `/api/products` | create: 201, or 400 with field errors |
+| PUT | `/api/products/{id}` | replace: 200, 400 or 404 |
+| DELETE | `/api/products/{id}` | 204, or 404 |
+
+```bash
+curl localhost:8080/api/products
+curl -X POST localhost:8080/api/products -H "Content-Type: application/json" -d '{"name":"","price":-1}'
+# 400 {"detail":"Validation failed","errors":{"name":"Name is required","price":"Price can't be negative",...}}
+
+# the preflight a browser sends before a cross-origin PUT: note the Access-Control-Allow-Origin header
+curl -i -X OPTIONS localhost:8080/api/products/1 -H "Origin: http://localhost:4200" -H "Access-Control-Request-Method: PUT"
+```
+For MySQL: `export DB_PASSWORD=...`, then `./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql`. The database `spring_angular_bootcamp` is created if missing.
 
 ## Read the code in this order
-1. `src/main/java/com/bootcamp/productservice/model/Product.java`: the entity.
-2. `.../dao/ProductRepository.java`: `CrudRepository` plus a derived query.
-3. `.../service/ProductService.java`: business logic and 404 handling.
-4. `.../controller/ProductController.java`: routes and status codes.
+1. `src/main/resources/application.properties` and `data.sql`
+2. `src/main/java/com/bootcamp/productservice/model/Product.java`: the entity and its validation
+3. `.../repository/ProductRepository.java`: the derived search query
+4. `.../service/ProductService.java`
+5. `.../controller/ProductController.java` and `ApiExceptionHandler.java`
+6. `.../config/CorsConfig.java`
+7. `src/test/java/.../ProductApiTest.java`
 
 ## Revision notes
-- `PUT` updates an existing resource, so return **200 OK**. **201 Created** is for `POST` creating something new.
-- `ResponseStatusException(HttpStatus.NOT_FOUND, msg)` is the quickest correct 404. A bare `RuntimeException` becomes a 500.
-- **Jackson naming gotcha:** getters like `getPName()` serialise as `pname`, not `pName`. Check the real JSON before writing the Angular model, or rename the fields to `name`, `price`, `quantity`.
-- `findBypName` works because Spring Data parses the method name. Keep the property casing exactly as it is on the entity.
-- Before the Angular app can call this API from `localhost:4200`, add a CORS config (`@CrossOrigin` or a `WebMvcConfigurer`).
-- More RESTful paths would be `POST /products`, `PUT /products/{id}` and `DELETE /products/{id}`. The current ones are verb-style.
+- **CORS is enforced by the browser only.** Page and API on different ports are different *origins*. The browser sends the request (or first an `OPTIONS` preflight, for PUT/DELETE and JSON bodies) and only lets the page read the answer if the server replies with `Access-Control-Allow-Origin: <that origin>`. curl and Postman ignore all of this, so "it works in Postman" proves nothing about the browser.
+- **Allowed origins:** list them exactly (`http://localhost:4200`). `*` would let any website's scripts call your API from a visitor's browser.
+- **Jackson naming:** JSON keys come from getter names, and `getPName()` becomes `"pname"`. The course's `pName` / `pPrice` fields never matched the Angular model. Plain `name` / `price` / `quantity` avoid the problem.
+- **Status codes:** POST → 201, PUT → 200, DELETE → 204 (nothing to return), missing → 404, invalid → 400. The course returned 200 plus a text message for delete.
+- **Paths:** use `POST /api/products`, not `/save`, because the method already says what happens. `/api` also separates the API from pages, and CORS applies only to `/api/**`.
+- **404s:** `ResponseStatusException(NOT_FOUND, ...)` is the quickest correct 404. Extending `ResponseEntityExceptionHandler` gives every error the same `ProblemDetail` shape.
+- **Tests that change data:** `@DirtiesContext(AFTER_EACH_TEST_METHOD)` gives every test a fresh app and database. It's simple but slower; fine for 6 tests.
 
 ## Status
-✅ Compiles; the endpoints return correct status codes.
-🚧 Known issues:
-- No CORS configuration yet.
-- The paths are verb-style and not consistently plural.
-- The `ProductserviceAngularApplicationTests` context test needs MySQL.
+✅ **Working.** 6 tests pass. Checked from a real (headless) browser through the Angular app: the list loaded across origins.
+
+Changes from the course version:
+- H2 by default, so MySQL is no longer required;
+- REST paths, and JSON names fixed;
+- validation, `ProblemDetail` errors, delete returns 204;
+- CORS added;
+- the `dao` package renamed to `repository`;
+- constructor injection.
