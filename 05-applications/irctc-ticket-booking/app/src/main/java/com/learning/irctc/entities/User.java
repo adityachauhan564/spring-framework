@@ -1,15 +1,10 @@
-package org.example.entities;
+package com.learning.irctc.entities;
 
 import java.util.List;
 
-public class User {
-
-    private String name;
-    private String password;
-    private String hashedPassword;
-    private String userId;
-
-    private List<Ticket> ticketBooked;
-
-
+/*
+ * A user as stored in users.json. There is no password field: only its BCrypt hash is kept,
+ * so reading the file never reveals anyone's password.
+ */
+public record User(String userId, String name, String hashedPassword, List<Ticket> ticketsBooked) {
 }

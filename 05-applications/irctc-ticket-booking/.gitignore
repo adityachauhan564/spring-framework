@@ -3,3 +3,6 @@
 
 # Ignore Gradle build output directory
 build
+
+# Bookings and sign-ups made while running the app (copied from the defaults on first run)
+data/
