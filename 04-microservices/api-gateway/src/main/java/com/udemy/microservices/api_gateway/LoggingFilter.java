@@ -9,19 +9,19 @@ import org.springframework.web.server.ServerWebExchange;
 
 import reactor.core.publisher.Mono;
 
-//Global Filter
-
+/*
+ * A GlobalFilter runs for EVERY request on every route (a route filter runs only on its route).
+ * The gateway is REACTIVE (Spring WebFlux): filters return Mono<Void> - "work that completes
+ * later" - instead of blocking a thread while the backend answers.
+ */
 @Component
 public class LoggingFilter implements GlobalFilter {
 
-	private Logger logger=LoggerFactory.getLogger(LoggingFilter.class);
-	@Override
-	public Mono<Void> filter(ServerWebExchange exchange,
-			GatewayFilterChain chain) {
-		
-		logger.info(" Path of the Request received -> {} ",
-				exchange.getRequest().getPath());
-		return chain.filter(exchange);
-	}
+    private static final Logger log = LoggerFactory.getLogger(LoggingFilter.class);
 
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        log.info("Request received -> {} {}", exchange.getRequest().getMethod(), exchange.getRequest().getPath());
+        return chain.filter(exchange);
+    }
 }
