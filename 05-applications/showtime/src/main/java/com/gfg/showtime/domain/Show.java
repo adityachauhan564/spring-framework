@@ -1,51 +1,47 @@
 package com.gfg.showtime.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.gfg.showtime.resource.ShowResource;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.util.CollectionUtils;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-@Data
+import com.gfg.showtime.resource.ShowResource;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "shows")
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
+@Builder
 public class Show {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss[.SSS][.SS][.S]")
-	@JsonSerialize(using = LocalDateTimeSerializer.class)
-	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
-	@Column(name = "show_time", columnDefinition = "TIME", nullable = false)
+	// A date AND a time. The course mapped this to a TIME column, which silently dropped the date.
+	@Column(name = "show_time", nullable = false)
 	private LocalDateTime showTime;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
 	@Column(name = "created_at")
 	private Date createdAt;
@@ -55,50 +51,22 @@ public class Show {
 	private Date updatedAt;
 
 	@ManyToOne
-	@JsonIgnore
 	private Movie movie;
 
 	@ManyToOne
-	@JsonIgnore
 	private Theater theater;
 
 	@OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
-	@JsonIgnore
-	private List<Ticket> tickets;
+	@Builder.Default
+	private List<Ticket> tickets = new ArrayList<>();
 
 	@OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
-	@JsonIgnore
-	private List<ShowSeat> seats;
-
-
-	public static List<ShowResource> toResource(List<Show> show) {
-
-		if (!CollectionUtils.isEmpty(show)) {
-			return show.stream().map(Show::toResource).collect(Collectors.toList());
-		}
-
-		return new ArrayList<>();
-	}
+	@Builder.Default
+	private List<ShowSeat> seats = new ArrayList<>();
 
 	public static ShowResource toResource(Show show) {
-
-		return ShowResource.builder()
-				.id(show.getId())
-				.showTime(show.getShowTime())	
-				.movieId(show.getMovie().getId())
-				.theaterId(show.getTheater().getId())
-				.seats(ShowSeat.toResource(show.getSeats()))
-				.createdAt(show.getCreatedAt())
-				.updatedAt(show.getUpdatedAt())
-				.build();
-
-	}
-
-	public static Show toEntity(ShowResource showResource) {
-
-		return Show.builder()
-				.showTime(showResource.getShowTime())
-				.build();
-
+		return new ShowResource(show.getId(), show.getShowTime(), show.getMovie().getId(), show.getTheater().getId(),
+				show.getMovie().getTitle(), show.getTheater().getName(), show.getTheater().getCity(),
+				ShowSeat.toResource(show.getSeats()), show.getCreatedAt(), show.getUpdatedAt());
 	}
 }

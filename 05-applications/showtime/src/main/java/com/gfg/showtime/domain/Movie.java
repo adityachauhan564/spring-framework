@@ -1,61 +1,66 @@
 package com.gfg.showtime.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gfg.showtime.enums.Genre;
-import com.gfg.showtime.resource.MovieResource;
-
-import lombok.*;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gfg.showtime.enums.Genre;
+import com.gfg.showtime.resource.MovieResource;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+/*
+ * Entities use @Getter/@Setter, not @Data: @Data also generates equals/hashCode/toString over every
+ * field, relationships included, which loads lazy collections and can loop forever (Movie -> Show -> Movie).
+ */
 @Entity
 @Table(name = "movies")
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
-@Data
+@Builder
 public class Movie {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String title;
 
-	@Enumerated(EnumType.STRING)
+	@Enumerated(EnumType.STRING)      // stored as "ACTION", not as a number that changes if the enum is reordered
 	private Genre genre;
 
-	private Double rating;
+	private Double rating;            // the average of its reviews, null until the first review
 
-	@OneToMany(mappedBy="movie")
-	private List<Review> reviews;
+	@OneToMany(mappedBy = "movie")
+	@Builder.Default
+	private List<Review> reviews = new ArrayList<>();
 
 	@OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
-	@JsonIgnore
 	@Builder.Default
 	private List<Show> shows = new ArrayList<>();
 
-	public static Movie toEntity(MovieResource movieRequest) {
-
-		return Movie.builder()
-				.title(movieRequest.getTitle())
-				.genre(movieRequest.getGenre())
-				.build();
-
+	public static Movie toEntity(MovieResource request) {
+		return Movie.builder().title(request.title()).genre(request.genre()).build();
 	}
 
 	public static MovieResource toResource(Movie movie) {
-
-		return MovieResource.builder()
-				.id(movie.getId())
-				.title(movie.getTitle())
-				.genre(movie.getGenre())
-				.reviews(Review.toResource(movie.getReviews()))
-				.build();
+		return new MovieResource(movie.getId(), movie.getTitle(), movie.getGenre(), movie.getRating(),
+				Review.toResource(movie.getReviews()));
 	}
 }

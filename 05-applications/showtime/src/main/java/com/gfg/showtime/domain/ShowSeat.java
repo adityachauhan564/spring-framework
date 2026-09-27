@@ -1,27 +1,42 @@
 package com.gfg.showtime.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Date;
+import java.util.List;
+
 import com.gfg.showtime.enums.SeatType;
 import com.gfg.showtime.resource.ShowSeatsResource;
 
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.util.CollectionUtils;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Getter
-@Setter
+/*
+ * One seat for one show: the thing people actually book.
+ *
+ * @Version = optimistic locking. Hibernate adds "where version = ?" to every update and increments it.
+ * Two customers who both read this seat as free can both try to book it; the first update wins,
+ * the second finds the version changed, updates 0 rows and fails -> TicketService answers 409.
+ * Without it, the second booking would silently overwrite the first: one seat, two tickets.
+ */
 @Entity
 @Table(name = "show_seats")
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
-@ToString
+@Builder
 public class ShowSeat {
 
 	@Id
@@ -38,42 +53,27 @@ public class ShowSeat {
 	@Column(name = "seat_type", nullable = false)
 	private SeatType seatType;
 
-	@Column(name = "is_booked", columnDefinition = "bit(1) default 0", nullable = false)
+	@Column(name = "is_booked", nullable = false)
 	private boolean booked;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "booked_at")
-	@CreationTimestamp
-	private Date bookedAt;
+	private Date bookedAt;                 // set when booked (the course used @CreationTimestamp: the time the seat was created)
+
+	@Version
+	private long version;
 
 	@ManyToOne
-	@JsonIgnore
 	private Show show;
 
 	@ManyToOne
-	@JsonIgnore
-	private Ticket ticket;
+	private Ticket ticket;                 // null while the seat is free
 
 	public static List<ShowSeatsResource> toResource(List<ShowSeat> seats) {
-
-		if (!CollectionUtils.isEmpty(seats)) {
-			return seats.stream().map(ShowSeat::toResource).collect(Collectors.toList());
-		}
-
-		return new ArrayList<>();
+		return seats == null ? List.of() : seats.stream().map(ShowSeat::toResource).toList();
 	}
 
-	public static ShowSeatsResource toResource(ShowSeat seatsEntity) {
-
-		return ShowSeatsResource.builder()
-				.id(seatsEntity.getId())
-				.seatNumber(seatsEntity.getSeatNumber())
-				.rate(seatsEntity.getRate())
-				.seatType(seatsEntity.getSeatType())
-				.booked(seatsEntity.isBooked())
-				.bookedAt(seatsEntity.getBookedAt())
-				.build();
-
+	public static ShowSeatsResource toResource(ShowSeat seat) {
+		return new ShowSeatsResource(seat.getId(), seat.getSeatNumber(), seat.getRate(), seat.getSeatType(),
+				seat.isBooked(), seat.getBookedAt());
 	}
-
 }

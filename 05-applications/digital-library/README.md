@@ -1,63 +1,99 @@
 # Digital Library
 
-> A Spring Boot REST backend for authors, books and library users, with Redis caching. Built during the GeeksforGeeks JBDL (Java Backend Development) batch 63; the package is `com.jbdl63`.
+> A Spring Boot REST backend for authors, books and library members: JPA relationships, validation, central error handling, issuing and returning books, and caching (in memory by default, Redis optionally). Built during the GeeksforGeeks JBDL batch 63 (package `com.jbdl63`).
+
+**Before this:** [03-spring-boot](../../03-spring-boot) (REST, validation, Spring Data JPA). This is the first "real" application: the same pieces, working together on a small domain.
+
+## Why it matters
+Stage 03 covered each concept on its own. A real backend combines them: three related tables, rules that span them ("you can't delete a book someone has borrowed"), errors that must become the right status code, and reads that are fast enough because they're cached.
 
 ## What it teaches
-- Layered REST design: Controller → Service → Spring Data JPA Repository
-- JPA relationships: Author 1..* Book (`@OneToMany`/`@ManyToOne`) and User *..* Book (`@ManyToMany` + `@JoinTable`)
-- Bean Validation (`@Valid`) and centralised errors with `@ControllerAdvice`
-- Redis in two roles: a Spring Cache backend (`@Cacheable`/`@CachePut`/`@CacheEvict`) and direct `RedisTemplate` data structures (string, list, set, hash)
-- Unit testing a service with Mockito (`@InjectMocks`, `@Mock`)
+- JPA relationships: Author 1..* Book (`@OneToMany` / `@ManyToOne`) and User *..* Book (`@ManyToMany` + a join table)
+- Which side **owns** a relationship, and why that decides where the foreign key lives
+- Bean Validation (`@Valid`) and one `@RestControllerAdvice` for 400 / 404 / 409
+- Spring's cache abstraction: `@Cacheable` / `@CachePut` / `@CacheEvict`, the same code with an in-memory map or Redis
+- Redis data structures used directly with `RedisTemplate` (string, list, set, hash)
+- Testing at three levels: Mockito unit tests, `@DataJpaTest`, and the full API with MockMvc
 
-## Run it
-Prerequisites: JDK 17+, MySQL on `localhost:3306`, Redis on `localhost:6379`.
+## Run it (nothing to install except JDK 21)
+```bash
+./gradlew bootRun          # Windows: gradlew.bat bootRun
+./gradlew test             # 17 tests, no database or Redis needed
+```
+It starts on H2 with sample data: 2 authors, 3 books, 1 user. Base URL: `http://localhost:8080/digitalLibrary/api`.
 
-1. Edit `src/main/resources/application.properties`. The `spring.datasource.username` and `spring.datasource.password` values are placeholders (`username` / `Password`). Replace them with your own, or change them to `${DB_USERNAME:root}` / `${DB_PASSWORD}` and set those environment variables.
-2. Create the database: `CREATE DATABASE digital_library;` Tables are created automatically because `ddl-auto=update`.
-3. Start the app:
-   ```bash
-   ./gradlew bootRun            # Windows: gradlew.bat bootRun
-   ```
-4. The base URL is `http://localhost:8080/digitalLibrary/api` (set by `server.servlet.context-path`).
+```bash
+B=localhost:8080/digitalLibrary/api/v1
+curl $B/authors
+curl "$B/authors/R.K.%20Narayan"                     # a cached read: the second call doesn't query the database
+curl "$B/books?category=fantasy"
+curl -X POST $B/users/1/books/2                      # issue book 2 to user 1
+curl $B/users/1/books
+curl -X DELETE $B/books/2                            # 409: the book is issued
+curl -X DELETE $B/users/1/books/2                    # return it
+curl -X POST $B/authors -H "Content-Type: application/json" -d '{"authorName":""}'   # 400 {"authorName":"..."}
+```
 
 | Endpoint | Purpose |
 | --- | --- |
-| `POST /v1/authors`, `GET /v1/authors`, `GET /v1/authors/{authorName}`, `GET /v1/authors/usingParam?authorName=` | Create, list and fetch authors (the fetch by name is cached) |
-| `PUT /v1/authors` (body `UpdateAuthorDto`), `DELETE /v1/authors/{authorId}` | Update an author's address (refreshes the cache); delete an author (clears the cache) |
-| `POST /v1/authors/upload-csv` (multipart `file`) | Bulk-insert authors from a CSV with header `authorId,authorName,authorAddress` |
-| `POST /v1/books`, `DELETE /v1/books/{bookId}`, `GET /v1/books/{authorName}` | Books; the POST body must contain `author.authorId` |
-| `POST /v1/users`, `GET /v1/users/{userName}` | Users |
-| `/v1/redis/...` | Playground endpoints for Redis strings, lists, sets and hashes |
+| `POST /v1/authors`, `GET /v1/authors`, `GET /v1/authors/{name}`, `GET /v1/authors/usingParam?authorName=` | Create, list, fetch by name (cached) |
+| `PUT /v1/authors` (body `{"authorId":1,"address":"..."}`), `DELETE /v1/authors/{id}` | Change the address (refreshes the cache); delete, with their books |
+| `POST /v1/authors/upload-csv` (multipart `file`) | Bulk insert; header line, then `authorName,authorAddress` |
+| `POST /v1/books`, `GET /v1/books/{id}`, `PUT /v1/books/{id}`, `DELETE /v1/books/{id}` | Books; the body needs `"author":{"authorId":1}` |
+| `GET /v1/books?author=...` / `?category=...` | Filters |
+| `POST /v1/users`, `GET/PUT/DELETE /v1/users/{id}` | Members (409 when deleting one who still has books) |
+| `GET /v1/users/{id}/books`, `POST` / `DELETE /v1/users/{id}/books/{bookId}` | Issued books; issue (409 if already issued); return (404 if not issued) |
+| `/v1/redis/...` | Redis playground, `redis` profile only |
 
-Tests:
+### Optional: MySQL and Redis
 ```bash
-./gradlew test --tests '*AuthorServiceTest'   # 6 Mockito unit tests, no DB needed
-./gradlew test                                # also runs DigitalLibraryApplicationTests, which needs MySQL + Redis
+# MySQL (the database is created if missing)
+export DB_PASSWORD=...                 # PowerShell: $env:DB_PASSWORD="..."; DB_USERNAME defaults to root
+./gradlew bootRun --args='--spring.profiles.active=mysql'
+
+# Redis as the cache, plus the /v1/redis playground
+docker compose up -d                   # Redis on localhost:6379
+./gradlew bootRun --args='--spring.profiles.active=redis'
+docker exec -it digital-library-redis redis-cli    # then: KEYS *   GET "authors::R.K. Narayan"   TTL "authors::R.K. Narayan"
+docker compose down
 ```
+Profiles combine: `--spring.profiles.active=mysql,redis`.
 
 ## Read the code in this order
-1. `Requirements`: the original brief (tables, relationships, required APIs).
-2. `src/main/java/com/jbdl63/digitalLibrary/Model/`: `Author`, `Book` and `User` entities and their relationships.
-3. `.../Repository/`: derived query methods such as `findByAuthorName` and `findByAuthorAuthorName`.
-4. `.../Service/AuthorService.java` and `BookService.java`: business rules, not-found handling, CSV parsing.
-5. `.../Controller/AuthorController.java`: validation and cache annotations.
-6. `.../Exceptions/GlobalExceptionHandler.java`: how exceptions become HTTP 400 or 404 responses.
-7. `.../Configuration/RedisConfiguration.java` and `Service/RedisService.java`: how the Redis template and serializers are set up.
-8. `src/test/java/.../AuthorServiceTest.java`: mocking the repository.
+1. `Requirements`: the original brief
+2. `src/main/resources/application.properties`, then `application-mysql.properties` / `application-redis.properties`, and `data.sql`
+3. `model/Author.java`, `Book.java`, `User.java`: the entities and their relationships
+4. `repository/`: derived queries such as `findByAuthorAuthorName`
+5. `service/AuthorService.java`: the cache annotations; `BookService.java`; `UserService.java`: issue and return
+6. `controller/`: thin controllers, `@Valid`, status codes
+7. `exception/GlobalExceptionHandler.java`: every error becomes a status code
+8. `configuration/CachingConfiguration.java`, `RedisConfiguration.java`, then `service/RedisService.java`
+9. `src/test/java/...`: `AuthorServiceTest` (Mockito) → `RepositoryTest` (`@DataJpaTest`) → `LibraryApiTest` (MockMvc) → `CachingTest`
 
 ## Revision notes
-- An `@ExceptionHandler` method's parameter type must match the exception it handles. Otherwise Spring can't bind it and you get a 500.
-- Don't let a broad `catch (RuntimeException)` swallow your own `DataNotFoundException`. Re-throw it, or a 404 turns into a 400.
-- `@CachePut` must use the **same key** as `@Cacheable`. Here that is `#result.authorName`; a key made from a missing parameter is `null`.
-- `@EnableCaching` on the application class is what turns the cache annotations on.
-- Use `Optional.orElseThrow(...)` instead of `.get()`. `.get()` on an empty Optional produces a 500.
-- When parsing uploaded text, split on `\r?\n` so Windows line endings work, trim fields, and check the column count.
-- `FetchType.EAGER` on both sides of a relationship is simple but loads a lot of data. Prefer LAZY once you understand the trade-off.
-- Style note: the packages are Capitalised (`Controller`, `Service`, ...), which is non-standard Java. Lowercase is the convention. They were deliberately **not** renamed: `RedisConfiguration` uses `JdkSerializationRedisSerializer`, which stores full class names (e.g. `com.jbdl63.digitalLibrary.Model.Author`) inside Redis values, so a rename would make already-stored data unreadable. Rename only together with flushing Redis or switching to a JSON serializer.
+- **Owning side:** the side *without* `mappedBy` owns the relationship and holds the foreign key (`Book.author` → `author_id`). For a many-to-many the owner (`User.issuedBooks`) controls the join table: adding to its list inserts a row in `books_issued`. Changing only the `mappedBy` side saves nothing.
+- **Infinite loops:** Author → books → author → ... breaks both JSON and Lombok's `toString`. Hide one side from JSON (`@JsonIgnore`) and exclude relations from `@ToString`.
+- `@Builder` ignores field initialisers (`= new ArrayList<>()`) unless the field has `@Builder.Default`.
+- **Lazy loading:** a `@OneToMany` / `@ManyToMany` list is loaded when first read, which needs an open transaction. `UserService.findAllBooksIssuedToUser` is `@Transactional(readOnly = true)` and returns a copy. `spring.jpa.open-in-view=false` makes this explicit, instead of keeping a database connection open for the whole HTTP request.
+- **Dirty checking:** inside `@Transactional`, changing a loaded entity is enough; it's saved at commit, with no `save()` call.
+- **409 from the database:** a duplicate unique name, or deleting a row that another table still references, throws `DataIntegrityViolationException`. The handler turns it into 409 instead of a 500.
+- **Cache keys:** `@CachePut` must write the same key that `@Cacheable` reads (here, the author's name), or it just adds a second copy. When you can't compute the key (delete by id), `allEntries = true` is the safe choice.
+- **Cache location:** put the cache annotations on the service. They work through a Spring proxy, so a call from inside the same class skips the cache.
+- **Cache types:** `spring.cache.type=simple` (a `ConcurrentHashMap`) vs `redis`. The code doesn't change, only a property. Redis survives restarts and is shared by several instances; the in-memory cache is neither.
+- **Redis serialization:** Boot's default for the Redis cache is JDK serialization, binary data that includes the class name, so renaming a package breaks stored values. Here Author is stored as plain JSON, which is readable in `redis-cli` and has no class names. That's why the packages could be lowercased in this version.
+- **`@EnableCaching` placement:** it sits on its own `@Configuration` class, not the application class. Otherwise test slices like `@DataJpaTest` fail with "No CacheManager".
+- **Why ids are ignored on create:** a new entity with an id set is treated as an update of a row that doesn't exist. Hibernate 6.6+ throws for that, so the services clear it.
+- **Boot 4 upgrade gotchas:** Jackson 3 writes JSON properties in alphabetical order by default. Redis JSON serializers are now `JacksonJsonRedisSerializer` / `GenericJacksonJsonRedisSerializer` (Jackson 3). `RedisCacheManagerBuilderCustomizer` moved to `org.springframework.boot.cache.autoconfigure`.
+- The CSV upload splits on `\r?\n`, so Windows line endings don't leave a `\r` in the last column.
 
 ## Status
-✅ Compiles; the unit tests pass.
-🚧 Known issues:
-- The datasource credentials in `application.properties` are placeholders.
-- Book update and the "fetch by category" / "books issued to user" APIs from `Requirements` are not implemented.
-- The Redis host and port are hardcoded in `RedisConfiguration`.
+✅ **Working.** 17 tests pass. Checked over HTTP on H2, and with the `redis` profile against Redis 7 in Docker (JSON values, 10-minute TTL, `@CachePut` refresh). The `mysql` profile wasn't run here.
+
+Changes from the course version:
+- Boot 3.2 → 4.0 and Gradle 8.5 → 9.1
+- H2 by default instead of placeholder MySQL credentials
+- lowercase packages
+- `User.getIssuedBooks()` no longer a stub that returned `null`
+- issue/return, update-book and by-category APIs added
+- constructor injection
+- Boot's auto-configured Redis client instead of a hard-coded Jedis bean

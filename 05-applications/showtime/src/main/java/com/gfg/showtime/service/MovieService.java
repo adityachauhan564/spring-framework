@@ -1,65 +1,52 @@
 package com.gfg.showtime.service;
 
+import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gfg.showtime.domain.Movie;
+import com.gfg.showtime.enums.Genre;
+import com.gfg.showtime.exception.ConflictException;
 import com.gfg.showtime.exception.NotFoundException;
 import com.gfg.showtime.repository.MovieRepository;
 import com.gfg.showtime.resource.MovieResource;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.Objects;
-import java.util.Optional;
-
-@Slf4j
+/*
+ * Services return resources (DTOs), not entities, and read inside a transaction.
+ * spring.jpa.open-in-view=false closes the database session when the service returns,
+ * so lazy lists (a movie's reviews) must be read here.
+ */
 @Service
+@Transactional(readOnly = true)
 public class MovieService {
 
+	private final MovieRepository movieRepository;
 
-
-	@Autowired
-	private MovieRepository movieRepository;
-
-
-	public MovieResource addMovie(MovieResource movieRequest) {
-
-		Movie movie = Movie.toEntity(movieRequest);
-
-		if (movieRepository.existsByTitle(movieRequest.getTitle())) {
-				return Movie.toResource(movie);
-		}
-
-		movie = movieRepository.save(movie);
-
-		log.info("Added New Movie"+ movie.toString());
-
-		return Movie.toResource(movie);
+	public MovieService(MovieRepository movieRepository) {
+		this.movieRepository = movieRepository;
 	}
 
+	@Transactional
+	public MovieResource addMovie(MovieResource request) {
+		if (movieRepository.existsByTitle(request.title())) {
+			throw new ConflictException("Movie already exists: " + request.title());
+		}
+		return Movie.toResource(movieRepository.save(Movie.toEntity(request)));
+	}
 
 	public MovieResource getMovie(long id) {
-		//add id check if valid
-		Optional<Movie> movie = movieRepository.findById(id);
-
-		if (movie.isEmpty()) {
-			throw new EntityNotFoundException("Movie not found:" + id);
-		}
-
-		return Movie.toResource(movie.get());
+		return Movie.toResource(movieRepository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Movie not found: " + id)));
 	}
 
 	public MovieResource getMovie(String title) {
-		//add id check if valid
-		Movie movie = movieRepository.findByTitle(title);
-
-		if (Objects.isNull(movie)) {
-			throw new NotFoundException("Movie not found:" + title);
-		}
-
-		return Movie.toResource(movie);
+		return Movie.toResource(movieRepository.findByTitle(title)
+				.orElseThrow(() -> new NotFoundException("Movie not found: " + title)));
 	}
 
+	public List<MovieResource> topRated(Genre genre) {
+		return movieRepository.findTop5ByGenreAndRatingNotNullOrderByRatingDesc(genre).stream()
+				.map(Movie::toResource).toList();
+	}
 }

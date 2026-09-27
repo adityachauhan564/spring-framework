@@ -1,38 +1,77 @@
-# IRCTC Ticket Booking (console app, work in progress)
+# IRCTC Ticket Booking (plain Java console app)
 
-> A plain-Java (no Spring) train-booking console app that stores users and trains in local JSON files through Jackson. This is the start of a build-along project.
+> A train-booking console app with **no Spring**: sign up and log in with hashed passwords, search trains by route, see a seat map, book and cancel seats. Users and trains are stored in two JSON files through Jackson.
+
+**Before this:** the other 05 projects. This one is the review: the same ideas built by hand, so you can see what Spring was doing for you.
+
+## Why it matters
+With Spring it's easy to forget what the framework does. Without it:
+- you create and connect the objects yourself (`App`'s constructor), where Spring would use dependency injection;
+- you check passwords yourself (`BCrypt.checkpw`), where Spring Security would;
+- you store data yourself (`JsonStore`), where Spring Data would;
+- nothing makes two writes atomic, which `@Transactional` would.
+
+Each of those is a small piece of code here, and the comments point out where Spring would take over.
 
 ## What it teaches
-- Structuring a plain Java app into `entities/` and `services/` without a framework
-- Using JSON files as a tiny "database": Jackson `ObjectMapper.readValue` with a `TypeReference<List<User>>`
-- Modelling seats as a 2-D grid (`List<List<Integer>>`, where 0 = free) and a timetable as a `Map<station, time>`
-- A Gradle build with a version catalog (`gradle/libs.versions.toml`) and a Java 21 toolchain
+- Structuring an app without a framework: `entities/` (records), `services/` (rules), `store/` (files), `App` (the console)
+- Jackson: JSON ↔ records, `snake_case` ↔ `camelCase`, `TypeReference<List<User>>`, `LocalDate` with the JSR-310 module
+- Classpath resources vs files: read the shipped defaults from the jar, and write a copy into `./data`
+- Safe file writes: write a temporary file, then move it into place
+- Password hashing with BCrypt: a salt, a slow hash, and `checkpw`
+- A console menu with `Scanner` and a `switch` expression
+- Gradle: the `application` plugin, a version catalog (`gradle/libs.versions.toml`), a Java toolchain, JUnit 5 with `@TempDir`
 
 ## Run it
-Prerequisites: JDK 21. The Gradle 9.1 wrapper is included.
+Needs only JDK 21; the Gradle 9.1 wrapper is included.
 ```bash
-./gradlew test    # Windows: gradlew.bat test; checks users.json / trains.json are valid JSON arrays
-./gradlew run     # runs org.example.App (currently does nothing, see Status)
+./gradlew run -q --console=plain      # Windows: gradlew.bat run -q --console=plain
+./gradlew test                        # 6 tests
 ```
-The JSON "db" lives in `app/src/main/resources/localDb/`. `UserBookingService` reads it by a relative path (`src/main/resources/localDb/users.json`), so it must run with `app/` as the working directory. `gradle run` and `gradle test` both do that.
+Demo login: `aditya` / `password123`, or sign up (option 1).
+- **Routes:** `bangalore → jaipur → delhi` (train `bacs`) and `delhi → kanpur → lucknow` (train `dlkn`).
+- **Where the data goes:** bookings are saved in `app/data/` (`gradle run` starts in `app/`). Delete that folder to start again from the shipped data.
+
+```
+1 Sign up   2 Log in   3 Search trains   4 Book a seat
+5 My bookings   6 Cancel a booking   0 Exit
+Choose: 4
+From: delhi
+To: lucknow
+Train id: dlkn
+Seats (. free, X booked):
+  row 1  . X . .
+Row: 1
+Seat: 2  ->  ! Seat 1-2 is taken or doesn't exist
+```
 
 ## Read the code in this order
-1. `app/src/main/resources/localDb/users.json` and `trains.json`: the data shape.
-2. `app/src/main/java/org/example/entities/`: `User`, `Ticket`, `Train`.
-3. `app/src/main/java/org/example/services/UserBookingService.java`: loads the users list.
-4. `app/src/test/java/org/example/AppTest.java`: guards the JSON files.
+1. `app/src/main/resources/localDb/trains.json` and `users.json`: the data shape
+2. `app/src/main/java/com/learning/irctc/entities/`: `Train` (with `runsBetween`, `isFree`), `Ticket`, `User`
+3. `.../store/JsonStore.java`: reading and writing the files
+4. `.../services/TrainService.java` and `UserBookingService.java`: the rules
+5. `.../App.java`: the menu
+6. `app/src/test/java/com/learning/irctc/AppTest.java`
+7. `app/build.gradle` and `gradle/libs.versions.toml`
 
 ## Revision notes
-- An anonymous subclass needs `new` and `()`: `new TypeReference<List<User>>(){}`. The generic type is captured by subclassing, which gets around type erasure.
-- Jackson needs getters/setters (or field visibility) plus name mapping. The JSON uses `snake_case` (`user_id`, `ticket_booked`) while the fields are `camelCase`. Use `@JsonProperty` or `PropertyNamingStrategies.SNAKE_CASE`.
-- `new File("relative/path")` resolves against the **working directory**, not the class. For read-only data, prefer classpath resources (`getResourceAsStream`).
-- Store only a hash (e.g. BCrypt) of a password, never the plain text.
+- **Generic types:** `new TypeReference<List<User>>() {}` is an anonymous subclass. Subclassing is what keeps `List<User>` available at runtime despite type erasure; `List.class` alone would give a list of maps.
+- **Naming:** the file uses `snake_case` (`train_no`) and Java uses `camelCase` (`trainNo`). One `PropertyNamingStrategies.SNAKE_CASE` on the `ObjectMapper` maps them all.
+- **Records:** Jackson (2.12+) reads JSON into records through their constructor. The record is immutable, but the lists inside it are not, which is how a seat is marked booked.
+- **Relative paths:** `new File("src/main/resources/...")` resolves against the **working directory**, so it breaks when started from anywhere else. Read shipped data with `getResourceAsStream` (the classpath). Write to a known folder, never into `src/`, and a jar can't be written to at all.
+- **Passwords:** store only `BCrypt.hashpw(password, gensalt())`. Check with `BCrypt.checkpw`, which re-hashes with the salt stored inside the hash. The course's `users.json` had plain-text passwords, and a "hashedPassword" that wasn't hashed.
+- **Failed logins:** say "wrong name or password", not which one was wrong, so no one can find out which names exist.
+- **Store references, not copies:** a ticket stores the train id and seat position. The course copied the whole train into every ticket, and that copy went stale on the next booking.
+- **No transactions:** a booking writes `trains.json` and then `users.json`. If the program dies in between, the seat is taken but no one has the ticket. A database transaction prevents exactly this, which is the reason the other projects use one.
+- **Known simplification:** seats belong to the train, not to a date, so booking seat 1-2 for one day also takes it for every other day. A real system keeps one seat map per train per travel date.
+- **JUnit 5 `@TempDir`:** a fresh folder per test, deleted afterwards, so tests don't share data or touch `app/data`.
 
 ## Status
-🚧 **Work in progress.**
-- `App.main` and `TrainService` are empty.
-- The entities have no getters/setters or JSON mapping, so `UserBookingService` can't deserialize `users.json` yet.
-- `users.json` contains demo plain-text passwords (`password`, and a `hashedPassword` that isn't actually hashed). They are sample data only; never reuse them.
-- Jackson 2.12.6 is old.
+✅ **Working.** 6 tests pass, and the console flow was run end to end (login, search, book, taken seat, my bookings).
 
-✅ `./gradlew test` passes.
+Changes from the course version (which was an unfinished skeleton):
+- the empty `App` and `TrainService` are implemented;
+- the entities are records with JSON mapping;
+- both data files are fixed: consistent keys, no duplicate `user_id`, BCrypt hashes only;
+- Jackson 2.12 → 2.19 and JUnit 4 → 5, and the unused Guava is removed;
+- the package `org.example` is renamed to `com.learning.irctc`.

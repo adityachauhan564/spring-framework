@@ -1,20 +1,29 @@
 package com.gfg.showtime.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gfg.showtime.enums.SeatType;
 
-import lombok.*;
-
-import javax.persistence.*;
-
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "theater_seats")
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
-@Data
+@Builder
 public class TheaterSeats {
 
 	@Id
@@ -29,6 +38,5 @@ public class TheaterSeats {
 	private SeatType seatType;
 
 	@ManyToOne
-	@JsonIgnore
 	private Theater theater;
 }

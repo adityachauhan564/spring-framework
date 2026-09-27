@@ -1,65 +1,60 @@
-/**
- * 
- */
 package com.gfg.showtime.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gfg.showtime.resource.TheaterResource;
-
-import lombok.*;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gfg.showtime.resource.TheaterResource;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "theaters")
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
-@Data
+@Builder
 public class Theater {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "name", nullable = false)
+	@Column(nullable = false)
 	private String name;
 
-	@Column(name = "city", nullable = false)
+	@Column(nullable = false)
 	private String city;
 
-	@Column(name = "address", nullable = false)
+	@Column(nullable = false)
 	private String address;
 
 	@OneToMany(mappedBy = "theater", cascade = CascadeType.ALL)
-	@JsonIgnore
 	@Builder.Default
 	private List<Show> shows = new ArrayList<>();
 
+	// The physical seats. Each show copies them into its own ShowSeats (with price and booked flag).
 	@OneToMany(mappedBy = "theater", cascade = CascadeType.ALL)
-	@JsonIgnore
 	@Builder.Default
 	private List<TheaterSeats> seats = new ArrayList<>();
 
-	public static Theater toEntity(TheaterResource theaterResource) {
-
-		return Theater.builder()
-				.name(theaterResource.getName())
-				.city(theaterResource.getCity())
-				.address(theaterResource.getAddress())
-				.build();
+	public static Theater toEntity(TheaterResource request) {
+		return Theater.builder().name(request.name()).city(request.city()).address(request.address()).build();
 	}
 
 	public static TheaterResource toResource(Theater theater) {
-
-		return TheaterResource.builder()
-				.id(theater.getId())
-				.name(theater.getName())
-				.city(theater.getCity())
-				.address(theater.getAddress())
-				.build();
+		return new TheaterResource(theater.getId(), theater.getName(), theater.getCity(), theater.getAddress());
 	}
-
 }

@@ -1,60 +1,154 @@
 # ShowTime: Movie Ticket Booking Backend
 
-> A Spring Boot backend for movies, theatres, shows, reviews and ticket booking. It sends booking notifications through Kafka and email. Built during the GeeksforGeeks JBDL course (package `com.gfg.showtime`).
+> A Spring Boot backend for movies, theatres, shows, reviews and ticket booking. It has real security (BCrypt and roles), safe concurrent booking (transactions and optimistic locking), and booking notifications that run in-process or through **Kafka**, with email. Built during the GeeksforGeeks JBDL course (package `com.gfg.showtime`).
+
+**Before this:** [digital-library](../digital-library) (relationships, validation, errors). ShowTime adds the problems a real booking system has: who may do what, two people wanting the same seat, and side effects like emails that must not break or duplicate a booking.
+
+## Why it matters
+Booking looks like "mark a seat as taken". Doing it correctly means answering four questions:
+- **Who is booking?** Take the user from the login, never from the request body.
+- **What if two people click at once?** Only one may get the seat.
+- **What if something fails halfway?** Either the whole booking is saved or none of it is.
+- **When do we send the email?** Only for bookings that were really saved, and without making the customer wait for the mail server.
 
 ## What it teaches
-- Modelling a booking domain with JPA: Movie → Shows → ShowSeats, Theater → TheaterSeats, User → Tickets
-- Keeping API shape separate from entities: request/response `resource/*Resource` classes vs `domain/*` entities
-- Event-driven side effects: `TicketService` publishes to the Kafka topic `TICKET_BOOKED`, and `NotificationConsumer` (`@KafkaListener`) sends the email
-- Spring Security 5.7+ style: `SecurityFilterChain` and `PasswordEncoder` beans with a custom `UserDetailsService` / `AuthenticationProvider`, no `WebSecurityConfigurerAdapter`
-- Swagger docs with springfox and validation with `javax.validation`
+- A booking domain in JPA: Movie → Shows → ShowSeats, Theater → TheaterSeats, User → Tickets
+- DTOs (`resource/*` records) kept separate from entities (`domain/*`)
+- Spring Security without `WebSecurityConfigurerAdapter`: `SecurityFilterChain`, BCrypt, `UserDetailsService`, role rules, HTTP Basic
+- `@Transactional` booking and `@Version` **optimistic locking** against double booking
+- Domain events with `@TransactionalEventListener`: act only after the commit
+- **Kafka**: producer, topic, consumer group; `@EmbeddedKafka` in tests
+- Email with `JavaMailSender`, tested against Mailpit
+- `ProblemDetail` errors, OpenAPI docs (springdoc)
 
-## Run it
-Prerequisites: JDK 17+ (builds on JDK 21), MySQL on `localhost:3306`, Docker for Kafka.
+## Run it (nothing to install except JDK 21)
+```bash
+./mvnw spring-boot:run        # Windows: mvnw.cmd spring-boot:run
+./mvnw test                   # 17 tests (one starts an embedded Kafka broker)
+```
+It starts on H2 with sample data:
+- **Movies:** Inception, 3 Idiots, Interstellar.
+- **Shows:** two shows tomorrow at PVR Phoenix, Mumbai.
+- **Users:**
+
+  | Login | Password | Role |
+  |---|---|---|
+  | `admin@showtime.local` | `admin12345` (or `ADMIN_PASSWORD`) | ADMIN |
+  | `asha@example.com` | `password123` | USER |
+
+  These are for local demos only.
+
+Swagger UI: http://localhost:8080/swagger-ui.html. For Postman, import `Showtime.postman_collection.json` and run the requests in order; they already carry the logins.
 
 ```bash
-docker compose up -d                  # Zookeeper + Kafka on localhost:9092 (docker-compose.yml)
-
-# Windows PowerShell: $env:DB_PASSWORD="..."   bash: export DB_PASSWORD=...
-# DB_USERNAME defaults to root. MAIL_USERNAME / MAIL_PASSWORD are optional (Gmail SMTP, app password).
-../../03-spring-boot/restful-web-services/mvnw spring-boot:run   # this project has no own wrapper; any mvnw or mvn works
+curl "localhost:8080/show/search?city=Mumbai"                                        # public
+curl -u asha@example.com:password123 -X POST localhost:8080/ticket/book \
+     -H "Content-Type: application/json" -d '{"showId":1,"seatsNumbers":["1A","1B"],"seatType":"REGULAR"}'
+# run the same booking again -> 409 "Seats [...] are not all free"
+curl -u asha@example.com:password123 localhost:8080/user/me                          # your tickets
+curl -u asha@example.com:password123 -X POST localhost:8080/movie/add \
+     -H "Content-Type: application/json" -d '{"title":"X","genre":"DRAMA"}'          # 403: ADMIN only
 ```
-- The app runs on `http://localhost:8080`. The `showtime` database is created automatically (`createDatabaseIfNotExist=true`).
-- Swagger UI: `http://localhost:8080/swagger-ui/`
-- Postman: import `Showtime.postman_collection.json` and run the requests in order: addUser → addTheater → addMovie → addShow → addReview → bookTicket → the get requests.
+The app log shows the notification: "No mail server configured, email to asha@example.com not sent: ...".
 
-Main endpoints:
-- Users: `POST /user/signup`, `GET /user/{id}`
-- Theaters: `POST /theater/add`, `GET /theater/{id}`
-- Movies: `POST /movie/add`, `GET /movie/{id}`, `GET /movie/title?title=`
-- Shows: `POST /show/add`, `GET /show/search?city=&movieName=&theaterName=`
-- Reviews: `POST /review/add`, `GET /review/find?reviewId=`
-- Tickets: `POST /ticket/book`, `GET /ticket/{id}`
+| Endpoint | Who |
+| --- | --- |
+| `POST /user/signup` | anyone (always role USER) |
+| `GET /movie/{id}`, `/movie/title?title=`, `/movie/top?genre=`, `/show/search?city=&movieName=&theaterName=`, `/theater/{id}`, `/review/find?reviewId=` | anyone |
+| `POST /movie/add`, `/theater/add`, `/show/add`, `GET /user/{id}` | ADMIN |
+| `POST /ticket/book`, `POST /review/add`, `GET /user/me` | any logged-in user |
+| `GET /ticket/{id}` | the ticket's owner, or ADMIN |
+
+### Optional: Kafka, real emails, MySQL
+```bash
+docker compose up -d                                             # Kafka on :9092, Mailpit on :1025 (web inbox :8025)
+./mvnw spring-boot:run -Dspring-boot.run.profiles=kafka,mail
+# book a ticket (as above), then:
+#   the log shows: Published to TICKET_BOOKED -> Received from TICKET_BOOKED -> Email sent to asha@example.com
+#   open http://localhost:8025 to read the email
+docker compose down
+
+export DB_PASSWORD=...            # PowerShell: $env:DB_PASSWORD="..."; DB_USERNAME defaults to root
+./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql
+```
+
+## How a booking flows
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant T as TicketService (@Transactional)
+    participant DB as Database
+    participant L as After-commit listener
+    participant K as Kafka topic TICKET_BOOKED
+    participant N as NotificationService
+    C->>T: POST /ticket/book (logged in as Asha)
+    T->>DB: load show + seats, check they're free
+    T->>DB: save ticket, mark seats booked (version + 1)
+    T-->>L: publish BookingNotification event
+    DB-->>T: commit (fails if a seat's version changed -> 409)
+    T-->>C: 201 ticket
+    alt default profile
+        L->>N: send email + SMS (in this app)
+    else kafka profile
+        L->>K: JSON message
+        K->>N: KafkaNotificationConsumer
+    end
+```
 
 ## Read the code in this order
-1. `design.txt`: requirements, entities and relationships.
-2. `src/main/java/com/gfg/showtime/domain/`: the entities; start with `Show`, `ShowSeat` and `Ticket`.
-3. `.../resource/`: the DTOs. Each entity has a `toResource()` method that maps it to its DTO.
-4. `.../service/TicketService.java`: the heart of the app (seat checks, booking, Kafka publish).
-5. `.../consumer/NotificationConsumer.java` → `service/NotificationService.java`: the async email path.
-6. `.../config/SecurityConfiguration.java`, `MyAuthorityProvider.java`, `service/UserAuthService.java`: security wiring.
-7. `.../exception/NotFoundAdvice.java`: how not-found errors become HTTP 404.
+1. `design.txt`: the original requirements and entities
+2. `domain/`: the entities. Start with `Show`, `ShowSeat` (`@Version`) and `Ticket`
+3. `resource/`: the request/response records and their validation
+4. `service/TicketService.java`: the booking; then `ShowService`, `TheaterService`, `ReviewService`
+5. `notification/`: `BookingNotification` → `LocalNotificationListener` or `KafkaNotificationPublisher` → `KafkaNotificationConsumer` → `NotificationService`
+6. `config/SecurityConfiguration.java`, `service/UserAuthService.java`, `domain/User.java`: security
+7. `exception/ApiExceptionHandler.java`: `ProblemDetail` for every error
+8. `config/DataSeeder.java`, `config/KafkaConfig.java`, and the `application-*.properties` files
+9. Tests:
+   - `BookingTest`: price, notification timing, the race, `@Version`
+   - `ApiSecurityTest`: 401/403, signup, ownership, validation, reviews
+   - `KafkaNotificationTest`
+   - `NotificationServiceTest`
+   - `RepositoryQueryTest`
 
 ## Revision notes
-- `UserDetailsService.loadUserByUsername` must **throw** `UsernameNotFoundException`; it must never return `null`.
-- Without a `@RestControllerAdvice` (or `@ResponseStatus`), a custom `NotFoundException` reaches the client as a 500.
-- A bare `new ArrayList<>();` without `return` is a silent bug. The compiler accepts it, and in `searchShows` the city check did nothing until this was fixed.
-- Kafka decouples booking from notification. The HTTP call returns right away, and email failures don't roll back the booking.
-- Spring Boot auto-configures `JavaMailSender` from `spring.mail.*`. Never hardcode credentials in a `@Bean`.
-- Boot 2.7 still uses `javax.*`; Boot 3+ moved to `jakarta.*`. That rename is the main work in an upgrade.
-- springfox needs `spring.mvc.pathmatch.matching-strategy=ant_path_matcher` on Boot 2.6+.
+**Security**
+- **Who is the user?** Take it from the login (`@AuthenticationPrincipal`), never from a `userId` in the body; otherwise anyone can book in someone else's name. For the same reason sign-up has no `role` field.
+- **Passwords:** store only a BCrypt hash (`$2a$...`). BCrypt is slow and salted on purpose; `NoOpPasswordEncoder` stores plain text.
+- **What Spring does for you:** a `UserDetailsService` bean plus a `PasswordEncoder` bean is all Spring Security needs. Its `DaoAuthenticationProvider` does the password check, so the course's hand-written `AuthenticationProvider` was removed.
+- `loadUserByUsername` must **throw** `UsernameNotFoundException`, never return `null`.
+- **401 vs 403:** 401 means not logged in or a wrong password; 403 means logged in but not allowed. Rules are matched top to bottom and the first match wins, so put `/user/me` before `/user/*`.
+- **CSRF** is disabled because this API is stateless (no session cookie to forge). Keep it enabled for browser apps with sessions.
+
+**Transactions and concurrency**
+- `@Transactional` on `bookTicket` means the ticket and the seat changes commit together or not at all. Entities loaded in the transaction are saved at commit, with no `save()` call.
+- **Optimistic locking:** `@Version` makes Hibernate write `update ... where id = ? and version = ?`. If another booking changed the seat first, 0 rows match and the commit fails; the handler turns that into 409. It's cheap because nothing is locked while reading. The alternative, *pessimistic* locking (`select ... for update`), blocks other readers instead.
+- **Events after commit:** `@TransactionalEventListener` runs after the commit, so a rolled-back booking sends nothing and a mail failure can't undo a booking. A plain `@EventListener` would run inside the transaction.
+
+**Kafka**
+- Kafka makes the notification asynchronous and durable: the producer returns immediately, and the message waits in the topic until a consumer in group `ticketGroup` reads it.
+- The message key (the ticket id) picks the partition, and order is kept within a partition.
+- The message is a small DTO as JSON, not JPA entities.
+
+**Upgrade gotchas (Boot 2.7 → 4)**
+- `javax.*` → `jakarta.*`.
+- springfox → springdoc.
+- Boot 4 uses **Jackson 3**: the `tools.jackson.*` packages (annotations stay `com.fasterxml.jackson.annotation`), `java.time` works without extra modules, and a request that omits a primitive field (`long id`) is **rejected** (`FAIL_ON_NULL_FOR_PRIMITIVES` is now on). That's why the request records use `Long`.
+- Boot 4 has a `spring-boot-starter-kafka`, and builds the producer and consumer from `spring.kafka.*`, so no hand-written factories.
+- `@Data` on entities generates `equals`/`hashCode`/`toString` over relationships, which loads lazy data and can loop. Use `@Getter`/`@Setter`.
+
+**Bugs fixed from the course version**
+- `Ticket.seats` was `mappedBy = "show"`; it is now `"ticket"`.
+- `show_time` was a `TIME` column, which lost the date.
+- `bookedAt` recorded the seat's creation time instead of the booking time.
+- `@Valid` was never used, and validation had no implementation on the classpath.
+- `ReviewResource` couldn't be read from JSON.
+- The Postman collection called `/user/add`, but the endpoint is `/user/signup`.
+- Duplicates returned 200 with an unsaved object; they now return 409.
+- Login looked users up by name but returned the email as the username.
+- A missing `return` in the show search meant the city check did nothing.
 
 ## Status
-✅ Compiles on JDK 21. Lombok was pinned to 1.18.36 because Boot 2.7's default version breaks on JDK 21.
-⚠️ **Security is learning-grade, not secure.** It uses `NoOpPasswordEncoder` (plain-text passwords), CSRF is disabled, and `/**` is `permitAll()`.
-🚧 Known issues:
-- Spring Boot 2.7.3 is end-of-life, and springfox 3.0.0 is abandoned.
-- The "top 5 movies by genre" requirement in `design.txt` is not implemented.
-- Kafka must be running before you book a ticket.
-- There is a login mismatch. `User.getUsername()` returns the **email**, but `UserAuthService.loadUserByUsername` looks the user up **by name** (`findByName`). Pick one and use it in both places.
-- See [`../movieshark`](../movieshark), a near-copy of this project.
+✅ **Working.** 17 tests pass. Checked over HTTP on H2, and with `kafka,mail` against Kafka 3.9 (KRaft) and Mailpit in Docker: the message reached the consumer and the email arrived in the inbox. The `mysql` profile wasn't run here.
+
+**movieshark**, a near-copy of this project from the same course (no Swagger, and a login bug), was removed. Everything it taught is here.

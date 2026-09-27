@@ -1,42 +1,33 @@
 [
   {
     "train_id": "bacs",
-    "train_no": 12345,
+    "train_no": "12345",
     "seats": [
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0]
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0]
     ],
     "station_times": {
-      "bangalore": "13:50:00",
-      "jaipur": "13:50:00",
-      "delhi": "13:50:00"
+      "bangalore": "06:00:00",
+      "jaipur": "22:15:00",
+      "delhi": "04:40:00"
     },
-    "stations": [
-      "bangalore",
-      "jaipur",
-      "delhi"
-    ]
+    "stations": ["bangalore", "jaipur", "delhi"]
   },
   {
-    "train_id": "bacs",
-    "train_no": 12345,
+    "train_id": "dlkn",
+    "train_no": "12004",
     "seats": [
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0]
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0]
     ],
     "station_times": {
-      "bangalore": "13:50:00",
-      "jaipur": "13:50:00",
-      "delhi": "13:50:00"
+      "delhi": "06:10:00",
+      "kanpur": "10:45:00",
+      "lucknow": "12:40:00"
     },
-    "stations": [
-      "bangalore",
-      "jaipur",
-      "delhi"
-    ]
+    "stations": ["delhi", "kanpur", "lucknow"]
   }
 ]

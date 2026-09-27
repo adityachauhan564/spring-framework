@@ -1,6 +1,9 @@
 package com.gfg.showtime.domain;
 
-import lombok.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,95 +11,73 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.gfg.showtime.enums.Role;
 import com.gfg.showtime.resource.UserResource;
 
-import javax.persistence.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+/*
+ * The user entity doubles as Spring Security's UserDetails, so the security layer can use it directly.
+ * The login name is the EMAIL: it's unique. (The course looked users up by name but returned the
+ * email as the username, so no one could log in, and two people can share a name anyway.)
+ */
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
+@Builder
 public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(name = "name", nullable = false)
+	@Column(nullable = false)
 	private String name;
 
-	@Column(name="password",nullable = false)
-	private String password;
+	@Column(nullable = false)
+	private String password;               // a BCrypt hash, never the password itself
 
-	@Column(name = "mobile", nullable = false)
+	@Column(nullable = false, unique = true)
 	private String mobile;
 
-	
-	@Column(name = "email", nullable = false,unique = true)
+	@Column(nullable = false, unique = true)
 	private String email;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Ticket> ticketEntities;
-
 	@Enumerated(EnumType.STRING)
-	@Column(name = "role" ,columnDefinition = "varchar(30) default 'USER'")
+	@Column(nullable = false)
 	private Role role;
 
-	public static User toEntity(UserResource userResource) {
-
-		return User.builder()
-				.name(userResource.getName())
-				.password(userResource.getPassword())
-				.role(userResource.getRole())
-				.mobile(userResource.getMobile())
-				.email(userResource.getEmail())
-				.build();
-
-	}
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@Builder.Default
+	private List<Ticket> tickets = new ArrayList<>();
 
 	public static UserResource toResource(User user) {
-
-		return UserResource.builder()
-				.id(user.getId())
-				.name(user.getName())
-				.mobile(user.getMobile())
-				.email(user.getEmail())
-				.tickets(Ticket.toResource(user.getTicketEntities()))
-				.build();
+		return new UserResource(user.getId(), user.getName(), user.getMobile(), user.getEmail(), user.getRole(),
+				Ticket.toResource(user.getTickets()));
 	}
 
+	// "ADMIN" or "USER"; the security rules check these with hasAuthority(...)
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		  return Arrays.stream(this.role.toString().split(",")).map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
+		return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
 	@Override
 	public String getUsername() {
 		return email;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
 	}
 }

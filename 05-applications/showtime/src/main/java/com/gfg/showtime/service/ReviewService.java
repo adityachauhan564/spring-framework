@@ -1,43 +1,48 @@
 package com.gfg.showtime.service;
 
-import com.gfg.showtime.exception.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gfg.showtime.domain.Movie;
 import com.gfg.showtime.domain.Review;
+import com.gfg.showtime.exception.NotFoundException;
 import com.gfg.showtime.repository.MovieRepository;
 import com.gfg.showtime.repository.ReviewRepository;
+import com.gfg.showtime.repository.UserRepository;
 import com.gfg.showtime.resource.ReviewResource;
-
-import java.util.Optional;
 
 @Service
 public class ReviewService {
 
-    @Autowired
-    private ReviewRepository reviewRepository;
+    private final ReviewRepository reviewRepository;
+    private final MovieRepository movieRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private MovieRepository movieRepository;
-
-    public void addReview(Review review) {
-        Movie movie=movieRepository.findById(review.getMovie().getId()).orElse(null);
-        reviewRepository.save(review);
-        //need to optimized
-        //exception handling.
-        if(movie!=null) {
-            Double average = reviewRepository.getReviewAverage(movie.getId());
-            movie.setRating(average);
-            movieRepository.save(movie);
-        }
-
+    public ReviewService(ReviewRepository reviewRepository, MovieRepository movieRepository, UserRepository userRepository) {
+        this.reviewRepository = reviewRepository;
+        this.movieRepository = movieRepository;
+        this.userRepository = userRepository;
     }
 
-    public ReviewResource getReviewById(Long reviewId) {
+    // One transaction: the review and the movie's new average are saved together, or not at all
+    @Transactional
+    public ReviewResource addReview(ReviewResource request, String userEmail) {
+        Movie movie = movieRepository.findById(request.movieId())
+                .orElseThrow(() -> new NotFoundException("Movie not found: " + request.movieId()));
+        Review review = reviewRepository.save(Review.builder()
+                .movie(movie)
+                .user(userRepository.findByEmail(userEmail).orElseThrow())
+                .movieReview(request.movieReview())
+                .rating(request.rating())
+                .build());
+        reviewRepository.flush();                                  // so the average query below sees this review
+        movie.setRating(reviewRepository.averageRating(movie.getId()));
+        return Review.toResource(review);
+    }
 
-        Optional<Review> review= reviewRepository.findById(reviewId);
-        return review.map(Review::toResource).orElseThrow(() -> new NotFoundException("Review Not Found with ID: " + reviewId));
-
+    @Transactional(readOnly = true)
+    public ReviewResource getReviewById(long reviewId) {
+        return reviewRepository.findById(reviewId).map(Review::toResource)
+                .orElseThrow(() -> new NotFoundException("Review not found: " + reviewId));
     }
 }

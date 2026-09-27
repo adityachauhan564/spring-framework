@@ -2,13 +2,12 @@ package com.gfg.showtime.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import com.gfg.showtime.domain.Review;
 
-@Repository
-public interface ReviewRepository extends JpaRepository<Review,Long> {
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @Query(value = "select avg(rating) from review_table where movie_id=?",nativeQuery = true)
-    Double getReviewAverage(Long id);
+    // JPQL uses entity and field names (Review, r.movie.id), not table names, so it survives a table rename
+    @Query("select avg(r.rating) from Review r where r.movie.id = :movieId")
+    Double averageRating(long movieId);
 }

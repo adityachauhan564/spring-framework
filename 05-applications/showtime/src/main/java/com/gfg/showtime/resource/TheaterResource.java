@@ -1,25 +1,10 @@
 package com.gfg.showtime.resource;
 
+import jakarta.validation.constraints.NotBlank;
 
-import lombok.*;
-
-import java.util.List;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
-@ToString
-public class TheaterResource {
-
-	private long id;
-
-	private String name;
-
-	private String city;
-
-	private String address;
-
-	private List<ShowResource> shows;
+public record TheaterResource(
+        Long id,               // a wrapper, not long: Jackson 3 rejects a request that omits a primitive field
+        @NotBlank(message = "Name is mandatory") String name,
+        @NotBlank(message = "City is mandatory") String city,
+        @NotBlank(message = "Address is mandatory") String address) {
 }

@@ -1,0 +1,7 @@
+# Redis for the "redis" profile:  docker compose up -d   (stop: docker compose down)
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: digital-library-redis
+    ports:
+      - "6379:6379"

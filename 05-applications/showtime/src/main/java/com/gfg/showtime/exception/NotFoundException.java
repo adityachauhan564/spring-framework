@@ -1,10 +1,8 @@
 package com.gfg.showtime.exception;
 
-public class NotFoundException extends RuntimeException{
-    private final String message;
-
+// Something the request refers to doesn't exist -> 404
+public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {
         super(message);
-        this.message = message;
     }
 }

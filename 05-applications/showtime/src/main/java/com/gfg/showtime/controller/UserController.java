@@ -1,32 +1,47 @@
 package com.gfg.showtime.controller;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.gfg.showtime.resource.SignupRequest;
 import com.gfg.showtime.resource.UserResource;
 import com.gfg.showtime.service.UserService;
 
-import javax.validation.constraints.Min;
+import jakarta.validation.Valid;
 
-
-@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-	@Autowired
-	private UserService userService;
+	private final UserService userService;
 
-	@PostMapping("/signup")
-	public ResponseEntity<UserResource> addUser(@RequestBody UserResource userResource) {
-		return ResponseEntity.ok(userService.addUser(userResource));
+	public UserController(UserService userService) {
+		this.userService = userService;
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<UserResource> getUser(@PathVariable(name = "id") @Min(value = 1, message = "User Id Cannot be -ve") long id) {
-		return ResponseEntity.ok(userService.getUser(id));
+	@PostMapping("/signup")                       // open to everyone
+	@ResponseStatus(HttpStatus.CREATED)
+	public UserResource signup(@RequestBody @Valid SignupRequest request) {
+		return userService.signup(request);
 	}
 
+	// Your own profile and tickets. There is no "GET /user/{id}" for normal users: it would let
+	// anyone read anyone's details by counting ids.
+	@GetMapping("/me")
+	public UserResource me(@AuthenticationPrincipal UserDetails user) {
+		return userService.getByEmail(user.getUsername());
+	}
+
+	@GetMapping("/{id}")                          // ADMIN only
+	public UserResource getUser(@PathVariable long id) {
+		return userService.getUser(id);
+	}
 }
