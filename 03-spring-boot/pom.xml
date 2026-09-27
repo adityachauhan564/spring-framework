@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+    Aggregator only: builds the four Spring Boot projects in one command. It is NOT their parent -
+    each project keeps spring-boot-starter-parent and its own wrapper, so it also works on its own.
+      ./mvnw verify                      build and test everything (from this folder)
+      ./mvnw -pl restful-web-services spring-boot:run
+  -->
+  <groupId>com.learning.springboot</groupId>
+  <artifactId>spring-boot-stage</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>03-spring-boot</name>
+
+  <modules>
+    <module>spring-boot-basics</module>
+    <module>restful-web-services</module>
+    <module>jpa-hibernate</module>
+    <module>rest-first-books-api</module>
+  </modules>
+</project>

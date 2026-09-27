@@ -1,45 +1,71 @@
-# Rest First — Books API
+# Rest First: Books API (stage 03 capstone)
 
-> My first Spring Boot REST API: a small Book API backed by MySQL through Spring Data JPA.
+> A complete, production-shaped REST API: layers, DTOs, validation, consistent errors, search, paging and sorting, H2 by default with MySQL as an option, OpenAPI docs, and tests at every layer. It builds on everything else in stage 03.
 
-## What it teaches
-- `@RestController` with `@GetMapping` / `@PostMapping`
-- The layers: Controller → Service → Repository → Entity
-- Spring Data `CrudRepository`: no DAO code needed for `findAll()` / `save()`
-- JPA entity mapping: `@Entity`, `@Table`, `@Id`, `@GeneratedValue`, `@Column`
-- Configuring a datasource and Hibernate DDL (`ddl-auto=update`) in `application.properties`
+**Before this:** [restful-web-services](../restful-web-services/) (REST design) and [jpa-hibernate](../jpa-hibernate/) (Spring Data JPA).
 
 ## Run it
-Needs a running **MySQL** with a database named `youtube_springboot_api`. Hibernate creates the `books` table.
+No database to install: by default it uses in-memory H2, loaded with 7 sample books from `data.sql`.
+```bash
+./mvnw spring-boot:run          # Windows: mvnw.cmd spring-boot:run
+./mvnw test
+```
+API docs are at http://localhost:8080/swagger-ui.html.
 
 ```bash
-export DB_PASSWORD=your_mysql_password      # DB_USERNAME defaults to root
-./mvnw spring-boot:run                      # Windows: set DB_PASSWORD=... && mvnw.cmd spring-boot:run
+curl localhost:8080/books                                       # page 0, 5 books
+curl "localhost:8080/books?page=1&size=3&sort=title,desc"       # paging + sorting
+curl "localhost:8080/books?author=sierra"                        # search (case-insensitive)
+curl -i localhost:8080/books/99                                  # 404
+curl -i -X POST localhost:8080/books -H "Content-Type: application/json" \
+     -d '{"title":"Refactoring","author":"Martin Fowler"}'        # 201 + Location
+curl -X PUT localhost:8080/books/8 -H "Content-Type: application/json" -d '{"title":"Refactoring 2e","author":"Martin Fowler"}'
+curl -i -X DELETE localhost:8080/books/8                         # 204
 ```
-The app runs on port 8080.
 
+**MySQL (optional):**
 ```bash
-curl localhost:8080/books
-curl -X POST localhost:8080/books -H "Content-Type: application/json" \
-     -d '{"title":"Head First Java","author":"Kathy Sierra"}'
+export DB_PASSWORD=your-password                       # DB_USERNAME defaults to root
+./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql
 ```
+The database `youtube_springboot_api` is created if it's missing. Hibernate keeps the tables up to date, and the sample data isn't loaded.
 
-## Read the code in this order
-1. `src/main/resources/application.properties`: DB connection and Hibernate settings
-2. `src/main/java/com/api/book/rest_first/entities/Book.java`: the table mapping
-3. `src/main/java/com/api/book/rest_first/dao/BookRepository.java`: Spring Data interface
-4. `src/main/java/com/api/book/rest_first/services/BookService.java`: business layer
-5. `src/main/java/com/api/book/rest_first/controllers/BookController.java`: HTTP endpoints
+## The layers (read in this order)
 
-## Revision notes
-- `@RestController` = `@Controller` + `@ResponseBody`, so return values are written as JSON by Jackson.
-- `@RequestBody` turns the JSON body into a `Book`. Jackson needs the **no-arg constructor** and setters.
-- `CrudRepository<Book, Integer>` gives you `save`, `findAll`, `findById`, `deleteById` and more for free.
-- `BookRepository.findById(int)` *overloads* the inherited `findById(Integer)`, which returns `Optional`. That's confusing: prefer the inherited method.
-- `ddl-auto=update` is handy while learning; production uses migrations (Flyway or Liquibase) instead.
-- `@Column(name="book_title")` maps the Java field `title` to a different column name.
-- `@Component` on `BookService` works, but `@Service` states the intent more clearly.
-- Credentials come from env vars (`${DB_PASSWORD}`). Never commit real passwords.
+| Layer | Package | Its one job |
+| :- | :--- | :--- |
+| Entity | `entities.Book` | One table row; `IDENTITY` ids |
+| Repository | `dao.BookRepository` | Database access; Spring Data writes it |
+| DTOs | `dto.BookRequest`, `dto.BookResponse` | What the API receives and what it sends |
+| Service | `services.BookService` | Business logic and transactions; converts between entities and DTOs |
+| Controller | `controllers.BookController` | HTTP only: parameters, status codes, `Location` |
+| Errors | `exceptions.*` | Every error as ProblemDetail JSON |
+
+## Why it's built this way
+- **DTOs instead of the entity:**
+  - The request has no `id`, so a client can't pick or overwrite ids (a sent `id` is ignored).
+  - The database can change without breaking clients.
+- **`IDENTITY` ids:** the old `GenerationType.AUTO` made Hibernate create a hidden sequence table on MySQL.
+- **No custom `findById(int)`:** it used to hide Spring Data's own `findById`, which returns `Optional`. The service uses `orElseThrow`, so a missing book becomes a 404 instead of a `NullPointerException`.
+- **`PagedModel`:** gives a stable JSON shape, `{"content":[...], "page":{"size","number","totalElements","totalPages"}}`. Returning Spring's `Page` directly isn't a stable format.
+- **H2 by default:** the old default was MySQL, so `./mvnw test` failed on any machine without a matching MySQL setup.
+
+## Tests (one per layer)
+- `BookControllerTest`: `@WebMvcTest` with a **`@MockitoBean`** service. It covers HTTP behaviour only, and checks that invalid input never reaches the service.
+- `BookRepositoryTest`: `@DataJpaTest` covering the sample data, the case-insensitive search and paging.
+- `RestFirstApplicationTests`: `@SpringBootTest` running full CRUD end to end, plus paging.
+
+## Exercises
+1. Add a `publishedYear` field. Update the entity, both DTOs and the validation (`@Min(1450)`), then make the list sortable by it.
+2. Add `GET /books/search?title=...` using a derived query.
+3. Return **409 Conflict** when creating a book with a title and author that already exist.
+
+## Revision checklist
+- [ ] Each layer's one job, and why the controller never sees the entity.
+- [ ] How `?page=&size=&sort=` becomes a `Pageable`.
+- [ ] Why `IDENTITY`, and why not a custom `findById`.
+- [ ] How the `mysql` profile swaps the database without changing code.
+- [ ] Which test type checks which layer, and what `@MockitoBean` replaces.
 
 ## Status
-🚧 **Partial.** GET all books and POST a book work. GET-by-id is commented out in the controller and service, and PUT/DELETE aren't written yet. Compiles; running it needs MySQL.
+✅ Working: full CRUD, search and paging were checked over HTTP on H2 (with `DB_PASSWORD` unset), and 8 tests pass. The `mysql` profile is written but wasn't run against a real MySQL database in this pass.

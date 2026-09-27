@@ -1,7 +1,5 @@
 package com.api.book.rest_first.entities;
 
-
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,67 +7,54 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/*
+ * ENTITY layer: one row of the books table.
+ * GenerationType.IDENTITY = the database's auto-increment column. The old AUTO strategy made
+ * Hibernate create and use a hidden sequence table on MySQL - surprising and slower.
+ * The entity never leaves the service layer: the API sends BookResponse instead (dto package).
+ */
 @Entity
-@Table(name="books")
+@Table(name = "books")
 public class Book {
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
-	@Column(name="book_title")
-	private String title;
-	private String author;
-	
-	public Book(int id, String title, String author) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.author = author;
-	}
 
-	
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Override
-	public String toString() {
-		return "Book [id=" + id + ", title=" + title + ", author=" + author + "]";
-	}
+    @Column(name = "book_title", nullable = false)      // Java field "title" -> column "book_title"
+    private String title;
 
+    @Column(nullable = false)
+    private String author;
 
+    protected Book() {
+        // required by JPA
+    }
 
-	public Book() {
-		//super();
-	}
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
 
+    public Integer getId() {
+        return id;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public String getTitle() {
+        return title;
+    }
 
+    public String getAuthor() {
+        return author;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void update(String newTitle, String newAuthor) {
+        this.title = newTitle;
+        this.author = newAuthor;
+    }
 
-
-	public String getTitle() {
-		return title;
-	}
-
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-
-	public String getAuthor() {
-		return author;
-	}
-
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-	
-	
-	
-
+    @Override
+    public String toString() {
+        return "Book[id=" + id + ", title=" + title + ", author=" + author + "]";
+    }
 }
