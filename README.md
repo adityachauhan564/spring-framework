@@ -7,7 +7,7 @@ The folders are numbered in the order to study them. Each numbered folder has a 
 ```mermaid
 flowchart LR
     A["01 Core Java<br/>24 topics: OOP · Collections · Generics<br/>Exceptions · Threads · Streams · DSA · JUnit"] --> B["02 Spring Foundations<br/>IoC/DI · JDBC · ORM · MVC"]
-    B --> C["03 Spring Boot<br/>REST · JPA/Hibernate"]
+    B --> C["03 Spring Boot<br/>Auto-config · Actuator · REST<br/>Validation · Security · Spring Data JPA"]
     C --> D["04 Microservices<br/>Config · Eureka · Gateway"]
     C --> E["05 Applications<br/>ShowTime · Digital Library · IRCTC"]
     C --> F["06 Full-Stack<br/>Angular + Spring Boot"]
@@ -21,7 +21,7 @@ flowchart LR
 | :--- | :--- | :--- |
 | 1 | [`01-core-java`](./01-core-java) | [head-first-java](./01-core-java/head-first-java) · [functional-programming](./01-core-java/functional-programming) · [dsa-interview-practice](./01-core-java/dsa-interview-practice) · [multithreaded-web-server](./01-core-java/multithreaded-web-server) · [junit-basics](./01-core-java/junit-basics) |
 | 2 | [`02-spring-foundations`](./02-spring-foundations) | [spring-core](./02-spring-foundations/spring-core) · [spring-jdbc](./02-spring-foundations/spring-jdbc) · [spring-orm](./02-spring-foundations/spring-orm) · [spring-mvc](./02-spring-foundations/spring-mvc) |
-| 3 | [`03-spring-boot`](./03-spring-boot) | [rest-first-books-api](./03-spring-boot/rest-first-books-api) · [restful-web-services](./03-spring-boot/restful-web-services) · [jpa-hibernate](./03-spring-boot/jpa-hibernate) |
+| 3 | [`03-spring-boot`](./03-spring-boot) | [spring-boot-basics](./03-spring-boot/spring-boot-basics) · [restful-web-services](./03-spring-boot/restful-web-services) · [jpa-hibernate](./03-spring-boot/jpa-hibernate) · [rest-first-books-api](./03-spring-boot/rest-first-books-api) |
 | 4 | [`04-microservices`](./04-microservices) | [spring-cloud-config-server](./04-microservices/spring-cloud-config-server) · [naming-server](./04-microservices/naming-server) · [limits-service](./04-microservices/limits-service) · [currency-exchange-service](./04-microservices/currency-exchange-service) · [currency-conversion-service](./04-microservices/currency-conversion-service) · [api-gateway](./04-microservices/api-gateway) |
 | 5 | [`05-applications`](./05-applications) | [showtime](./05-applications/showtime) · [movieshark](./05-applications/movieshark) · [digital-library](./05-applications/digital-library) · [irctc-ticket-booking](./05-applications/irctc-ticket-booking) |
 | 6 | [`06-fullstack-angular`](./06-fullstack-angular) | [product-service-backend](./06-fullstack-angular/product-service-backend) · [product-inventory-frontend](./06-fullstack-angular/product-inventory-frontend) |
@@ -32,8 +32,7 @@ flowchart LR
 - ✅ **Verified running:**
   - `head-first-java`: all 24 topics, 37 programs, including the `assert` self-checks (`java -ea`)
   - `functional-programming`: all 15 topics, including the `assert` self-checks
-  - `restful-web-services` (in-memory data, Swagger)
-  - `jpa-hibernate` (H2)
+  - `03-spring-boot`: all 4 projects run with no database or server installed, and `./mvnw verify` passes 37 tests; every API was checked over real HTTP
   - `02-spring-foundations`: all 4 projects (30 topics) run with no database or server installed, and `./mvnw verify` passes 43 tests; the MVC app was checked over real HTTP on Jetty
   - `multithreaded-web-server` step 1
   - the `digital-library` and `irctc` unit tests
