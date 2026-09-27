@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Person(String name, int personId) -->
+
+    <!-- 1. in the same order as the constructor parameters -->
+    <bean id="byPosition" class="com.springcore.topic03_constructor_injection.Person">
+        <constructor-arg value="Roshan"/>
+        <constructor-arg value="16"/>
+    </bean>
+
+    <!-- 2. by index: order in the XML no longer matters -->
+    <bean id="byIndex" class="com.springcore.topic03_constructor_injection.Person">
+        <constructor-arg index="1" value="17"/>
+        <constructor-arg index="0" value="Aditya"/>
+    </bean>
+
+    <!-- 3. by parameter name: only works if the code is compiled with -parameters
+         (set in the parent pom; Spring 6.1+ no longer reads names from debug info) -->
+    <bean id="byName" class="com.springcore.topic03_constructor_injection.Person">
+        <constructor-arg name="personId" value="18"/>
+        <constructor-arg name="name" value="Khushi"/>
+    </bean>
+
+    <!-- 4. by type: useful when parameter types differ -->
+    <bean id="byType" class="com.springcore.topic03_constructor_injection.Person">
+        <constructor-arg type="int" value="19"/>
+        <constructor-arg type="java.lang.String" value="Asha"/>
+    </bean>
+
+    <!-- 5. c: namespace shorthand (needs xmlns:c) -->
+    <bean id="cNamespace" class="com.springcore.topic03_constructor_injection.Person"
+          c:name="Ravi" c:personId="20"/>
+</beans>

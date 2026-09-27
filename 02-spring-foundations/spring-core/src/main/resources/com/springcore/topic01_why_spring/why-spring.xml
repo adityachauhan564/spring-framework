@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The container reads this "recipe" and builds the objects for you. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="upiPayment" class="com.springcore.topic01_why_spring.UpiPayment"/>
+    <bean id="cardPayment" class="com.springcore.topic01_why_spring.CardPayment"/>
+
+    <!-- change ref to "cardPayment" to switch implementations - no Java change needed -->
+    <bean id="orderService" class="com.springcore.topic01_why_spring.OrderService">
+        <constructor-arg ref="upiPayment"/>
+    </bean>
+</beans>

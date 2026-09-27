@@ -1,17 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page isELIgnored="false" %>    
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+  <title>Welcome</title>
+  <%@ include file="head.jspf" %>
 </head>
-<body>
-<h1>Welcome , ${ user.userName} </h1>
-<h1>Your Email Address is ${user.email}</h1>
+<body class="container py-4">
+<%@ include file="nav.jspf" %>
 
-<h1>Your Password is ${user.password} try to secure the password</h1>
-
+<%-- "user" arrived as a flash attribute across the redirect (Post/Redirect/Get) --%>
+<h1>Welcome, <c:out value="${user.userName}"/>!</h1>
+<p>Your email address is <c:out value="${user.email}"/>.</p>
+<%-- The old page printed the password here. Never show or store a plain password:
+     it was hashed with BCrypt before it reached the database. --%>
+<p>Your password was stored as a BCrypt hash - not even this app can read it back.</p>
+<p>Refresh this page: it redirects to the form instead of registering you twice.</p>
+<p><a href="<c:url value='/users/${user.id}'/>">View your profile</a></p>
 </body>
 </html>

@@ -1,28 +1,47 @@
 # 02 - Spring Foundations
 
-This stage covers Spring without Spring Boot: the IoC container, `JdbcTemplate`, Hibernate integration and XML-configured Spring MVC on Tomcat. Everything here is configured by hand (XML or `@Configuration`), so you see exactly what Boot auto-configures later. Next stage: [03 - Spring Boot](../03-spring-boot/).
+Spring **without** Spring Boot: the IoC container, JDBC, Hibernate/JPA and web MVC, all configured by hand. Boot automates exactly this setup, so knowing it by hand turns Boot's "magic" into something you can read, debug and change. Next stage: [03 - Spring Boot](../03-spring-boot/).
 
-These are Maven projects without a Maven wrapper. Run `mvn` from the project folder, or point any sibling wrapper at it, e.g. `../../03-spring-boot/restful-web-services/mvnw -f pom.xml compile`.
+**Before this:** [01 - Core Java](../01-core-java/): classes and interfaces, collections, lambdas, and especially interfaces + dependency injection by hand (head-first-java topic05).
+
+## Run it (nothing to install except a JDK 21)
+All four projects are modules of one Maven build, with the Maven wrapper in this folder. Databases are in-memory H2 by default, and the web app runs on an embedded Jetty.
+
+```bash
+cd 02-spring-foundations
+./mvnw verify                                   # build all 4 projects and run all 43 tests
+./mvnw -q -pl spring-core compile exec:java -Dexec.mainClass=com.springcore.topic01_why_spring.ContainerWiringDemo
+./mvnw -pl spring-mvc jetty:run                 # then open http://localhost:8080/springmvc/
+```
+
+On Windows, use `mvnw.cmd` instead of `./mvnw`. Each project README lists its demo classes. MySQL is optional: set `DB_URL`, `DB_USERNAME` and `DB_PASSWORD` (see the spring-jdbc README).
 
 | # | Project | Topics | Status |
 | :- | :--- | :--- | :--- |
-| 1 | [spring-core](./spring-core/) | IoC/DI, XML + annotations + Java config, autowiring, lifecycle, scopes, SpEL | ✅ Working |
-| 2 | [spring-jdbc](./spring-jdbc/) | `JdbcTemplate`, DAO, `RowMapper`, MySQL | ✅ Working (needs MySQL) |
-| 3 | [spring-orm](./spring-orm/) | JPA entity mapping, `HibernateTemplate` DAO | 🚧 Unfinished tutorial |
-| 4 | [spring-mvc](./spring-mvc/) | `DispatcherServlet`, controllers, JSP/JSTL, form binding, Hibernate save | 🚧 Builds, not run on Tomcat yet |
+| 1 | [spring-core](./spring-core/) | 13 topics: why Spring, XML/annotation/Java config, autowiring, scopes, lifecycle, SpEL, profiles, AOP | ✅ Working (15 tests) |
+| 2 | [spring-jdbc](./spring-jdbc/) | 5 topics: `JdbcTemplate`, DAO, row mappers, named parameters/keys/batch, transactions | ✅ Working (8 tests) |
+| 3 | [spring-orm](./spring-orm/) | 5 topics: entity mapping, SessionFactory, CRUD + HQL, entity states, JPA | ✅ Working (5 tests) |
+| 4 | [spring-mvc](./spring-mvc/) | 7 topics: DispatcherServlet, controllers/views, request data, layers, forms + validation, error handling, REST JSON | ✅ Working (15 tests) |
 
 ## Suggested study order
-1. **spring-core**: follow its README order from XML beans through to `@Configuration`.
-2. **spring-jdbc**: reuse DI to build a DAO on `JdbcTemplate`.
-3. **spring-orm**: swap SQL for entity mapping, then finish `config.xml` (steps are in its README).
-4. **spring-mvc**: put it all behind a web layer. Its `spring-servlet.xml` is also the reference for spring-orm's missing config.
+1. **spring-core** 01 → 13. By topic13 you'll know what a proxy is, which the next two projects depend on.
+2. **spring-jdbc** 01 → 05. SQL by hand, finishing with transactions.
+3. **spring-orm** 01 → 05. The same data work with Hibernate writing the SQL, then JPA.
+4. **spring-mvc** 01 → 07. Put everything behind web pages and a JSON API.
 
 ## Quick revision checklist
-- [ ] IoC vs DI, and constructor vs setter injection trade-offs
-- [ ] Autowiring `byType` / `byName` / `constructor`, and what `@Qualifier` solves
-- [ ] Singleton vs prototype scope, and when destroy callbacks run
-- [ ] How `@Configuration` + `@Bean` replaces XML
-- [ ] What `JdbcTemplate` does for you, and why `?` placeholders matter
-- [ ] The DataSource -> SessionFactory -> HibernateTemplate -> TransactionManager chain
-- [ ] The request flow: `DispatcherServlet` -> controller -> `ViewResolver` -> JSP
-- [ ] javax vs jakarta: why Tomcat 10 / Spring 6 need `jakarta.*`
+- [ ] IoC vs DI; constructor vs setter injection, and why constructor is the default choice
+- [ ] Autowiring `byName` / `byType` / `constructor`, and what `@Qualifier` and `@Primary` solve
+- [ ] Singleton vs prototype scope; when init and destroy callbacks run
+- [ ] How `@Configuration` + `@Bean` replaces XML, and why `@Bean` methods return singletons
+- [ ] `${...}` properties vs `#{...}` SpEL; how `@Profile` picks beans
+- [ ] What an AOP proxy is, and why self-invocation skips `@Transactional`
+- [ ] What `JdbcTemplate` does for you, and why `?` / `:name` placeholders matter
+- [ ] When `@Transactional` commits and when it rolls back
+- [ ] The DataSource → SessionFactory/EntityManagerFactory → TransactionManager chain
+- [ ] Persistent vs detached entities; dirty checking
+- [ ] The request flow: `DispatcherServlet` → controller → view resolver → JSP
+- [ ] Validation with `@Valid` + `BindingResult`, and Post/Redirect/Get
+- [ ] `@ControllerAdvice` error handling; `@RestController` + JSON with proper status codes
+- [ ] Why passwords are hashed (BCrypt) and entities are never returned from an API
+- [ ] javax vs jakarta: Spring 6 and Tomcat 10+ need `jakarta.*`
