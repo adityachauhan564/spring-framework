@@ -10,7 +10,7 @@ flowchart LR
     B --> C["03 Spring Boot<br/>Auto-config · Actuator · REST<br/>Validation · Security · Spring Data JPA"]
     C --> D["04 Microservices<br/>Config · Eureka · Feign · Gateway<br/>Resilience4j · Tracing"]
     C --> E["05 Applications<br/>Digital Library · ShowTime · IRCTC<br/>Security · Kafka · Redis"]
-    C --> F["06 Full-Stack<br/>Angular + Spring Boot"]
+    C --> F["06 Full-Stack<br/>Angular + Spring Boot<br/>CORS · Signals · Forms"]
 ```
 
 ---
@@ -28,7 +28,7 @@ flowchart LR
 | — | [`reference`](./reference) | [in28minutes-spring-microservices-v3](./reference/in28minutes-spring-microservices-v3): the course's own code, kept for comparison (not my work) |
 
 ### Status at a glance
-- ✅ **Everything compiles.** Every Maven and Gradle project builds on JDK 21, and the Angular tests pass.
+- ✅ **Everything compiles.** Every Maven and Gradle project builds on JDK 21, and the Angular app builds and its tests pass.
 - ✅ **Verified running:**
   - `head-first-java`: all 24 topics, 37 programs, including the `assert` self-checks (`java -ea`)
   - `functional-programming`: all 15 topics, including the `assert` self-checks
@@ -36,9 +36,8 @@ flowchart LR
   - `03-spring-boot`: all 4 projects run with no database or server installed, and `./mvnw verify` passes 37 tests; every API was checked over real HTTP
   - `04-microservices`: all 6 services start with one script (`start-all.sh` / `.ps1`), and `./mvnw verify` passes 14 tests; config refresh, load balancing, Feign and RestClient calls, gateway routes, Resilience4j and tracing were checked end to end
   - `05-applications`: all 3 projects run with no database or broker installed (40 tests); digital-library was checked with Redis, and showtime with Kafka and Mailpit, in Docker
+  - `06-fullstack-angular`: the API and the Angular app work together with no database installed (6 + 12 tests); checked in a headless browser across origins
   - `multithreaded-web-server` step 1
-- 🚧 **Work in progress:**
-  - The Angular frontend is an unfinished tutorial step.
 - 📝 **Stubs:** three `dsa-interview-practice` files marked `// TODO: not implemented yet` (`sortColours`, `LinkedList_Cycle`, `MiddleOfLinkedList`) are problem statements, not solutions.
 
 ---
@@ -49,8 +48,8 @@ flowchart LR
 - **JDK 21**. The Boot 2.7 apps also work on JDK 17.
 - **Maven**: use the `./mvnw` wrapper included with the projects. Stages 02, 03 and 04 also have one wrapper at the stage root that builds and tests all their projects (`./mvnw verify`).
 - **Gradle**: use the included `./gradlew`.
-- **MySQL 8** for `06-fullstack-angular`. It is optional everywhere else: 02, 03 and 05 default to in-memory H2. **Docker** is needed only for the optional Redis (digital-library) and Kafka/Mailpit (showtime) modes.
-- **Node 18+** for the Angular app.
+- **MySQL 8** is optional: the Spring projects default to in-memory H2, and their READMEs show how to switch to MySQL where it is supported. **Docker** is needed only for the optional Redis (digital-library) and Kafka/Mailpit (showtime) modes.
+- **Node 20+** for the Angular app.
 
 ### Credentials: environment variables, never in git
 Projects that need a database read it from environment variables:
