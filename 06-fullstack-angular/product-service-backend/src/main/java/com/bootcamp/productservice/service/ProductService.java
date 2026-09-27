@@ -3,66 +3,52 @@ package com.bootcamp.productservice.service;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
-import com.bootcamp.productservice.dao.ProductRepository;
 import com.bootcamp.productservice.model.Product;
+import com.bootcamp.productservice.repository.ProductRepository;
 
 @Service
 public class ProductService {
-	
-	@Autowired
-	ProductRepository prRepo;
-	
-	//return type is here *list of Product*
-	public List<Product> findAll(){
-		
-		return (List<Product>) prRepo.findAll();
-	}
-	
-	//find by name
-	public Product findByPName(String pName) {
-		
-		return prRepo.findBypName(pName)
-				.orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Not Found "));
-	}
-	
-	//save product
-	public Product saveProduct(Product p) {
-		
-		return prRepo.save(p);
-	}
-	
-	//update product ,first find the product then update the product 
-	public Product updateProduct(Integer  pId, Product pr) {
-		
-	   Product existing=	prRepo.findById(pId)
-		.orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "No Product Available with ID :: "+pId));
-	   
-	   if(pr.getPName()!=null)
-		   existing.setPName(pr.getPName());
-	   if(pr.getPPrice()!=null)
-		   existing.setPPrice(pr.getPPrice());
-	   if(pr.getPQuantity()!=null)
-		   existing.setPQuantity(pr.getPQuantity());
-	   
-	   return prRepo.save(existing);
-	}
-	
-	//delete the product
-	public String deleteProduct(Integer pId) {
-		
-		Product existing=	prRepo.findById(pId)
-				.orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "No Product Available with ID :: "+pId));
-		
-		//since product is already fetched so I am deleting it
-		prRepo.delete(existing);
-		
-		return "Product Deleted Successfully ";
+
+	private final ProductRepository repository;
+
+	public ProductService(ProductRepository repository) {
+		this.repository = repository;
 	}
 
-	
+	public List<Product> findAll(String search) {
+		return StringUtils.hasText(search)
+				? repository.findByNameContainingIgnoreCaseOrderByName(search.trim())
+				: repository.findAllByOrderByName();
+	}
 
+	public Product findById(Integer id) {
+		// ResponseStatusException is the quickest correct 404; a plain RuntimeException would be a 500
+		return repository.findById(id)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No product with id " + id));
+	}
+
+	public Product create(Product product) {
+		product.setId(null);                   // always a new row, whatever id the client sent
+		return repository.save(product);
+	}
+
+	// PUT replaces the product's fields (all are validated as required).
+	// Inside @Transactional the changes to the loaded entity are saved at commit: no save() needed.
+	@Transactional
+	public Product update(Integer id, Product changes) {
+		Product existing = findById(id);
+		existing.setName(changes.getName());
+		existing.setPrice(changes.getPrice());
+		existing.setQuantity(changes.getQuantity());
+		return existing;
+	}
+
+	public void delete(Integer id) {
+		repository.delete(findById(id));
+	}
 }
