@@ -9,7 +9,7 @@ flowchart LR
     A["01 Core Java<br/>24 topics: OOP · Collections · Generics<br/>Exceptions · Threads · Streams · DSA · JUnit"] --> B["02 Spring Foundations<br/>IoC/DI · JDBC · ORM · MVC"]
     B --> C["03 Spring Boot<br/>Auto-config · Actuator · REST<br/>Validation · Security · Spring Data JPA"]
     C --> D["04 Microservices<br/>Config · Eureka · Feign · Gateway<br/>Resilience4j · Tracing"]
-    C --> E["05 Applications<br/>ShowTime · Digital Library · IRCTC"]
+    C --> E["05 Applications<br/>Digital Library · ShowTime · IRCTC<br/>Security · Kafka · Redis"]
     C --> F["06 Full-Stack<br/>Angular + Spring Boot"]
 ```
 
@@ -23,7 +23,7 @@ flowchart LR
 | 2 | [`02-spring-foundations`](./02-spring-foundations) | [spring-core](./02-spring-foundations/spring-core) · [spring-jdbc](./02-spring-foundations/spring-jdbc) · [spring-orm](./02-spring-foundations/spring-orm) · [spring-mvc](./02-spring-foundations/spring-mvc) |
 | 3 | [`03-spring-boot`](./03-spring-boot) | [spring-boot-basics](./03-spring-boot/spring-boot-basics) · [restful-web-services](./03-spring-boot/restful-web-services) · [jpa-hibernate](./03-spring-boot/jpa-hibernate) · [rest-first-books-api](./03-spring-boot/rest-first-books-api) |
 | 4 | [`04-microservices`](./04-microservices) | [spring-cloud-config-server](./04-microservices/spring-cloud-config-server) · [naming-server](./04-microservices/naming-server) · [limits-service](./04-microservices/limits-service) · [currency-exchange-service](./04-microservices/currency-exchange-service) · [currency-conversion-service](./04-microservices/currency-conversion-service) · [api-gateway](./04-microservices/api-gateway) |
-| 5 | [`05-applications`](./05-applications) | [showtime](./05-applications/showtime) · [movieshark](./05-applications/movieshark) · [digital-library](./05-applications/digital-library) · [irctc-ticket-booking](./05-applications/irctc-ticket-booking) |
+| 5 | [`05-applications`](./05-applications) | [digital-library](./05-applications/digital-library) · [showtime](./05-applications/showtime) · [irctc-ticket-booking](./05-applications/irctc-ticket-booking) |
 | 6 | [`06-fullstack-angular`](./06-fullstack-angular) | [product-service-backend](./06-fullstack-angular/product-service-backend) · [product-inventory-frontend](./06-fullstack-angular/product-inventory-frontend) |
 | — | [`reference`](./reference) | [in28minutes-spring-microservices-v3](./reference/in28minutes-spring-microservices-v3): the course's own code, kept for comparison (not my work) |
 
@@ -32,13 +32,13 @@ flowchart LR
 - ✅ **Verified running:**
   - `head-first-java`: all 24 topics, 37 programs, including the `assert` self-checks (`java -ea`)
   - `functional-programming`: all 15 topics, including the `assert` self-checks
-  - `03-spring-boot`: all 4 projects run with no database or server installed, and `./mvnw verify` passes 37 tests; every API was checked over real HTTP
   - `02-spring-foundations`: all 4 projects (30 topics) run with no database or server installed, and `./mvnw verify` passes 43 tests; the MVC app was checked over real HTTP on Jetty
+  - `03-spring-boot`: all 4 projects run with no database or server installed, and `./mvnw verify` passes 37 tests; every API was checked over real HTTP
   - `04-microservices`: all 6 services start with one script (`start-all.sh` / `.ps1`), and `./mvnw verify` passes 14 tests; config refresh, load balancing, Feign and RestClient calls, gateway routes, Resilience4j and tracing were checked end to end
+  - `05-applications`: all 3 projects run with no database or broker installed (40 tests); digital-library was checked with Redis, and showtime with Kafka and Mailpit, in Docker
   - `multithreaded-web-server` step 1
-  - the `digital-library` and `irctc` unit tests
 - 🚧 **Work in progress:**
-  - `irctc-ticket-booking` and the Angular frontend are unfinished tutorial steps.
+  - The Angular frontend is an unfinished tutorial step.
 - 📝 **Stubs:** three `dsa-interview-practice` files marked `// TODO: not implemented yet` (`sortColours`, `LinkedList_Cycle`, `MiddleOfLinkedList`) are problem statements, not solutions.
 
 ---
@@ -47,9 +47,9 @@ flowchart LR
 
 ### Prerequisites
 - **JDK 21**. The Boot 2.7 apps also work on JDK 17.
-- **Maven**: use the `./mvnw` wrapper included with the projects. `02-spring-foundations` has one wrapper for all four of its projects.
+- **Maven**: use the `./mvnw` wrapper included with the projects. Stages 02, 03 and 04 also have one wrapper at the stage root that builds and tests all their projects (`./mvnw verify`).
 - **Gradle**: use the included `./gradlew`.
-- **MySQL 8** for the Boot apps that use it (optional in `02-spring-foundations`, which defaults to in-memory H2). **Redis** for digital-library.
+- **MySQL 8** for `06-fullstack-angular`. It is optional everywhere else: 02, 03 and 05 default to in-memory H2. **Docker** is needed only for the optional Redis (digital-library) and Kafka/Mailpit (showtime) modes.
 - **Node 18+** for the Angular app.
 
 ### Credentials: environment variables, never in git
@@ -62,7 +62,7 @@ export DB_USERNAME=root DB_PASSWORD=your-password
 $env:DB_USERNAME="root"; $env:DB_PASSWORD="your-password"
 ```
 
-Mail (showtime/movieshark, optional): `MAIL_USERNAME`, `MAIL_PASSWORD`.
+Mail for showtime with a real SMTP server (optional): `MAIL_USERNAME`, `MAIL_PASSWORD`. Locally, Mailpit needs neither.
 
 ### Run a Spring Boot project
 ```bash

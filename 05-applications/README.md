@@ -1,27 +1,62 @@
 # 05 — Real-World Backend Applications
 
-These are larger, end-to-end backend projects that combine what the earlier sections teach: REST design, JPA relationships, validation, exception handling, caching (Redis), messaging (Kafka), email and security. Each one is a separate build (Maven or Gradle); run it from its own folder.
+> Three complete applications that combine what stages 01-03 taught: REST, JPA relationships, validation, error handling, security, transactions, caching, messaging, and one app built with no framework at all.
 
-| # | Project | Topics | Status |
-| --- | --- | --- | --- |
-| 1 | [digital-library](./digital-library) | Spring Boot 3, JPA 1..* / *..*, validation, `@ControllerAdvice`, Redis cache + `RedisTemplate`, Mockito tests | ✅ builds, unit tests pass; needs MySQL + Redis |
-| 2 | [showtime](./showtime) | Booking domain, DTO mapping, Kafka producer/consumer, email, Spring Security filter chain, springfox | ✅ builds; Boot 2.7 (EOL); security not secure |
-| 3 | [movieshark](./movieshark) | Near-copy of showtime (different `User` login field, no Swagger) | ✅ builds; duplicate |
-| 4 | [irctc-ticket-booking](./irctc-ticket-booking) | Plain Java + Gradle, Jackson over JSON files | 🚧 work in progress |
+**Before this:** [03-spring-boot](../03-spring-boot). Stage [04-microservices](../04-microservices) is independent of this one; each app here is a single service.
 
-Common prerequisites: JDK 17+ (21 recommended), MySQL on `localhost:3306`, and `DB_PASSWORD` set in your environment (`DB_USERNAME` defaults to `root`). showtime and movieshark also need Kafka (`showtime/docker-compose.yml`). digital-library also needs Redis.
+## Why this stage
+Tutorials show one feature at a time. Real applications have to combine them and handle what goes wrong:
+- a book that can't be deleted because someone has borrowed it;
+- two customers booking the same seat;
+- an email for a booking that was then rolled back;
+- data that has to survive a restart.
+
+Each project here is small enough to read in an afternoon and shows one layer more than the previous one.
+
+## Run everything (nothing to install except JDK 21)
+Each project is its own build with its own wrapper, and each starts on in-memory H2 with sample data:
+
+| # | Project | Build | Run | Test |
+|---|---|---|---|---|
+| 1 | [digital-library](./digital-library) | Gradle | `./gradlew bootRun` | `./gradlew test` (17) |
+| 2 | [showtime](./showtime) | Maven | `./mvnw spring-boot:run` | `./mvnw test` (17) |
+| 3 | [irctc-ticket-booking](./irctc-ticket-booking) | Gradle | `./gradlew run -q --console=plain` | `./gradlew test` (6) |
+
+Optional real infrastructure, through Docker and a Spring profile:
+- **Redis** for digital-library (`redis` profile);
+- **Kafka** and **Mailpit** for showtime (`kafka,mail` profiles);
+- **MySQL** for both (`mysql` profile, credentials from `DB_USERNAME` / `DB_PASSWORD`).
+
+Each README has the exact commands.
+
+## What each project adds
+
+| | digital-library | showtime | irctc-ticket-booking |
+|---|---|---|---|
+| Domain | authors, books, members, lending | movies, theatres, shows, seats, tickets | trains, seats, bookings |
+| Data | JPA: `@OneToMany`, `@ManyToMany` + join table | JPA, a richer model, DTO records | JSON files + Jackson |
+| Rules | 409 when a book is still issued | `@Transactional` booking, `@Version` against double booking | checked by hand, no transaction |
+| Security | none | BCrypt, roles, HTTP Basic, owner-only tickets | BCrypt by hand |
+| Beyond the DB | `@Cacheable`: in memory or Redis; Redis data structures | after-commit events, Kafka, email (Mailpit) | classpath resources, safe file writes |
+| Tests | Mockito, `@DataJpaTest`, MockMvc, cache | MockMvc + security, concurrency, `@EmbeddedKafka` | JUnit 5 `@TempDir` |
 
 ## Suggested study order
-1. **digital-library**: the cleanest layered REST + JPA example. Learn the exception handling and caching here.
-2. **showtime**: the same layering on a richer domain, plus async notifications with Kafka and Spring Security.
-3. **movieshark**: diff it against showtime as a review exercise (why should the login field be unique?).
-4. **irctc-ticket-booking**: rebuild the ideas without Spring, to see what the framework was doing for you.
+1. **digital-library**: the cleanest layered REST + JPA example. Learn relationships, error handling and caching here.
+2. **showtime**: the same layering on a richer domain, plus security, transactions and concurrency, and Kafka.
+3. **irctc-ticket-booking**: rebuild the ideas without Spring, to see what the framework was doing for you.
+
+`movieshark` was removed: it was an older copy of showtime with a login bug.
 
 ## Quick revision checklist
-- [ ] Can I explain `@OneToMany(mappedBy=...)` vs `@ManyToOne` vs `@ManyToMany` + `@JoinTable`, and which side owns the relationship?
-- [ ] Do I know why an `@ExceptionHandler` parameter must match its exception type, and how a custom exception becomes a 404?
-- [ ] Can I explain `@Cacheable` / `@CachePut` / `@CacheEvict`, including why their keys must match?
-- [ ] Can I trace a booking in showtime from `POST /ticket/book` through Kafka to the email?
-- [ ] Why must `loadUserByUsername` throw instead of returning `null`? Why is `NoOpPasswordEncoder` unsafe?
-- [ ] Why use `Optional.orElseThrow` instead of `.get()`?
-- [ ] Why do credentials go in environment variables (`${DB_PASSWORD}`) rather than in `application.properties`?
+- [ ] Which side owns a JPA relationship, and where does the foreign key or join table end up?
+- [ ] Why do Author → Book → Author loops break JSON and `toString`, and what are two ways to stop them?
+- [ ] Why does a lazy collection need an open transaction, and what does `open-in-view=false` change?
+- [ ] `@Cacheable` / `@CachePut` / `@CacheEvict`: which keys must match, and why do the annotations belong on the service?
+- [ ] Why is JSON a safer Redis format than JDK serialization?
+- [ ] 401 vs 403. Why must the booking user come from the login, not the request body?
+- [ ] Why BCrypt, and why must `loadUserByUsername` throw instead of returning `null`?
+- [ ] How does `@Version` stop two people from booking the same seat? How is that different from a pessimistic lock?
+- [ ] Why send the notification from a `@TransactionalEventListener` rather than inside the booking?
+- [ ] What does Kafka add over calling the email code directly (async, durable, consumer groups)?
+- [ ] Why read shipped data from the classpath but write to a separate folder?
+- [ ] What goes wrong without a transaction when one action writes two files?
