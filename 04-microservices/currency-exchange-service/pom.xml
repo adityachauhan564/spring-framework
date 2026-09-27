@@ -52,12 +52,16 @@
 			<scope>runtime</scope>
 		</dependency>
 		
-		<!--
-           <dependency>
+		<!-- RestClient.Builder (used by CircuitBreakerController). Boot 4 moved it into its own starter -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-restclient</artifactId>
+		</dependency>
+		<!-- /h2-console to browse the exchange table -->
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-h2console</artifactId>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
@@ -80,14 +84,32 @@
 			<artifactId>spring-boot-starter-aspectj</artifactId> <!-- renamed from starter-aop in Boot 4 -->
 		</dependency>
 		
+		<!-- @Retry, @CircuitBreaker, @RateLimiter, @Bulkhead (needs the aspectj starter above).
+		     The -spring-boot4 artifact matches Spring Boot 4; -spring-boot3 is for Boot 3. -->
 		<dependency>
-		<groupId>io.github.resilience4j</groupId>
-		<artifactId>resilience4j-spring-boot3</artifactId>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-spring-boot4</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<!-- distributed tracing: adds traceId/spanId to every log line and passes them on to other services -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-micrometer-tracing-brave</artifactId>
+		</dependency>
+		<!-- the tracer itself: the Boot module above only auto-configures it -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-brave</artifactId>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		
