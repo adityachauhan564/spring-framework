@@ -12,61 +12,51 @@
 	<artifactId>restful-web-services</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>restful-web-services</name>
-	<description>Demo project for Spring Boot</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+	<description>REST API design with Spring Boot: CRUD, validation, errors, filtering, versioning, OpenAPI, testing, security</description>
+
 	<properties>
 		<java.version>21</java.version>
 	</properties>
+
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-h2console</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
+		<!-- REST controllers + JSON (Jackson 3) + embedded Tomcat -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
-		<!-- Open AI for Documentation-->
-        <dependency>
-        <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>3.0.0</version> <!-- springdoc 3.x = Spring Boot 4 -->
-       </dependency>
+		<!-- @Valid, @NotBlank, @Past... (topic04) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<!-- authentication and authorization (topic09) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- OpenAPI docs + Swagger UI (topic07). springdoc 3.x is the line for Spring Boot 4 -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Spring Security in test slices (@WebMvcTest) + httpBasic(...) / @WithMockUser (topic08/09).
+		     Boot 4 split this into its own starter; spring-security-test alone is no longer enough. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -79,5 +69,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
