@@ -1,0 +1,40 @@
+# application.yml - Boot reads this automatically (application.properties works the same way;
+# YAML just groups keys by indentation instead of repeating prefixes).
+
+spring:
+  application:
+    name: spring-boot-basics
+
+app:
+  name: Learning Shop
+  environment-label: local development          # topic03: overridden in application-prod.yml
+  greeting:
+    style: friendly                             # topic01: friendly | formal
+  shop:                                         # topic02: bound to ShopProperties
+    currency: INR
+    max-items: 20                               # relaxed binding: max-items -> maxItems
+    discount-percent: 10
+    contact:
+      email: support@example.com
+
+# topic05: Actuator. Only these endpoints are reachable over HTTP.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, conditions
+  endpoint:
+    health:
+      show-details: always                      # fine locally; use "when-authorized" in production
+  info:
+    env:
+      enabled: true                             # publish the info.* keys below at /actuator/info
+
+info:
+  app:
+    description: Spring Boot basics - stage 03 of the learning path
+
+# topic04: log levels per package (default INFO)
+logging:
+  level:
+    com.learning.springboot.basics: info
