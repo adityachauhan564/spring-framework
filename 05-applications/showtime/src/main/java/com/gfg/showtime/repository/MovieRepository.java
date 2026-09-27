@@ -1,20 +1,20 @@
 package com.gfg.showtime.repository;
 
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import com.gfg.showtime.domain.Movie;
 import com.gfg.showtime.enums.Genre;
 
-import java.util.List;
-
-@Repository
-public interface MovieRepository extends JpaRepository<Movie, Long>{
+public interface MovieRepository extends JpaRepository<Movie, Long> {
 
 	boolean existsByTitle(String title);
 
-	public Movie findByTitle(String title);
+	Optional<Movie> findByTitle(String title);
 
-	public List<Movie> findByGenre(Genre genre);
+	// "Top 5 movies by genre" from design.txt, written as a method name:
+	// where genre = ? and rating is not null order by rating desc limit 5
+	List<Movie> findTop5ByGenreAndRatingNotNullOrderByRatingDesc(Genre genre);
 }

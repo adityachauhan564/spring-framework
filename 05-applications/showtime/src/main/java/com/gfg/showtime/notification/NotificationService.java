@@ -1,60 +1,58 @@
-package com.gfg.showtime.service;
+package com.gfg.showtime.notification;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gfg.showtime.resource.TicketMessage;
-
-import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+/*
+ * Sends the "your tickets" email (and pretends to send an SMS).
+ * Boot creates a JavaMailSender only when spring.mail.host is set (the "mail" profile points it at
+ * Mailpit). ObjectProvider lets this class work either way: no mail server = the email is only logged.
+ */
 @Service
-@Slf4j
 public class NotificationService {
 
+    private static final Logger log = LoggerFactory.getLogger(NotificationService.class);
 
-    @Autowired
-    JavaMailSenderImpl javaMailSender;
+    private final ObjectProvider<JavaMailSender> mailSender;
 
-    ObjectMapper mapper=new ObjectMapper();
+    public NotificationService(ObjectProvider<JavaMailSender> mailSender) {
+        this.mailSender = mailSender;
+    }
 
+    public void send(BookingNotification booking) {
+        sendEmail(booking);
+        log.info("SMS to {}: {} tickets {} confirmed", booking.mobile(), booking.movieTitle(), booking.seats());
+    }
 
-    public void sendNotification(TicketMessage message) {
-        try {
-            sendEmailToUser(message);
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void sendEmail(BookingNotification booking) {
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setFrom("tickets@showtime.local");
+        mail.setTo(booking.email());
+        mail.setSubject("Your ShowTime tickets for " + booking.movieTitle());
+        mail.setText("""
+                Hi %s,
+
+                %s at %s, %s
+                Seats: %s   Amount: %.2f   Ticket: %d
+                """.formatted(booking.userName(), booking.movieTitle(), booking.theaterName(), booking.showTime(),
+                booking.seats(), booking.amount(), booking.ticketId()));
+
+        JavaMailSender sender = mailSender.getIfAvailable();
+        if (sender == null) {
+            log.info("No mail server configured, email to {} not sent:\n{}", booking.email(), mail.getText());
+            return;
         }
         try {
-            sendSMSToUser(message);
-        } catch (Exception e) {
-            e.printStackTrace();
+            sender.send(mail);
+            log.info("Email sent to {}", booking.email());
+        } catch (MailException e) {
+            // the booking is already committed: a mail problem is logged, never turned into a failed booking
+            log.error("Email to {} failed: {}", booking.email(), e.getMessage());
         }
     }
-
-    private void sendSMSToUser(TicketMessage message) {
-        log.info("calling sms service for showDetails: {}  seatDetails : {}to number {}", message.getShow(), message.getSeats(), message.getMobile());
-
-    }
-
-    private void sendEmailToUser(TicketMessage message) throws JsonProcessingException {
-        log.info("calling email service for showDetails: {}  seatDetails : {}to number {}", message.getShow(), message.getSeats(), message.getEmail());
-
-        SimpleMailMessage mailMessage=new SimpleMailMessage();
-        mailMessage.setTo(message.getEmail());
-        mailMessage.setSubject("MovieShark Tickets");
-        mailMessage.setText("Show: "+message.getShow()+" Tickets: "+message.getSeats());
-
-        log.info(mapper.writeValueAsString(mailMessage));
-
-
-        javaMailSender.send(mailMessage);
-
-
-    }
-
 }

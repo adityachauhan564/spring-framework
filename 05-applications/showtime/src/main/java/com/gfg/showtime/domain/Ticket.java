@@ -1,32 +1,34 @@
 package com.gfg.showtime.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gfg.showtime.resource.TicketResource;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.util.CollectionUtils;
-
-import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.hibernate.annotations.CreationTimestamp;
 
-@Data
+import com.gfg.showtime.resource.TicketResource;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
-@EntityListeners(value = { AuditingEntityListener.class })
 @Table(name = "tickets")
+@Getter
+@Setter
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
+@Builder
 public class Ticket {
 
 	@Id
@@ -39,48 +41,29 @@ public class Ticket {
 	@Column(name = "amount", nullable = false)
 	private double amount;
 
-
 	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "booked_at", nullable = false)
 	private Date bookedAt;
 
 	@ManyToOne
-	@JsonIgnore
 	private User user;
 
 	@ManyToOne
-	@JsonIgnore
 	private Show show;
 
-	@OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
-	@JsonIgnore
-	private List<ShowSeat> seats;
+	// mappedBy names the field in ShowSeat that points back HERE ("ticket").
+	// The course had mappedBy = "show", which maps a ticket's seats to... the show's seats.
+	@OneToMany(mappedBy = "ticket")
+	@Builder.Default
+	private List<ShowSeat> seats = new ArrayList<>();
 
-
-	public static List<TicketResource> toResource(List<Ticket> tickets){
-		if(CollectionUtils.isEmpty(tickets))
-			return new ArrayList<>();
-		return tickets.stream().map(Ticket::toResource).collect(Collectors.toList());
+	public static TicketResource toResource(Ticket ticket) {
+		Show show = ticket.getShow();
+		return new TicketResource(ticket.getId(), ticket.getAllottedSeats(), ticket.getAmount(), ticket.getBookedAt(),
+				show.getId(), show.getMovie().getTitle(), show.getTheater().getName(), show.getShowTime());
 	}
 
-	public static Ticket toEntity(TicketResource ticketResource) {
-
-		return Ticket.builder()
-				.allottedSeats(ticketResource.getAllottedSeats())
-				.amount(ticketResource.getAmount())
-				.build();
-
+	public static List<TicketResource> toResource(List<Ticket> tickets) {
+		return tickets == null ? List.of() : tickets.stream().map(Ticket::toResource).toList();
 	}
-
-	public static TicketResource toResource(Ticket ticketEntity) {
-
-		return TicketResource.builder()
-				.id(ticketEntity.getId())
-				.allottedSeats(ticketEntity.getAllottedSeats())
-				.amount(ticketEntity.getAmount())
-				.bookedAt(ticketEntity.getBookedAt())
-				.build();
-	}
-
 }

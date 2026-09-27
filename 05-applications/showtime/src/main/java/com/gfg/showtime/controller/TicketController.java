@@ -1,37 +1,44 @@
 package com.gfg.showtime.controller;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.gfg.showtime.enums.Role;
 import com.gfg.showtime.resource.BookingResource;
 import com.gfg.showtime.resource.TicketResource;
 import com.gfg.showtime.service.TicketService;
 
-import javax.validation.constraints.Min;
+import jakarta.validation.Valid;
 
-@Slf4j
 @RestController
-@RequestMapping("ticket")
+@RequestMapping("/ticket")
 public class TicketController {
 
-	@Autowired
-	private TicketService ticketService;
+	private final TicketService ticketService;
 
-	@PostMapping("book")
-	public ResponseEntity<TicketResource> bookTicket(@RequestBody BookingResource bookingResource) {
-
-		log.info("Received Request to book ticket: " + bookingResource);
-
-		return ResponseEntity.ok(ticketService.bookTicket(bookingResource));
+	public TicketController(TicketService ticketService) {
+		this.ticketService = ticketService;
 	}
 
-	@GetMapping("{id}")
-	public ResponseEntity<TicketResource> getTicket(@PathVariable(name = "id") @Min(value = 1, message = "Ticket Id Cannot be -ve") long id) {
+	// The ticket is booked for the logged-in user; the body only says which show and seats
+	@PostMapping("/book")
+	@ResponseStatus(HttpStatus.CREATED)
+	public TicketResource bookTicket(@RequestBody @Valid BookingResource booking, @AuthenticationPrincipal UserDetails user) {
+		return ticketService.bookTicket(user.getUsername(), booking);
+	}
 
-		log.info("Received Request to get ticket: " + id);
-
-		return ResponseEntity.ok(ticketService.getTicket(id));
+	@GetMapping("/{id}")
+	public TicketResource getTicket(@PathVariable long id, @AuthenticationPrincipal UserDetails user) {
+		boolean isAdmin = user.getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.name()));
+		return ticketService.getTicket(id, user.getUsername(), isAdmin);
 	}
 }

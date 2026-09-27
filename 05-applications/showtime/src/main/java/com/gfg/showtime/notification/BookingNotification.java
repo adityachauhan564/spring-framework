@@ -1,22 +1,20 @@
-package com.gfg.showtime.resource;
+package com.gfg.showtime.notification;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
-import java.util.List;
-
-import com.gfg.showtime.domain.Show;
-import com.gfg.showtime.domain.ShowSeat;
-
-@AllArgsConstructor
-@Data
-@NoArgsConstructor
-public class TicketMessage {
-
-    private String  userName;
-    private String  mobile;
-    private String email;
-    private Show show;
-    private List<ShowSeat> seats;
+/*
+ * What a booking notification needs, as plain values. This is the Kafka message (as JSON) and the
+ * Spring event. The course put JPA entities (Show, ShowSeat) in the message: that ties the message
+ * format to the database model and serializes far more than the email needs.
+ */
+public record BookingNotification(
+        long ticketId,
+        String userName,
+        String email,
+        String mobile,
+        String movieTitle,
+        String theaterName,
+        LocalDateTime showTime,
+        String seats,
+        double amount) {
 }

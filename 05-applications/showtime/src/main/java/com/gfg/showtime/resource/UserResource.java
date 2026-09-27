@@ -1,38 +1,9 @@
 package com.gfg.showtime.resource;
 
-import lombok.*;
-
-import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 import com.gfg.showtime.enums.Role;
 
-import java.util.List;
-
-
-@Getter
-@Setter
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
-@ToString
-public class UserResource {
-
-	private long id;
-
-	@NotBlank(message = "User name is Mandatory")
-	private String name;
-
-	@NotBlank(message = "password is Mandatory")
-	private String password;
-
-
-	private Role role;
-
-	@NotBlank(message = "Mobile is Mandatory")
-	private String mobile;
-
-	@NotBlank(message = "Email is Mandatory")
-	private String email;
-
-	private List<TicketResource> tickets;
+// What the API returns about a user. There is deliberately no password field, not even a hashed one.
+public record UserResource(long id, String name, String mobile, String email, Role role, List<TicketResource> tickets) {
 }

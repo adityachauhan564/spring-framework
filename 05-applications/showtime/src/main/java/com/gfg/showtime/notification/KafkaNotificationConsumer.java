@@ -1,31 +1,36 @@
-package com.gfg.showtime.consumer;
+package com.gfg.showtime.notification;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gfg.showtime.resource.TicketMessage;
-import com.gfg.showtime.service.NotificationService;
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Slf4j
-@Service
-public class NotificationConsumer {
+import com.gfg.showtime.config.KafkaConfig;
 
+import tools.jackson.databind.json.JsonMapper;
 
-    ObjectMapper mapper=new ObjectMapper();
+/*
+ * "kafka" profile: reads TICKET_BOOKED messages and sends the notifications.
+ * groupId: consumers in the same group share the messages (each one is handled once per group).
+ */
+@Component
+@Profile("kafka")
+public class KafkaNotificationConsumer {
 
-    @Autowired
-    NotificationService notificationService;
+    private static final Logger log = LoggerFactory.getLogger(KafkaNotificationConsumer.class);
 
-    @KafkaListener(topics = {"TICKET_BOOKED"},groupId = "ticketGroup")
-    public void sendNotification(String message) throws JsonProcessingException {
-        log.info("message ->{}",message);
-        TicketMessage msg=mapper.readValue(message,TicketMessage.class);
+    private final NotificationService notificationService;
+    private final JsonMapper jsonMapper;
 
-        notificationService.sendNotification(msg);
+    public KafkaNotificationConsumer(NotificationService notificationService, JsonMapper jsonMapper) {
+        this.notificationService = notificationService;
+        this.jsonMapper = jsonMapper;
+    }
 
+    @KafkaListener(topics = KafkaConfig.TICKET_BOOKED, groupId = "ticketGroup")
+    public void onMessage(String message) {
+        log.info("Received from {}: {}", KafkaConfig.TICKET_BOOKED, message);
+        notificationService.send(jsonMapper.readValue(message, BookingNotification.class));
     }
 }

@@ -1,24 +1,15 @@
 package com.gfg.showtime.resource;
 
-import lombok.*;
-
+import java.time.LocalDateTime;
 import java.util.Date;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
-@ToString
-public class TicketResource {
-
-	private long id;
-
-	private String allottedSeats;
-
-	private double amount;
-
-	private Date bookedAt;
-
-	private ShowResource show;
+public record TicketResource(
+        long id,
+        String allottedSeats,
+        double amount,
+        Date bookedAt,
+        long showId,
+        String movieTitle,
+        String theaterName,
+        LocalDateTime showTime) {
 }

@@ -1,46 +1,25 @@
 package com.gfg.showtime.config;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.*;
+import org.springframework.context.annotation.Profile;
+import org.springframework.kafka.config.TopicBuilder;
 
-import java.util.Properties;
-
+/*
+ * Only with the "kafka" profile. Producer, consumer and KafkaTemplate need no code: Boot builds them
+ * from the spring.kafka.* properties (application-kafka.properties). The course built them by hand,
+ * with localhost:9092 hard-coded.
+ * The one thing left is the topic: this bean makes Boot's KafkaAdmin create it if it doesn't exist.
+ */
 @Configuration
+@Profile("kafka")
 public class KafkaConfig {
 
-    public Properties getProducerConfig(){
-        Properties producerConfig = new Properties();
-        producerConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
-        producerConfig.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,StringSerializer.class);
-        producerConfig.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,StringSerializer.class);
-        return producerConfig;
-    }
-
-    public Properties getConsumerConfig(){
-        Properties consumerConfig = new Properties();
-        consumerConfig.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
-        consumerConfig.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        consumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,StringDeserializer.class);
-        return consumerConfig;
-    }
+    public static final String TICKET_BOOKED = "TICKET_BOOKED";
 
     @Bean
-    public ProducerFactory getProducerFactory(){
-        return new DefaultKafkaProducerFactory(getProducerConfig());
-    }
-
-    @Bean
-    public ConsumerFactory getConsumerFactory(){
-        return new DefaultKafkaConsumerFactory(getConsumerConfig());
-    }
-
-    @Bean
-    public KafkaTemplate<String,String> getKafkaTemplate(){
-        return new KafkaTemplate<String,String>(getProducerFactory());
+    public NewTopic ticketBookedTopic() {
+        return TopicBuilder.name(TICKET_BOOKED).partitions(1).replicas(1).build();
     }
 }
