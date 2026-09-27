@@ -8,7 +8,7 @@ The folders are numbered in the order to study them. Each numbered folder has a 
 flowchart LR
     A["01 Core Java<br/>24 topics: OOP · Collections · Generics<br/>Exceptions · Threads · Streams · DSA · JUnit"] --> B["02 Spring Foundations<br/>IoC/DI · JDBC · ORM · MVC"]
     B --> C["03 Spring Boot<br/>Auto-config · Actuator · REST<br/>Validation · Security · Spring Data JPA"]
-    C --> D["04 Microservices<br/>Config · Eureka · Gateway"]
+    C --> D["04 Microservices<br/>Config · Eureka · Feign · Gateway<br/>Resilience4j · Tracing"]
     C --> E["05 Applications<br/>ShowTime · Digital Library · IRCTC"]
     C --> F["06 Full-Stack<br/>Angular + Spring Boot"]
 ```
@@ -34,11 +34,11 @@ flowchart LR
   - `functional-programming`: all 15 topics, including the `assert` self-checks
   - `03-spring-boot`: all 4 projects run with no database or server installed, and `./mvnw verify` passes 37 tests; every API was checked over real HTTP
   - `02-spring-foundations`: all 4 projects (30 topics) run with no database or server installed, and `./mvnw verify` passes 43 tests; the MVC app was checked over real HTTP on Jetty
+  - `04-microservices`: all 6 services start with one script (`start-all.sh` / `.ps1`), and `./mvnw verify` passes 14 tests; config refresh, load balancing, Feign and RestClient calls, gateway routes, Resilience4j and tracing were checked end to end
   - `multithreaded-web-server` step 1
   - the `digital-library` and `irctc` unit tests
 - 🚧 **Work in progress:**
   - `irctc-ticket-booking` and the Angular frontend are unfinished tutorial steps.
-  - `currency-exchange-service` and `currency-conversion-service` are skeletons: their controllers were never committed. Their READMEs point to the complete versions under `reference/` to compare against.
 - 📝 **Stubs:** three `dsa-interview-practice` files marked `// TODO: not implemented yet` (`sortColours`, `LinkedList_Cycle`, `MiddleOfLinkedList`) are problem statements, not solutions.
 
 ---
@@ -71,7 +71,12 @@ cd 03-spring-boot/restful-web-services
 ```
 
 ### Run the microservices
-Start them in the order given in [`04-microservices/README.md`](./04-microservices/README.md): config server (8888), then naming server (8761), then the services, then the gateway (8765).
+```bash
+cd 04-microservices
+./start-all.sh                  # Windows PowerShell: .\start-all.ps1
+./stop-all.sh
+```
+It builds all six services, starts them in order (config server → naming server → services → gateway) and waits until they're ready. [`04-microservices/README.md`](./04-microservices/README.md) has a walkthrough of every pattern.
 
 ### Run plain Java examples (no build file)
 ```bash
