@@ -1,50 +1,69 @@
-# Spring JDBC
+# Spring JDBC: SQL without the boilerplate
 
-> CRUD on a MySQL `student` table with `JdbcTemplate`, a DAO layer and a `RowMapper`, configured with Java `@Configuration`.
+> Talking to a relational database with `JdbcTemplate`, from a first query to DAOs, row mappers, named parameters, batches and transactions.
 
-## What it teaches
-- `DriverManagerDataSource` + `JdbcTemplate` as Spring beans
-- DAO pattern: `StudentDao` interface, `StudentDaoImpl` implementation
-- `update(...)` for insert/update/delete, `queryForObject` / `query` for reads
-- Mapping rows to objects with a `RowMapper`
-- Java-based config with `@ComponentScan`
+**Before this:** [spring-core](../spring-core/) topics 06, 07 and 11 (constructor injection, `@Repository`, `@Configuration`) and 13 (proxies, for transactions).
 
 ## Run it
-Needs a local MySQL. Create the schema first:
-
-```sql
-CREATE DATABASE springjdbc;
-USE springjdbc;
-CREATE TABLE student (id INT PRIMARY KEY, name VARCHAR(100), city VARCHAR(100));
-```
-
-Then set `DB_PASSWORD` (and optionally `DB_USERNAME`, default `root`) as environment variables; `jdbcconfig.java` reads them.
+No database to install: by default every run uses a fresh **in-memory H2** database, and `db/schema.sql` creates the tables on startup.
 
 ```bash
-mvn -q compile dependency:build-classpath -Dmdep.outputFile=cp.txt
-java -cp "target/classes;$(cat cp.txt)" com.springcore.jdbc.App
+./mvnw -q -pl spring-jdbc compile exec:java -Dexec.mainClass=com.springcore.jdbc.topic02_crud_dao.CrudDemo
+./mvnw -q -pl spring-jdbc test
 ```
 
-Use `:` instead of `;` on macOS/Linux. `App` prints every row in `student`.
+**Using MySQL instead:** create an empty database, then set environment variables before running:
 
-## Read the code in this order
-1. `src/main/java/com/springcore/jdbc/jdbcconfig.java` - DataSource and JdbcTemplate beans
-2. `dao/StudentDao.java` - the contract
-3. `dao/StudentDaoImpl.java` - SQL with `?` placeholders
-4. `dao/RowMapperImpl.java` - `ResultSet` -> `Student`
-5. `entities/Student.java`
-6. `App.java` - boot the context and call the DAO
+```bash
+export DB_URL="jdbc:mysql://localhost:3306/springjdbc" DB_USERNAME=root DB_PASSWORD=your-password
+# PowerShell: $env:DB_URL="jdbc:mysql://localhost:3306/springjdbc"; $env:DB_PASSWORD="your-password"
+```
 
-## Revision notes
-- `JdbcTemplate` removes JDBC boilerplate: opening/closing connections, statements and result sets, and translating `SQLException` into Spring's `DataAccessException`.
-- Always use `?` placeholders (as here), never string concatenation - that prevents SQL injection.
-- `update()` returns the number of affected rows.
-- `queryForObject` throws `EmptyResultDataAccessException` if no row matches - handle it for "find by id".
-- `RowMapper` maps one row; `query(sql, rowMapper)` applies it to every row and returns a `List`.
-- `DriverManagerDataSource` opens a new connection each time - fine for learning, use a pool (HikariCP) in real apps.
-- `getBean("studentDao", StudentDao.class)` works because of `@Component("studentDao")` + `@ComponentScan`.
+`schema.sql` drops and re-creates its three tables on every run, so only point it at a learning database. The tests always use H2, even if `DB_URL` is set.
+
+## Topics
+
+| # | Package | Run | What you learn |
+| :- | :--- | :--- | :--- |
+| 01 | `topic01_datasource_and_jdbctemplate` | `JdbcTemplateDemo` | `DataSource` vs `JdbcTemplate`, `update()` vs `queryForObject()`, `?` placeholders |
+| 02 | `topic02_crud_dao` | `CrudDemo` | The DAO pattern: create, read, update, delete behind an interface; `Optional` for "not found" |
+| 03 | `topic03_row_mappers` | `RowMapperStylesDemo` | Four ways to turn rows into objects |
+| 04 | `topic04_named_params_keys_batch` | `NamedParametersDemo` | `:named` parameters, database-generated ids (`KeyHolder`), `batchUpdate` |
+| 05 | `topic05_transactions` | `TransactionsDemo` | `@Transactional`: all or nothing, with a money-transfer demo |
+
+## Topic notes
+
+### 01 DataSource and JdbcTemplate
+- **Why:** plain JDBC means opening and closing connections, statements and result sets, plus catching `SQLException` around every query. `JdbcTemplate` does all of that for you.
+- **How:** the `DataSource` says *where* connections come from, and `JdbcTemplate` runs SQL on it. `update()` returns the number of rows changed. Spring translates database errors into `DataAccessException`, for example `DuplicateKeyException`.
+- **Mistake:** building SQL with `+`. Always use `?`, or you invite SQL injection.
+
+### 02 CRUD with a DAO
+- **Why:** callers should never see SQL. The DAO interface lets you swap in Hibernate (spring-orm) or Spring Data (stage 03) later.
+- **How:** a `@Repository` gets its `JdbcTemplate` through the constructor. `findById` returns `Optional`: use `query(...)` and take the first element, because `queryForObject` throws `EmptyResultDataAccessException` when no row matches.
+- **Exercise:** add `findByCity(String city)`.
+
+### 03 Row mappers
+- **Why:** a `ResultSet` is rows and columns, and your code wants objects.
+- **How:** a `RowMapper` class (reusable), a lambda (it's a functional interface), `BeanPropertyRowMapper` (maps columns to setters by name), or `queryForList` (a `Map` per row, no class at all).
+- **Mistake:** `rs.getInt(1)`. If the columns are reordered, values go into the wrong fields. Read columns by name.
+
+### 04 Named parameters, keys and batches
+- **Why:** ten `?` markers are hard to read, apps usually let the database generate ids, and inserting 1,000 rows one at a time is slow.
+- **How:** `NamedParameterJdbcTemplate` with `:title`, `KeyHolder` for the generated id, and `batchUpdate` to send many rows in one round trip. `DataClassRowMapper` maps rows onto a **record** through its constructor.
+
+### 05 Transactions
+- **Why:** a transfer is two updates, and a crash between them must not create or destroy money.
+- **How:** use `@EnableTransactionManagement` and a `DataSourceTransactionManager`. On a `@Transactional` method, a RuntimeException means rollback and a normal return means commit. The demo shows the total staying at 600 with the transaction, and jumping to 1600 without it.
+- **Mistakes:** checked exceptions don't roll back unless you say `rollbackFor`. Self-invocation skips the transaction (spring-core topic13).
+
+## Revision checklist
+- [ ] What `JdbcTemplate` removes compared with plain JDBC.
+- [ ] `update` vs `query` vs `queryForObject`, and what each returns or throws.
+- [ ] Why `?` / `:name` placeholders prevent SQL injection.
+- [ ] Four ways to map rows to objects.
+- [ ] How to get a database-generated id back.
+- [ ] What "atomic" means, and when `@Transactional` commits or rolls back.
 
 ## Status
-✅ Working (compiles; running it needs MySQL and the `DB_PASSWORD` env var).
-- Only `getAllStudents()` is called from `App`; insert/update/delete/get-by-id are written but not exercised.
-- `src/test/java/.../AppTest.java` is the archetype placeholder test (JUnit 3.8).
+✅ Working: all 5 demos run on H2 with nothing installed. `./mvnw -pl spring-jdbc test` passes (8 tests: CRUD, keys and batch, transaction rollback). MySQL mode is selected with `DB_URL`.

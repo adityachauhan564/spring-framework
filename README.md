@@ -34,11 +34,11 @@ flowchart LR
   - `functional-programming`: all 15 topics, including the `assert` self-checks
   - `restful-web-services` (in-memory data, Swagger)
   - `jpa-hibernate` (H2)
-  - `spring-core` examples
+  - `02-spring-foundations`: all 4 projects (30 topics) run with no database or server installed, and `./mvnw verify` passes 43 tests; the MVC app was checked over real HTTP on Jetty
   - `multithreaded-web-server` step 1
   - the `digital-library` and `irctc` unit tests
 - 🚧 **Work in progress:**
-  - `spring-orm`, `irctc-ticket-booking` and the Angular frontend are unfinished tutorial steps.
+  - `irctc-ticket-booking` and the Angular frontend are unfinished tutorial steps.
   - `currency-exchange-service` and `currency-conversion-service` are skeletons: their controllers were never committed. Their READMEs point to the complete versions under `reference/` to compare against.
 - 📝 **Stubs:** three `dsa-interview-practice` files marked `// TODO: not implemented yet` (`sortColours`, `LinkedList_Cycle`, `MiddleOfLinkedList`) are problem statements, not solutions.
 
@@ -48,9 +48,9 @@ flowchart LR
 
 ### Prerequisites
 - **JDK 21**. The Boot 2.7 apps also work on JDK 17.
-- **Maven**: use the `./mvnw` wrapper when a project has one. For the `02-spring-foundations` projects use `mvn` or any sibling project's wrapper with `-f`.
+- **Maven**: use the `./mvnw` wrapper included with the projects. `02-spring-foundations` has one wrapper for all four of its projects.
 - **Gradle**: use the included `./gradlew`.
-- **MySQL 8** for the JDBC, MVC and Boot apps that use it. **Redis** for digital-library.
+- **MySQL 8** for the Boot apps that use it (optional in `02-spring-foundations`, which defaults to in-memory H2). **Redis** for digital-library.
 - **Node 18+** for the Angular app.
 
 ### Credentials: environment variables, never in git
