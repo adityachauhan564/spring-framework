@@ -149,6 +149,6 @@ sequenceDiagram
 - A missing `return` in the show search meant the city check did nothing.
 
 ## Status
-✅ **Working.** 17 tests pass. Checked over HTTP on H2, and with `kafka,mail` against Kafka 3.9 (KRaft) and Mailpit in Docker: the message reached the consumer and the email arrived in the inbox. The `mysql` profile wasn't run here.
+✅ **Working.** 17 tests pass. Checked over HTTP on H2, and with `kafka,mail` against Kafka 3.9 (KRaft) and Mailpit in Docker: the message reached the consumer and the email arrived in the inbox. The `mysql` profile was checked against MySQL 8.4 in Docker: seeding runs only on an empty database, a booking bumps the seats' `@Version`, a second booking of the same seat is 409, and tickets survive a restart.
 
 **movieshark**, a near-copy of this project from the same course (no Swagger, and a login bug), was removed. Everything it taught is here.

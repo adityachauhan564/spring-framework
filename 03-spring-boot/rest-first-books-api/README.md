@@ -68,4 +68,4 @@ The database `youtube_springboot_api` is created if it's missing. Hibernate keep
 - [ ] Which test type checks which layer, and what `@MockitoBean` replaces.
 
 ## Status
-✅ Working: full CRUD, search and paging were checked over HTTP on H2 (with `DB_PASSWORD` unset), and 8 tests pass. The `mysql` profile is written but wasn't run against a real MySQL database in this pass.
+✅ Working: full CRUD, search and paging were checked over HTTP on H2 (with `DB_PASSWORD` unset), and 8 tests pass. The `mysql` profile was checked against MySQL 8.4 in Docker: the database is created, no sample books are inserted, and a created book survives a restart.

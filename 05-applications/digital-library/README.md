@@ -87,7 +87,7 @@ Profiles combine: `--spring.profiles.active=mysql,redis`.
 - The CSV upload splits on `\r?\n`, so Windows line endings don't leave a `\r` in the last column.
 
 ## Status
-✅ **Working.** 17 tests pass. Checked over HTTP on H2, and with the `redis` profile against Redis 7 in Docker (JSON values, 10-minute TTL, `@CachePut` refresh). The `mysql` profile wasn't run here.
+✅ **Working.** 17 tests pass. Checked over HTTP on H2, and with the `redis` profile against Redis 7 in Docker (JSON values, 10-minute TTL, `@CachePut` refresh). The `mysql` profile was checked against MySQL 8.4 in Docker: the tables and the `books_issued` join table are created, the unique-name and foreign-key conflicts return 409, and issued books survive a restart.
 
 Changes from the course version:
 - Boot 3.2 → 4.0 and Gradle 8.5 → 9.1
