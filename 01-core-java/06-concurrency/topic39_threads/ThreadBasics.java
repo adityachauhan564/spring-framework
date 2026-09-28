@@ -1,11 +1,11 @@
-package topic22_multithreading;
+package topic39_threads;
 
 /*
  * Topic    : Threads - running work at the same time
  * Key idea : give a Thread a Runnable (a lambda works), call start() - NOT run().
  *            join() waits for a thread to finish. Output order between threads varies.
- * Run      : java -cp out topic22_multithreading.ThreadBasics
- * Next     : RaceConditionDemo, then ExecutorServiceDemo
+ * Run      : java -cp out topic39_threads.ThreadBasics
+ * Next     : topic 40 (what goes wrong when threads share data)
  */
 public class ThreadBasics {
 

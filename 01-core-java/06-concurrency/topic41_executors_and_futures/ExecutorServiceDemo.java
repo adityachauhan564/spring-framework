@@ -1,4 +1,4 @@
-package topic22_multithreading;
+package topic41_executors_and_futures;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
  * Key idea : submit tasks to a pool instead of creating Threads by hand.
  *            A Callable returns a value; Future.get() waits for it.
  *            Always shut the pool down (try-with-resources does it, Java 19+).
- * Run      : java -cp out topic22_multithreading.ExecutorServiceDemo
+ * Run      : java -cp out topic41_executors_and_futures.ExecutorServiceDemo
  * Try this : change the pool size to 1 and see the tasks run one after another.
  */
 public class ExecutorServiceDemo {

@@ -1,4 +1,4 @@
-package topic14_parallel_streams;
+package topic42_parallel_streams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.stream.LongStream;
  * Topic    : Parallel streams
  * Key idea : .parallel() splits the work across CPU cores. It helps only for large,
  *            CPU-heavy, independent work - and it breaks code that changes shared state.
- * Run      : java -ea -cp out topic14_parallel_streams.ParallelStreams
+ * Run      : java -ea -cp out topic42_parallel_streams.ParallelStreams
  * Try this : change N to 1_000 and compare the times - parallel can be SLOWER for small work.
  */
 public class ParallelStreams {

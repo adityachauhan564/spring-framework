@@ -1,4 +1,4 @@
-package topic22_multithreading;
+package topic40_synchronization;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Topic    : Race conditions and how to fix them
  * Key idea : count++ is really read + add + write. Two threads can read the same value
  *            and one update is lost. Fix with 'synchronized' or an AtomicInteger.
- * Run      : java -ea -cp out topic22_multithreading.RaceConditionDemo
+ * Run      : java -ea -cp out topic40_synchronization.RaceConditionDemo
  * Try this : run it a few times - the unsafe total changes every run.
  */
 public class RaceConditionDemo {
