@@ -1,11 +1,11 @@
-package topic12_arrays;
+package topic06_arrays;
 
 import java.util.Arrays;
 
 /*
  * Topic    : 2D arrays (arrays of arrays)
  * Key idea : grid[row][col]. grid.length = number of rows, grid[r].length = columns in row r.
- * Run      : java -cp out topic12_arrays.TwoDimensionalArrays
+ * Run      : java -cp out topic06_arrays.TwoDimensionalArrays
  * Try this : print the matrix transposed (rows become columns).
  */
 public class TwoDimensionalArrays {

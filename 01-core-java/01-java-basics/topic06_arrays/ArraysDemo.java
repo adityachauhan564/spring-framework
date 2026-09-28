@@ -1,4 +1,4 @@
-package topic12_arrays;
+package topic06_arrays;
 
 import java.util.Arrays;
 
@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Topic    : Arrays
  * Key idea : an array has a FIXED size set at creation; indexes go 0 .. length-1.
  *            java.util.Arrays has the helpers (toString, sort, fill, copyOf, binarySearch).
- * Run      : java -cp out topic12_arrays.ArraysDemo
+ * Run      : java -cp out topic06_arrays.ArraysDemo
  * Try this : find the second-largest number in 'scores' with one loop.
  */
 public class ArraysDemo {

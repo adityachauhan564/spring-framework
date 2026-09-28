@@ -1,10 +1,10 @@
-package topic10_data_types_and_operators;
+package topic02_variables_and_data_types;
 
 /*
  * Topic    : Primitive types, wrapper classes and type casting
  * Key idea : 8 primitives hold raw values (int, double, ...). Wrappers (Integer, Double)
  *            are objects, needed for collections. Java converts between them (autoboxing).
- * Run      : java -cp out topic10_data_types_and_operators.DataTypes
+ * Run      : java -cp out topic02_variables_and_data_types.DataTypes
  * Try this : print Long.MAX_VALUE + 1 and explain the result.
  */
 public class DataTypes {

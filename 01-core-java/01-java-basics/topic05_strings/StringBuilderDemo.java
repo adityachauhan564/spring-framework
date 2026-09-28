@@ -1,10 +1,10 @@
-package topic11_strings;
+package topic05_strings;
 
 /*
  * Topic    : StringBuilder
  * Key idea : '+' in a loop creates a new String every pass. StringBuilder changes
  *            one buffer in place, so use it when building text in a loop.
- * Run      : java -cp out topic11_strings.StringBuilderDemo
+ * Run      : java -cp out topic05_strings.StringBuilderDemo
  * Try this : write isPalindrome(String) using reverse().
  */
 public class StringBuilderDemo {

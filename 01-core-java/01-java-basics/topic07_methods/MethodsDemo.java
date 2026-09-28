@@ -1,4 +1,4 @@
-package topic13_methods_and_static;
+package topic07_methods;
 
 import java.util.Arrays;
 
@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Topic    : Methods - parameters, return values, overloading, varargs, recursion, pass-by-value
  * Key idea : Java ALWAYS passes a copy. For a primitive that's a copy of the value;
  *            for an object it's a copy of the reference (so the object itself can change).
- * Run      : java -cp out topic13_methods_and_static.MethodsDemo
+ * Run      : java -cp out topic07_methods.MethodsDemo
  * Try this : add an overload add(double, double) and see which one add(1, 2.5) calls.
  */
 public class MethodsDemo {

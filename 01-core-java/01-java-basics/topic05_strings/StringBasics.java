@@ -1,10 +1,10 @@
-package topic11_strings;
+package topic05_strings;
 
 /*
  * Topic    : Strings
  * Key idea : a String is immutable - methods like toUpperCase() return a NEW string.
  *            Compare text with equals(), never with ==.
- * Run      : java -cp out topic11_strings.StringBasics
+ * Run      : java -cp out topic05_strings.StringBasics
  * Next     : StringBuilderDemo
  */
 public class StringBasics {

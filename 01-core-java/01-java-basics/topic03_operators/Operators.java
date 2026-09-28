@@ -1,10 +1,10 @@
-package topic10_data_types_and_operators;
+package topic03_operators;
 
 /*
  * Topic    : Operators
  * Key idea : arithmetic, comparison, logical, increment and the ternary operator.
  *            Integer division drops the remainder; && and || stop early (short-circuit).
- * Run      : java -cp out topic10_data_types_and_operators.Operators
+ * Run      : java -cp out topic03_operators.Operators
  * Try this : predict each line's output before running it.
  */
 public class Operators {

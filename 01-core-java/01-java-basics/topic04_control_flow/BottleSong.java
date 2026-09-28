@@ -1,10 +1,10 @@
-package topic01_loops_and_conditions;
+package topic04_control_flow;
 
 /*
  * Topic    : Loops and conditions (Head First Java, chapter 1)
  * Key idea : a while loop repeats until its condition is false;
  *            if/else picks the right word for each verse.
- * Run      : java -cp out topic01_loops_and_conditions.BottleSong
+ * Run      : java -cp out topic04_control_flow.BottleSong
  * Try this : rewrite the while loop as a for loop.
  */
 public class BottleSong {
