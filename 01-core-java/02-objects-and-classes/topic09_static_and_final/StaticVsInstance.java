@@ -1,10 +1,10 @@
-package topic13_methods_and_static;
+package topic09_static_and_final;
 
 /*
  * Topic    : static vs instance members, and final
  * Key idea : an instance field belongs to each object; a static field belongs to the
  *            CLASS and is shared by all objects. static methods have no 'this'.
- * Run      : java -cp out topic13_methods_and_static.StaticVsInstance
+ * Run      : java -cp out topic09_static_and_final.StaticVsInstance
  * Try this : make 'count' non-static and see what totalCreated() does (it won't compile - why?).
  */
 public class StaticVsInstance {

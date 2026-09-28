@@ -1,10 +1,10 @@
-package topic02_classes_and_objects;
+package topic08_classes_and_objects;
 
 /*
  * Topic    : How objects behave (Head First Java, chapter 4)
  * Key idea : instance variables live in each object, so song1 and song2
  *            keep their own title/artist. Methods use that state.
- * Run      : java -cp out topic02_classes_and_objects.Song
+ * Run      : java -cp out topic08_classes_and_objects.Song
  * Try this : add a 'duration' field and print it in play().
  */
 public class Song {

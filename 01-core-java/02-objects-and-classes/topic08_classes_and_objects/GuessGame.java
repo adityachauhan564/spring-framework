@@ -1,4 +1,4 @@
-package topic02_classes_and_objects;
+package topic08_classes_and_objects;
 
 /*
  * GuessGame owns three Player objects (instance variables)

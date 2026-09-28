@@ -1,4 +1,4 @@
-package topic06_exceptions;
+package topic10_exception_basics;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -10,7 +10,7 @@ import java.io.IOException;
  * Key idea : the compiler FORCES you to handle a checked exception
  *            (catch it, or declare 'throws'). Remove the try/catch below
  *            and the file won't compile.
- * Run      : java -cp out topic06_exceptions.CheckedExceptionDemo
+ * Run      : java -cp out topic10_exception_basics.CheckedExceptionDemo
  * Try this : create myFile.txt in the folder you run 'java' from, then run again.
  */
 public class CheckedExceptionDemo {

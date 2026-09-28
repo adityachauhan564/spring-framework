@@ -1,11 +1,11 @@
-package topic06_exceptions;
+package topic10_exception_basics;
 
 /*
  * Topic    : Unchecked (runtime) exceptions
  * Key idea : the compiler does NOT force you to handle these
  *            (NullPointerException, ArithmeticException, ...). They are
  *            usually bugs - prevent them with a check rather than catching them.
- * Run      : java -cp out topic06_exceptions.UncheckedExceptionDemo
+ * Run      : java -cp out topic10_exception_basics.UncheckedExceptionDemo
  */
 public class UncheckedExceptionDemo {
 

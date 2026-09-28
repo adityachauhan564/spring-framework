@@ -1,10 +1,10 @@
-package topic02_classes_and_objects;
+package topic08_classes_and_objects;
 
 /*
  * Topic    : A well-written class (template to copy)
  * Key idea : private fields + constructor + getters + toString().
  *            Fields are final: an Employee can't change after it is built.
- * Run      : java -cp out topic02_classes_and_objects.Employee
+ * Run      : java -cp out topic08_classes_and_objects.Employee
  */
 public class Employee {
 
