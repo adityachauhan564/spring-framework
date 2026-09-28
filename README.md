@@ -38,6 +38,7 @@ flowchart LR
   - `04-microservices`: all 6 services start with one script (`start-all.sh` / `.ps1`), and `./mvnw verify` passes 14 tests; config refresh, load balancing, Feign and RestClient calls, gateway routes, Resilience4j and tracing were checked end to end
   - `05-applications`: all 3 projects run with no database or broker installed (40 tests); digital-library was checked with Redis, and showtime with Kafka and Mailpit, in Docker
   - `06-fullstack-angular`: the API and the Angular app work together with no database installed (6 + 12 tests); checked in a headless browser across origins
+  - **MySQL modes**: every project with one (spring-jdbc, spring-orm, spring-mvc, rest-first-books-api, digital-library, showtime, product-service-backend) was run against MySQL 8.4 in a throwaway Docker container, including persistence across a restart
 
 ---
 

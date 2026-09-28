@@ -102,4 +102,4 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 - [ ] What XSS is, and how `<c:out>` prevents it.
 
 ## Status
-✅ Working: runs on Jetty 12 with `jetty:run`, and every page, the form flow and the JSON API were checked over real HTTP. `./mvnw -pl spring-mvc test` passes (15 MockMvc tests). The WAR targets Tomcat 10.1 / Jakarta EE 10; deploying it to Tomcat itself wasn't tested in this pass.
+✅ Working: runs on Jetty 12 with `jetty:run`, and every page, the form flow and the JSON API were checked over real HTTP, on H2 and against MySQL 8.4 in Docker (users stored with BCrypt hashes). `./mvnw -pl spring-mvc test` passes (15 MockMvc tests). The WAR targets Tomcat 10.1 / Jakarta EE 10; deploying it to Tomcat itself wasn't tested in this pass.

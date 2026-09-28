@@ -72,4 +72,4 @@ You'll still see this in older code. It's legacy: it predates `getCurrentSession
 - [ ] How SessionFactory/Session map onto JPA's EntityManagerFactory/EntityManager.
 
 ## Status
-✅ Working: all 5 demos run on Hibernate 6.6 with H2, and `./mvnw -pl spring-orm test` passes (5 tests). This tutorial was unfinished before: `config.xml` was empty and `App` printed "Hello World".
+✅ Working: all 5 demos run on Hibernate 6.6 with H2, and against MySQL 8.4 in Docker (`DB_URL`); `./mvnw -pl spring-orm test` passes (5 tests). This tutorial was unfinished before: `config.xml` was empty and `App` printed "Hello World".

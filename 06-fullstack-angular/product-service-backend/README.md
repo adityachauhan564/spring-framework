@@ -58,7 +58,7 @@ For MySQL: `export DB_PASSWORD=...`, then `./mvnw spring-boot:run -Dspring-boot.
 - **Tests that change data:** `@DirtiesContext(AFTER_EACH_TEST_METHOD)` gives every test a fresh app and database. It's simple but slower; fine for 6 tests.
 
 ## Status
-✅ **Working.** 6 tests pass. Checked from a real (headless) browser through the Angular app: the list loaded across origins.
+✅ **Working.** 6 tests pass. Checked from a real (headless) browser through the Angular app: the list loaded across origins. The `mysql` profile was checked against MySQL 8.4 in Docker: CRUD, search and CORS work, and the data survives a restart.
 
 Changes from the course version:
 - H2 by default, so MySQL is no longer required;

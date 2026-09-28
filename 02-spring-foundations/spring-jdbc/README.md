@@ -15,8 +15,8 @@ No database to install: by default every run uses a fresh **in-memory H2** datab
 **Using MySQL instead:** create an empty database, then set environment variables before running:
 
 ```bash
-export DB_URL="jdbc:mysql://localhost:3306/springjdbc" DB_USERNAME=root DB_PASSWORD=your-password
-# PowerShell: $env:DB_URL="jdbc:mysql://localhost:3306/springjdbc"; $env:DB_PASSWORD="your-password"
+export DB_URL="jdbc:mysql://localhost:3306/springjdbc?createDatabaseIfNotExist=true" DB_USERNAME=root DB_PASSWORD=your-password
+# PowerShell: $env:DB_URL="jdbc:mysql://localhost:3306/springjdbc?createDatabaseIfNotExist=true"; $env:DB_PASSWORD="your-password"
 ```
 
 `schema.sql` drops and re-creates its three tables on every run, so only point it at a learning database. The tests always use H2, even if `DB_URL` is set.
@@ -66,4 +66,4 @@ export DB_URL="jdbc:mysql://localhost:3306/springjdbc" DB_USERNAME=root DB_PASSW
 - [ ] What "atomic" means, and when `@Transactional` commits or rolls back.
 
 ## Status
-✅ Working: all 5 demos run on H2 with nothing installed. `./mvnw -pl spring-jdbc test` passes (8 tests: CRUD, keys and batch, transaction rollback). MySQL mode is selected with `DB_URL`.
+✅ Working: all 5 demos run on H2 with nothing installed. `./mvnw -pl spring-jdbc test` passes (8 tests: CRUD, keys and batch, transaction rollback). MySQL mode is selected with `DB_URL`; all 5 demos were also run against MySQL 8.4 in Docker.
