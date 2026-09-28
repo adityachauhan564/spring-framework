@@ -106,8 +106,8 @@ IDE files (`.project`, `.classpath`, `.settings/`, `.idea/`) are no longer track
 
 ## 🧠 How to revise quickly
 1. Open a stage's README and work through its **Quick revision checklist**.
-2. For any item you can't explain, open that project's README and read its **Revision notes**.
-3. Then follow **Read the code in this order**, and run the project to see it work.
+2. For any item you can't explain, open the linked project or topic README and read its **Revision notes** (Core Java topics: **Key concepts** and **Common mistakes**).
+3. Then follow **Read the code in this order** (Core Java: the **Run it** list), and run it to see it work. In Core Java, finish with the topic's `Exercises.java`.
 
 New to Java? Start with [01 Core Java](./01-core-java): 54 topics in study order, each with a why-first README, runnable examples, exercises with solutions, and a revision checklist.
 

@@ -51,7 +51,7 @@ In an IDE, open each module folder as its own project with the folder as the sou
 - a "build a multithreaded web server" tutorial (topic 46)
 - *Cracking the Coding Interview* and LeetCode problems (module 10)
 
-## Stage checklist
+## Quick revision checklist
 Each item links to the topic that teaches it. Every module README has a longer checklist.
 - [ ] Compile and run from the terminal, and read compile and runtime errors ([01](./01-java-basics/topic01_first_program/))
 - [ ] Types, casting, and why `Integer == Integer` can be false ([02](./01-java-basics/topic02_variables_and_data_types/))
