@@ -2,7 +2,7 @@
 
 > How the Spring container creates your objects ("beans") and connects them. We start with XML, then move to annotations, then to pure Java config, and finish with properties, profiles and AOP.
 
-**Before this:** [head-first-java](../../01-core-java/head-first-java/) topic05 (interfaces and dependency injection by hand), topic13 (static) and topic24 (records).
+**Before this:** [01 Core Java](../../01-core-java/): [topic 14](../../01-core-java/03-oop/topic14_interfaces_and_dependency_injection/) (interfaces and dependency injection by hand), [topic 09](../../01-core-java/02-objects-and-classes/topic09_static_and_final/) (static) and [topic 17](../../01-core-java/03-oop/topic17_records_and_immutability/) (records).
 
 ## Run it
 From `02-spring-foundations/` (the Maven wrapper is there, nothing to install):

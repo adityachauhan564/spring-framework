@@ -8,7 +8,7 @@ Every Spring project runs with **only JDK 21** (plus Node for the Angular app): 
 
 ```mermaid
 flowchart LR
-    A["01 Core Java<br/>24 topics: OOP · Collections · Generics<br/>Exceptions · Threads · Streams · DSA · JUnit"] --> B["02 Spring Foundations<br/>IoC/DI · AOP · JDBC · ORM<br/>Transactions · MVC"]
+    A["01 Core Java<br/>54 topics in 10 modules: basics · OOP<br/>Collections · Streams · Concurrency · JUnit · DSA"] --> B["02 Spring Foundations<br/>IoC/DI · AOP · JDBC · ORM<br/>Transactions · MVC"]
     B --> C["03 Spring Boot<br/>Auto-config · Actuator · REST<br/>Validation · Security · Spring Data JPA"]
     C --> D["04 Microservices<br/>Config · Eureka · Feign · Gateway<br/>Resilience4j · Tracing"]
     C --> E["05 Applications<br/>Digital Library · ShowTime · IRCTC<br/>Security · Kafka · Redis"]
@@ -21,7 +21,7 @@ flowchart LR
 
 | Stage | Folder | Projects |
 | :--- | :--- | :--- |
-| 1 | [`01-core-java`](./01-core-java) | [head-first-java](./01-core-java/head-first-java) · [functional-programming](./01-core-java/functional-programming) · [dsa-interview-practice](./01-core-java/dsa-interview-practice) · [multithreaded-web-server](./01-core-java/multithreaded-web-server) · [junit-basics](./01-core-java/junit-basics) |
+| 1 | [`01-core-java`](./01-core-java) | 54 topics in order: [01 Java basics](./01-core-java/01-java-basics) · [02 Objects and classes](./01-core-java/02-objects-and-classes) · [03 OOP](./01-core-java/03-oop) · [04 Collections and generics](./01-core-java/04-collections-and-generics) · [05 Streams](./01-core-java/05-streams) · [06 Concurrency](./01-core-java/06-concurrency) · [07 Java APIs](./01-core-java/07-java-apis) · [08 Advanced Java](./01-core-java/08-advanced-java) · [09 Testing and build](./01-core-java/09-testing-and-build) · [10 DSA](./01-core-java/10-dsa) |
 | 2 | [`02-spring-foundations`](./02-spring-foundations) | [spring-core](./02-spring-foundations/spring-core) · [spring-jdbc](./02-spring-foundations/spring-jdbc) · [spring-orm](./02-spring-foundations/spring-orm) · [spring-mvc](./02-spring-foundations/spring-mvc) |
 | 3 | [`03-spring-boot`](./03-spring-boot) | [spring-boot-basics](./03-spring-boot/spring-boot-basics) · [restful-web-services](./03-spring-boot/restful-web-services) · [jpa-hibernate](./03-spring-boot/jpa-hibernate) · [rest-first-books-api](./03-spring-boot/rest-first-books-api) |
 | 4 | [`04-microservices`](./04-microservices) | [spring-cloud-config-server](./04-microservices/spring-cloud-config-server) · [naming-server](./04-microservices/naming-server) · [limits-service](./04-microservices/limits-service) · [currency-exchange-service](./04-microservices/currency-exchange-service) · [currency-conversion-service](./04-microservices/currency-conversion-service) · [api-gateway](./04-microservices/api-gateway) |
@@ -32,15 +32,12 @@ flowchart LR
 ### Status at a glance
 - ✅ **Everything compiles.** Every Maven and Gradle project builds on JDK 21, and the Angular app builds and its tests pass.
 - ✅ **Verified running:**
-  - `head-first-java`: all 24 topics, 37 programs, including the `assert` self-checks (`java -ea`)
-  - `functional-programming`: all 15 topics, including the `assert` self-checks
-  - `dsa-interview-practice`: every problem runs, including the `assert` self-checks
+  - `01-core-java`: all 54 topics. Every example and exercise solution runs, and every unsolved `Exercises.java` fails as it should. Module 09's Maven build passes 17 JUnit tests.
   - `02-spring-foundations`: all 4 projects (30 topics) run with no database or server installed, and `./mvnw verify` passes 43 tests; the MVC app was checked over real HTTP on Jetty
   - `03-spring-boot`: all 4 projects run with no database or server installed, and `./mvnw verify` passes 37 tests; every API was checked over real HTTP
   - `04-microservices`: all 6 services start with one script (`start-all.sh` / `.ps1`), and `./mvnw verify` passes 14 tests; config refresh, load balancing, Feign and RestClient calls, gateway routes, Resilience4j and tracing were checked end to end
   - `05-applications`: all 3 projects run with no database or broker installed (40 tests); digital-library was checked with Redis, and showtime with Kafka and Mailpit, in Docker
   - `06-fullstack-angular`: the API and the Angular app work together with no database installed (6 + 12 tests); checked in a headless browser across origins
-  - `multithreaded-web-server` step 1
 
 ---
 
@@ -90,22 +87,19 @@ cd 06-fullstack-angular/product-inventory-frontend && npm ci && npx ng serve   #
 ```
 Then open http://localhost:4200. [`06-fullstack-angular/README.md`](./06-fullstack-angular/README.md) explains how the two halves talk (CORS).
 
-### Run plain Java examples (no build file)
+### Run the Core Java topics (no build file)
 ```bash
-cd 01-core-java/head-first-java
-javac -d out $(find src -name "*.java")
-java -ea -cp out topic11_strings.StringBasics      # any topicNN_<name>.<Class>
-
-cd ../dsa-interview-practice
-javac -d out $(find cracking-the-coding-interview_DSA_Patterns -name "*.java")
-java -ea -cp out kadane.MaximumSubarray
+cd 01-core-java/01-java-basics                      # any module folder
+javac -d out $(find . -name "*.java")               # PowerShell: javac -d out (Get-ChildItem -Recurse -Filter *.java).FullName
+java -cp out topic04_control_flow.LoopTypes          # any topicNN_<name>.<Class>
+java -cp out topic04_control_flow.Exercises          # then solve the exercises
 ```
+Module `09-testing-and-build` is the exception: it's a Maven project (`./mvnw test`).
 
 ### Opening in Eclipse / IntelliJ
 IDE files (`.project`, `.classpath`, `.settings/`, `.idea/`) are no longer tracked.
 - **Maven/Gradle projects:** import them as existing Maven/Gradle projects.
-- **Plain Java projects:** create a Java project on the folder and mark `src` as the source folder.
-- **junit-basics:** also add the JUnit 5 library.
+- **Core Java modules:** create a Java project on each module folder (for example `01-core-java/03-oop`), with the folder itself as the source folder. Import `09-testing-and-build` as a Maven project.
 
 ---
 
@@ -114,7 +108,7 @@ IDE files (`.project`, `.classpath`, `.settings/`, `.idea/`) are no longer track
 2. For any item you can't explain, open that project's README and read its **Revision notes**.
 3. Then follow **Read the code in this order**, and run the project to see it work.
 
-New to Java? Start with [head-first-java](./01-core-java/head-first-java): it has 24 numbered topics, a beginner reading path through them, and a revision checklist for each topic.
+New to Java? Start with [01 Core Java](./01-core-java): 54 topics in study order, each with a why-first README, runnable examples, exercises with solutions, and a revision checklist.
 
 ---
 
