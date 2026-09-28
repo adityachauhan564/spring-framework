@@ -104,4 +104,4 @@ curl -H "X-API-Version: 2" localhost:8080/person                              # 
 - [ ] Authentication vs authorization; when CSRF can be disabled.
 
 ## Status
-✅ Working: every endpoint was checked over HTTP from the packaged jar, and 14 tests pass. New in this pass: PUT and DELETE, validation, ProblemDetail errors, filtering, versioning, security and real tests; the unused JPA and H2 dependencies were removed.
+✅ Working: every endpoint was checked over HTTP from the packaged jar, and 14 tests pass. Added compared with the course version: PUT and DELETE, validation, ProblemDetail errors, filtering, versioning, security and real tests; the unused JPA and H2 dependencies were removed.
