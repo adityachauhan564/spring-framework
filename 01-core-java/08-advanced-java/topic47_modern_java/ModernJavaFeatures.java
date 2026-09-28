@@ -1,25 +1,18 @@
-package topic24_modern_java;
+package topic47_modern_java;
 
 import java.util.List;
 import java.util.Map;
 
 /*
  * Topic    : Modern Java (10 - 21) features you will see in real code
- * Key idea : less boilerplate - var, records, switch expressions, text blocks,
+ * Key idea : less boilerplate and safer types - var, switch expressions, text blocks,
  *            pattern matching, sealed types, immutable collection factories.
- * Run      : java -cp out topic24_modern_java.ModernJavaFeatures
+ *            (Records are topic 17; the shapes below are records because that's how sealed
+ *            hierarchies are usually written.)
+ * Run      : java -cp out topic47_modern_java.ModernJavaFeatures
  * Try this : add a Triangle to Shape - the compiler forces you to update area().
  */
 public class ModernJavaFeatures {
-
-    // record (Java 16): constructor, getters, equals, hashCode and toString for free
-    record Point(int x, int y) {
-        Point {                                      // compact constructor: validation
-            if (x < 0 || y < 0) {
-                throw new IllegalArgumentException("coordinates must be >= 0");
-            }
-        }
-    }
 
     // sealed interface (Java 17): only these classes may implement Shape
     sealed interface Shape permits Circle, Square { }
@@ -51,11 +44,6 @@ public class ModernJavaFeatures {
         var count = names.size();                   // int
         System.out.println("var: " + names + ", count " + count);
 
-        // records
-        var p1 = new Point(1, 2);
-        var p2 = new Point(1, 2);
-        System.out.println("record: " + p1 + ", x = " + p1.x() + ", equals: " + p1.equals(p2));
-
         // switch expression
         System.out.println("SUN is a " + dayType("SUN") + ", MON is a " + dayType("MON"));
 
@@ -75,7 +63,7 @@ public class ModernJavaFeatures {
         String json = """
                 {
                   "name": "Aditya",
-                  "topic": 24
+                  "topic": 47
                 }
                 """;
         System.out.print("text block:\n" + json);
