@@ -2,7 +2,7 @@
 
 Spring **without** Spring Boot: the IoC container, JDBC, Hibernate/JPA and web MVC, all configured by hand. Boot automates exactly this setup, so knowing it by hand turns Boot's "magic" into something you can read, debug and change. Next stage: [03 - Spring Boot](../03-spring-boot/).
 
-**Before this:** [01 - Core Java](../01-core-java/): classes and interfaces, collections, lambdas, and especially interfaces + dependency injection by hand (head-first-java topic05).
+**Before this:** [01 - Core Java](../01-core-java/): classes and interfaces, collections, lambdas, Maven ([topic 51](../01-core-java/09-testing-and-build/topic51_maven/)), and especially interfaces + dependency injection by hand ([topic 14](../01-core-java/03-oop/topic14_interfaces_and_dependency_injection/)).
 
 ## Run it (nothing to install except a JDK 21)
 All four projects are modules of one Maven build, with the Maven wrapper in this folder. Databases are in-memory H2 by default, and the web app runs on an embedded Jetty.

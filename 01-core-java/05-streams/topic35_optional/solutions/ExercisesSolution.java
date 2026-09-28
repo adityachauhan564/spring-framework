@@ -1,0 +1,58 @@
+package topic35_optional.solutions;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+// Solutions for topic35_optional/Exercises.java
+public class ExercisesSolution {
+
+    record Address(String city) { }
+
+    record User(String name, Address address) {
+        Optional<Address> findAddress() {
+            return Optional.ofNullable(address);
+        }
+    }
+
+    static final Map<Integer, User> USERS = Map.of(
+            1, new User("Asha", new Address("pune")),
+            2, new User("Ravi", null));
+
+    static Optional<User> findUser(int id) {
+        return Optional.ofNullable(USERS.get(id));        // ofNullable: null becomes an empty Optional
+    }
+
+    static String cityOf(int id) {
+        return findUser(id)
+                .flatMap(User::findAddress)                 // flatMap: findAddress already returns an Optional
+                .map(Address::city)
+                .map(String::toUpperCase)
+                .orElse("UNKNOWN");                         // every step is skipped once it's empty
+    }
+
+    static Optional<String> firstLongWord(List<String> words) {
+        return words.stream().filter(word -> word.length() > 5).findFirst();
+    }
+
+    static Optional<Integer> parse(String text) {
+        try {
+            return Optional.of(Integer.parseInt(text));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
+    }
+
+    public static void main(String[] args) {
+        check(findUser(1).isPresent() && findUser(9).isEmpty(), "exercise 1");
+        check(cityOf(1).equals("PUNE") && cityOf(2).equals("UNKNOWN") && cityOf(9).equals("UNKNOWN"), "exercise 2");
+        check(firstLongWord(List.of("java", "streams", "optional")).orElse("").equals("streams"), "exercise 3");
+        check(firstLongWord(List.of("a", "b")).isEmpty(), "exercise 3");
+        check(parse("42").orElse(0) == 42 && parse("x").isEmpty(), "exercise 4");
+        System.out.println("All exercises pass");
+    }
+
+    private static void check(boolean ok, String exercise) {
+        if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
+    }
+}
