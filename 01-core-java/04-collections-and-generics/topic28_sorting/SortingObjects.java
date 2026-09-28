@@ -1,6 +1,7 @@
-package topic20_comparable_and_comparator;
+package topic28_sorting;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * Key idea : Comparable = the ONE natural order, written inside the class (compareTo).
  *            Comparator = any number of extra orders, written outside the class.
  *            compareTo/compare return negative (a first), 0 (equal), positive (b first).
- * Run      : java -cp out topic20_comparable_and_comparator.SortingObjects
+ * Run      : java -cp out topic28_sorting.SortingObjects
  * Try this : sort by name length, then alphabetically for equal lengths.
  */
 public class SortingObjects {
@@ -72,6 +73,6 @@ public class SortingObjects {
                 return Integer.compare(a.getMarks(), b.getMarks());   // not a - b: that can overflow
             }
         };
-        System.out.println("Lowest marks: " + students.stream().min(byMarksOldStyle).orElseThrow());
+        System.out.println("Lowest marks: " + Collections.min(students, byMarksOldStyle));
     }
 }

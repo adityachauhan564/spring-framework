@@ -1,10 +1,10 @@
-package topic07_hashmap_and_optional;
+package topic26_maps_and_hashing;
 
 /*
  * Topic    : How a HashMap works inside (interview question: "build one without HashMap")
  * Key idea : an array of "buckets". hashCode() picks the bucket; keys that land in
  *            the same bucket (a collision) are kept in a small linked list (chaining).
- * Run      : java -ea -cp out topic07_hashmap_and_optional.MyHashMap   (-ea turns on the asserts)
+ * Run      : java -ea -cp out topic26_maps_and_hashing.MyHashMap   (-ea turns on the asserts)
  * Try this : add resizing - when size > 0.75 * buckets.length, double the array.
  */
 public class MyHashMap<K, V> {

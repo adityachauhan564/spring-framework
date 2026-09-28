@@ -1,4 +1,4 @@
-package topic03_arraylist;
+package topic23_lists_and_iteration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /*
  * Topic    : Using the Java library - first ArrayList (Head First Java, chapter 6)
  * Key idea : an ArrayList grows by itself; <Egg> means "a list of Egg objects".
- * Run      : java -cp out topic03_arraylist.ArrayListBasics
+ * Run      : java -cp out topic23_lists_and_iteration.ArrayListBasics
  * Next     : ArrayListOperations
  */
 public class ArrayListBasics {

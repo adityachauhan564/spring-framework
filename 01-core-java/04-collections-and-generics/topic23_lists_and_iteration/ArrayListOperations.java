@@ -1,4 +1,4 @@
-package topic03_arraylist;
+package topic23_lists_and_iteration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.List;
  * Topic    : Everyday ArrayList operations (Head First Java, chapter 6)
  * Key idea : add / get / set / remove / indexOf / contains / isEmpty / loop.
  *            Indexes start at 0, like arrays.
- * Run      : java -cp out topic03_arraylist.ArrayListOperations
+ * Run      : java -cp out topic23_lists_and_iteration.ArrayListOperations
  * Try this : remove "Mango" by index instead of by value.
  */
 public class ArrayListOperations {

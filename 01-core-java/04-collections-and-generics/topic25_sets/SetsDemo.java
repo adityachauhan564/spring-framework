@@ -1,4 +1,4 @@
-package topic19_collections_framework;
+package topic25_sets;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -11,7 +11,7 @@ import java.util.TreeSet;
  * Key idea : HashSet     - fastest, no order
  *            LinkedHashSet - keeps insertion order
  *            TreeSet     - always sorted
- * Run      : java -cp out topic19_collections_framework.SetsDemo
+ * Run      : java -cp out topic25_sets.SetsDemo
  * Next     : QueuesAndDeques, then MapsDemo
  */
 public class SetsDemo {

@@ -1,4 +1,4 @@
-package topic18_generics;
+package topic24_generics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.List;
  * Topic    : Generics
  * Key idea : a type parameter <T> lets one class/method work with any type while the
  *            compiler still checks types - no casts, no ClassCastException at runtime.
- * Run      : java -cp out topic18_generics.GenericsDemo
+ * Run      : java -cp out topic24_generics.GenericsDemo
  * Try this : write a generic method swap(T[] array, int i, int j).
  */
 public class GenericsDemo {
@@ -25,7 +25,7 @@ public class GenericsDemo {
         }
     }
 
-    // 2. two type parameters (a record is a short data class - see topic24)
+    // 2. two type parameters (a record is a short data class - see topic 17)
     record Pair<K, V>(K first, V second) { }
 
     // 3. generic method: <T> before the return type

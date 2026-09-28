@@ -1,4 +1,4 @@
-package topic19_collections_framework;
+package topic26_maps_and_hashing;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,7 +11,7 @@ import java.util.TreeMap;
  * Topic    : Choosing a Map, counting with merge(), and the Iterator
  * Key idea : HashMap (no order) / LinkedHashMap (insertion order) / TreeMap (sorted keys) -
  *            the same idea as the three Sets. Use an Iterator to remove while looping.
- * Run      : java -cp out topic19_collections_framework.MapsDemo
+ * Run      : java -cp out topic26_maps_and_hashing.MapsDemo
  * Try this : count the characters of "mississippi" instead of words.
  */
 public class MapsDemo {

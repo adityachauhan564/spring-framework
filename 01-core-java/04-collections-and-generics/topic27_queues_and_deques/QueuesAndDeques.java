@@ -1,4 +1,4 @@
-package topic19_collections_framework;
+package topic27_queues_and_deques;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -10,7 +10,7 @@ import java.util.Queue;
  * Key idea : Queue         - FIFO: first in, first out (a line at a shop)
  *            Deque as stack - LIFO: last in, first out (a pile of plates)
  *            PriorityQueue - always hands out the smallest (or highest priority) first
- * Run      : java -cp out topic19_collections_framework.QueuesAndDeques
+ * Run      : java -cp out topic27_queues_and_deques.QueuesAndDeques
  * Try this : use a Deque to check if "({[]})" has balanced brackets.
  */
 public class QueuesAndDeques {
