@@ -21,7 +21,7 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
  *
  * Which database:
  *   default          -> an in-memory H2 database (nothing to install, empty on every run)
- *   DB_URL is set    -> that database, e.g. DB_URL=jdbc:mysql://localhost:3306/springjdbc
+ *   DB_URL is set    -> that database, e.g. DB_URL=jdbc:mysql://localhost:3306/springjdbc?createDatabaseIfNotExist=true
  *                       with DB_USERNAME (default root) and DB_PASSWORD. Never commit passwords.
  */
 @Configuration
