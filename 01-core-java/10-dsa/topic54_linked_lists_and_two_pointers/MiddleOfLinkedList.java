@@ -1,4 +1,4 @@
-package fast_and_slow_pointers;
+package topic54_linked_lists_and_two_pointers;
 
 /*
  * Middle of the Linked List (LeetCode 876) - fast and slow pointers.

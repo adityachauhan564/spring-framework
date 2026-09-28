@@ -1,4 +1,4 @@
-package fast_and_slow_pointers;
+package topic54_linked_lists_and_two_pointers;
 
 /*
  * Linked List Cycle (LeetCode 141) - Floyd's "tortoise and hare".

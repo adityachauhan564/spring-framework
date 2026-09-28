@@ -1,4 +1,4 @@
-package chapter_1_arrays_and_strings;
+package topic53_arrays_and_hashing;
 
 import java.util.Arrays;
 

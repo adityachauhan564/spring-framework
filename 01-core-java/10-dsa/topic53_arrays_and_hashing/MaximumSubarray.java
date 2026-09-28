@@ -1,4 +1,4 @@
-package kadane;
+package topic53_arrays_and_hashing;
 
 /*
  * Maximum Subarray (LeetCode 53) - Kadane's algorithm.

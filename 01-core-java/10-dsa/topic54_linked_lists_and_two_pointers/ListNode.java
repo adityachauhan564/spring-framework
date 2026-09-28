@@ -1,4 +1,4 @@
-package fast_and_slow_pointers;
+package topic54_linked_lists_and_two_pointers;
 
 /*
  * A singly linked list node, as used by LeetCode's linked-list problems.

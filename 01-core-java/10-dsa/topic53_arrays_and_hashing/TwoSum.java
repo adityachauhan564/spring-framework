@@ -1,4 +1,4 @@
-package topic09_interview_problems;
+package topic53_arrays_and_hashing;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,7 +9,7 @@ import java.util.Set;
  *            add up to the target (any order), or an empty array if none exist.
  *            A number can't be added to itself. At most one pair exists.
  * Example  : [3, -4, 8, 11, 1, -1, 6], target 10  ->  [-1, 11]
- * Run      : java -ea -cp out topic09_interview_problems.TwoSum
+ * Run      : java -ea -cp out topic53_arrays_and_hashing.TwoSum
  * Try this : solve it a third way - sort the array, then use two pointers. O(n log n).
  */
 public class TwoSum {
