@@ -1,4 +1,4 @@
-package topic23_file_io;
+package topic44_file_io;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,8 +12,8 @@ import java.util.List;
  * Topic    : Reading and writing files with java.nio.file
  * Key idea : Path points to a file; the Files class does the work.
  *            Small files: readAllLines / writeString. Big files: a BufferedReader line by line.
- *            File operations throw IOException (checked - see topic06).
- * Run      : java -cp out topic23_file_io.FileIODemo
+ *            File operations throw IOException (checked - see topic 10).
+ * Run      : java -cp out topic44_file_io.FileIODemo
  * Try this : count how many lines contain the word "Java".
  */
 public class FileIODemo {
