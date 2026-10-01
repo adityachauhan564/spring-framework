@@ -2,23 +2,25 @@ package topic11_encapsulation_and_access_modifiers;
 
 /*
  * Topic    : Encapsulation
- * Key idea : keep fields private and change them only through methods that
- *            check the rules. Nobody outside can set balance = -500.
+ * Key idea : Keep the fields private, and allow changes ONLY through methods that check the rules.
+ *            Like your bank account: you can't walk into the vault and change your balance.
+ *            You go through the counter (deposit / withdraw), and the counter checks everything.
+ *            So nobody outside this class can ever do balance = -500.
  * Read     : BankAccount -> EncapsulationDemo
  *
- * Access modifiers (who can see a member):
- *   private    - this class only
- *   (default)  - this package only (no keyword)
- *   protected  - this package + subclasses anywhere
+ * Access modifiers (who is allowed to see a field or method):
+ *   private    - only this class
+ *   (default)  - only classes in the same package (you write no keyword at all)
+ *   protected  - same package + child classes (subclasses) in any package
  *   public     - everyone
  */
 public class BankAccount {
 
-    private final String owner;     // read-only: getter, no setter
-    private double balance;         // changed only by deposit()/withdraw()
+    private final String owner;     // read-only: there is a getter but no setter
+    private double balance;         // can change ONLY through deposit() and withdraw()
 
     public BankAccount(String owner, double openingBalance) {
-        if (openingBalance < 0) {
+        if (openingBalance < 0) {                   // check the rule even while creating the account
             throw new IllegalArgumentException("Opening balance can't be negative");
         }
         this.owner = owner;
@@ -36,7 +38,7 @@ public class BankAccount {
         if (amount <= 0) {
             throw new IllegalArgumentException("Withdrawal must be positive");
         }
-        if (amount > balance) {
+        if (amount > balance) {                     // you can't take out more than you have
             throw new IllegalStateException("Insufficient funds: balance is " + balance);
         }
         balance -= amount;
