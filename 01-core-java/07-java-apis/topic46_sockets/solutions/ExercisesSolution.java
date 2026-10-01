@@ -7,17 +7,17 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-// Solutions for topic46_sockets/Exercises.java
+// Answers for topic46_sockets/Exercises.java
 public class ExercisesSolution {
 
     static String respond(String request) {
-        String[] parts = request.split(" ", 2);           // the command, then the rest
+        String[] parts = request.split(" ", 2);           // split into 2 pieces only: the command, and everything after it
         return switch (parts[0]) {
             case "PING" -> "PONG";
             case "UPPER" -> parts.length > 1 ? parts[1].toUpperCase() : "";
             case "ADD" -> {
                 String[] numbers = parts[1].split(" ");
-                yield String.valueOf(Integer.parseInt(numbers[0]) + Integer.parseInt(numbers[1]));
+                yield String.valueOf(Integer.parseInt(numbers[0]) + Integer.parseInt(numbers[1]));   // yield = the value of this case
             }
             default -> "ERROR unknown command";
         };
@@ -26,9 +26,9 @@ public class ExercisesSolution {
     static String ask(String host, int port, String request) throws IOException {
         try (Socket socket = new Socket(host, port);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {   // true: println flushes
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {   // true: every println is flushed (sent) right away
             out.println(request);
-            return in.readLine();                          // blocks until the server's line arrives
+            return in.readLine();                          // waits here until the server's reply arrives
         }
     }
 
@@ -46,6 +46,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // a tiny server that answers just one client, using respond()
     private static void answerOne(ServerSocket serverSocket) {
         try (Socket client = serverSocket.accept();
              BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -56,6 +57,7 @@ public class ExercisesSolution {
         }
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
