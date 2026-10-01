@@ -2,18 +2,21 @@ package topic04_control_flow;
 
 /*
  * Topic    : Making decisions: if / else-if / else, switch statement, switch expression
- * Key idea : if/else-if checks conditions top to bottom and runs the FIRST branch that matches.
- *            switch picks a branch by matching ONE value; the modern switch expression also
- *            returns a value and never "falls through".
+ * Key idea : - if / else-if checks the conditions from top to bottom and runs ONLY the
+ *              first one that is true. The rest are skipped.
+ *              Like a marksheet: 95 marks gets 'A' and stops there, it never reaches 'C'.
+ *            - switch looks at ONE value and jumps to the matching case.
+ *            - The new switch expression (with ->) also gives back a value, and it never
+ *              "falls through" into the next case by mistake.
  * Run      : java -cp out topic04_control_flow.GradeCalculator
- * Try this : move the "score >= 60" branch above "score >= 90" and see what goes wrong.
+ * Try this : Move the "score >= 60" check above "score >= 90" and see what goes wrong.
  */
 public class GradeCalculator {
 
-    // if / else-if: order matters - the first true condition wins
+    // if / else-if: the order is important - the first true condition wins
     static char grade(int score) {
         if (score < 0 || score > 100) {
-            return '?';                                 // reject impossible input first
+            return '?';                                 // marks below 0 or above 100 are impossible, so reject them first
         } else if (score >= 90) {
             return 'A';
         } else if (score >= 75) {
@@ -25,7 +28,8 @@ public class GradeCalculator {
         }
     }
 
-    // classic switch statement: every case needs a break, or execution falls into the next case
+    // old-style switch: every case needs a break.
+    // If you forget break, Java keeps running into the next case also (this is called "fall-through").
     static String describeOld(char grade) {
         String text;
         switch (grade) {
@@ -33,16 +37,16 @@ public class GradeCalculator {
                 text = "excellent";
                 break;
             case 'B':
-            case 'C':                                   // two cases sharing one body (deliberate fall-through)
+            case 'C':                                   // B has no code, so it falls into C on purpose - both share one answer
                 text = "passed";
                 break;
-            default:
+            default:                                    // default = "none of the above"
                 text = "try again";
         }
         return text;
     }
 
-    // switch expression (Java 14+): arrows, several labels per case, returns a value, no break
+    // new switch expression (Java 14+): uses arrows ->, many values per case, gives back a value, no break needed
     static String describe(char grade) {
         return switch (grade) {
             case 'A' -> "excellent";
