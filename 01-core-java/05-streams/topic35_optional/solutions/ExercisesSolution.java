@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-// Solutions for topic35_optional/Exercises.java
+// Answers for topic35_optional/Exercises.java
 public class ExercisesSolution {
 
     record Address(String city) { }
@@ -20,7 +20,7 @@ public class ExercisesSolution {
             2, new User("Ravi", null));
 
     static Optional<User> findUser(int id) {
-        return Optional.ofNullable(USERS.get(id));        // ofNullable: null becomes an empty Optional
+        return Optional.ofNullable(USERS.get(id));        // ofNullable: a null turns into an empty box
     }
 
     static String cityOf(int id) {
@@ -28,18 +28,18 @@ public class ExercisesSolution {
                 .flatMap(User::findAddress)                 // flatMap: findAddress already returns an Optional
                 .map(Address::city)
                 .map(String::toUpperCase)
-                .orElse("UNKNOWN");                         // every step is skipped once it's empty
+                .orElse("UNKNOWN");                         // once the box is empty, every step above is skipped
     }
 
     static Optional<String> firstLongWord(List<String> words) {
-        return words.stream().filter(word -> word.length() > 5).findFirst();
+        return words.stream().filter(word -> word.length() > 5).findFirst();   // findFirst already gives an Optional
     }
 
     static Optional<Integer> parse(String text) {
         try {
-            return Optional.of(Integer.parseInt(text));
+            return Optional.of(Integer.parseInt(text));     // it worked: a box with the number
         } catch (NumberFormatException e) {
-            return Optional.empty();
+            return Optional.empty();                        // not a number: an empty box, no crash
         }
     }
 
@@ -52,6 +52,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

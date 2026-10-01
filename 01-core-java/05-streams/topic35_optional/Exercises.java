@@ -5,11 +5,14 @@ import java.util.Map;
 import java.util.Optional;
 
 /*
- * Exercises for topic 35. Replace each "TODO" with code that uses Optional - no null checks,
- * no bare get() - then run:
- *   java -cp out topic35_optional.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 35.
+ * How to use:
+ *   - Replace each "TODO" with code that uses Optional.
+ *     No "if (x == null)" checks, and no bare get().
+ *   - Then run:  java -cp out topic35_optional.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
@@ -25,13 +28,13 @@ public class Exercises {
             1, new User("Asha", new Address("pune")),
             2, new User("Ravi", null));
 
-    // 1. The user with this id, as an Optional (USERS.get returns null for a missing id).
+    // 1. Return the user with this id, as an Optional. (USERS.get gives null when the id is not there.)
     static Optional<User> findUser(int id) {
         throw new UnsupportedOperationException("TODO exercise 1");
     }
 
-    // 2. The user's city in UPPER CASE, or "UNKNOWN" if the user or the address is missing.
-    //    One chain: findUser -> flatMap -> map -> map -> orElse
+    // 2. The user's city in CAPITAL letters, or "UNKNOWN" if the user or the address is missing.
+    //    Write it as one chain: findUser -> flatMap -> map -> map -> orElse
     static String cityOf(int id) {
         throw new UnsupportedOperationException("TODO exercise 2");
     }
@@ -41,7 +44,7 @@ public class Exercises {
         throw new UnsupportedOperationException("TODO exercise 3");
     }
 
-    // 4. Parse the text as an int; an empty Optional if it isn't a number.
+    // 4. Turn the text into an int. Return an empty Optional if the text is not a number.
     static Optional<Integer> parse(String text) {
         throw new UnsupportedOperationException("TODO exercise 4");
     }
@@ -55,6 +58,7 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
