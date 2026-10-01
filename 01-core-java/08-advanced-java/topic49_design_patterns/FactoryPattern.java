@@ -1,11 +1,14 @@
 package topic49_design_patterns;
 
 /*
- * Pattern  : Factory - one place decides WHICH class to create
- * Use for  : choosing an implementation from input or configuration ("upi", "card", ...).
- * Key idea : callers ask the factory for "a Notifier for EMAIL" and get the interface type back;
- *            only the factory knows the concrete classes. Adding a type changes one method.
- * Spring   : the container is a giant factory - you ask for a type, it decides what to build.
+ * Pattern  : Factory - ONE place decides which class to create
+ * Use for  : picking the right implementation from some input or setting ("upi", "card", ...).
+ * Key idea : The caller just asks the factory: "give me a Notifier for EMAIL".
+ *            It gets back the interface type, and never sees the real class.
+ *            Only the factory knows the real classes - so adding a new type means changing one method.
+ *            Like ordering at a restaurant counter: you say "one masala dosa", and the kitchen
+ *            decides which cook makes it. You never walk into the kitchen.
+ * Spring   : The Spring container is one giant factory - you ask for a type, it decides what to build.
  * Run      : java -cp out topic49_design_patterns.FactoryPattern
  */
 public class FactoryPattern {
@@ -30,7 +33,7 @@ public class FactoryPattern {
 
     static class NotifierFactory {
         static Notifier create(Channel channel) {
-            return switch (channel) {            // the ONLY place that knows the concrete classes
+            return switch (channel) {            // the ONLY place in the code that knows the real classes
                 case EMAIL -> new EmailNotifier();
                 case SMS -> new SmsNotifier();
             };
@@ -39,7 +42,7 @@ public class FactoryPattern {
 
     public static void main(String[] args) {
         for (Channel channel : Channel.values()) {
-            Notifier notifier = NotifierFactory.create(channel);    // the caller only sees the interface
+            Notifier notifier = NotifierFactory.create(channel);    // the caller only ever sees the interface
             System.out.println(notifier.send("your order has shipped"));
         }
     }

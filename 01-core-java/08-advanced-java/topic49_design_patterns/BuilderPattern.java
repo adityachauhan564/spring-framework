@@ -1,10 +1,12 @@
 package topic49_design_patterns;
 
 /*
- * Pattern  : Builder - create an object with many (optional) parts, readably
- * Use for  : objects with lots of fields, most of them optional.
- * Key idea : instead of new Pizza("large", true, false, true, 2) - which argument was what? -
- *            chain named steps and finish with build(). The result can still be immutable.
+ * Pattern  : Builder - create an object that has many parts (mostly optional), in a readable way
+ * Use for  : objects with lots of fields, where most of them are optional.
+ * Key idea : Instead of new Pizza("large", true, false, true, 2) - which value means what?? -
+ *            you chain named steps and finish with build(). The final object can still be immutable.
+ *            Like ordering a Subway sandwich: bread, then cheese, then veggies, then sauce -
+ *            one clear step at a time, and you skip whatever you don't want.
  * Spring   : RestClient.builder(), UriComponentsBuilder, and Lombok's @Builder (stage 05).
  * Run      : java -cp out topic49_design_patterns.BuilderPattern
  */
@@ -16,14 +18,14 @@ public class BuilderPattern {
         private final int timeoutSeconds;
         private final String body;
 
-        private HttpRequest(Builder builder) {      // only the builder can create one
+        private HttpRequest(Builder builder) {      // private: only the builder can create one
             this.url = builder.url;
             this.method = builder.method;
             this.timeoutSeconds = builder.timeoutSeconds;
             this.body = builder.body;
         }
 
-        static Builder to(String url) {             // the one required part
+        static Builder to(String url) {             // the one part that is required - so you must give it first
             return new Builder(url);
         }
 
@@ -34,7 +36,7 @@ public class BuilderPattern {
 
         static final class Builder {
             private final String url;
-            private String method = "GET";          // sensible defaults for the optional parts
+            private String method = "GET";          // sensible default values for the optional parts
             private int timeoutSeconds = 30;
             private String body;
 
@@ -44,7 +46,7 @@ public class BuilderPattern {
 
             Builder method(String method) {
                 this.method = method;
-                return this;                        // returning 'this' is what makes the chain work
+                return this;                        // returning 'this' is what lets you chain .method(...).body(...)
             }
 
             Builder timeout(int seconds) {
@@ -59,7 +61,7 @@ public class BuilderPattern {
 
             HttpRequest build() {
                 if (body != null && method.equals("GET")) {
-                    throw new IllegalStateException("a GET request has no body");   // validate once, at the end
+                    throw new IllegalStateException("a GET request has no body");   // check everything once, at the very end
                 }
                 return new HttpRequest(this);
             }
@@ -67,7 +69,7 @@ public class BuilderPattern {
     }
 
     public static void main(String[] args) {
-        System.out.println(HttpRequest.to("/products").build());
-        System.out.println(HttpRequest.to("/orders").method("POST").body("{\"id\":1}").timeout(5).build());
+        System.out.println(HttpRequest.to("/products").build());                                            // only the required part
+        System.out.println(HttpRequest.to("/orders").method("POST").body("{\"id\":1}").timeout(5).build());   // everything set
     }
 }

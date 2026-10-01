@@ -3,7 +3,7 @@ package topic49_design_patterns.solutions;
 import java.util.ArrayList;
 import java.util.List;
 
-// Solutions for topic49_design_patterns/Exercises.java
+// Answers for topic49_design_patterns/Exercises.java
 public class ExercisesSolution {
 
     interface Payment {
@@ -11,8 +11,8 @@ public class ExercisesSolution {
     }
 
     static Payment paymentFor(String type) {
-        return switch (type) {                          // the factory: the only place that knows the options
-            case "upi" -> amount -> "UPI paid " + amount;         // each strategy is a lambda
+        return switch (type) {                          // the factory: the only place that knows all the options
+            case "upi" -> amount -> "UPI paid " + amount;         // each strategy is just a lambda
             case "card" -> amount -> "Card paid " + amount;
             case "wallet" -> amount -> "Wallet paid " + amount;
             default -> throw new IllegalArgumentException("unknown payment type: " + type);
@@ -26,7 +26,7 @@ public class ExercisesSolution {
             paymentFor("cash");
             check(false, "exercise 1 must reject an unknown type");
         } catch (IllegalArgumentException expected) {
-            // rejected
+            // refused - correct
         }
 
         Pizza pizza = Pizza.size("large").topping("olive").topping("onion").build();
@@ -43,6 +43,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
@@ -56,7 +57,7 @@ final class Pizza {
     private Pizza(String size, boolean cheese, List<String> toppings) {
         this.size = size;
         this.cheese = cheese;
-        this.toppings = List.copyOf(toppings);          // an immutable copy: the builder can't change it later
+        this.toppings = List.copyOf(toppings);          // a locked copy: the builder can't change this pizza later
     }
 
     static Builder size(String size) {
@@ -70,7 +71,7 @@ final class Pizza {
 
     static final class Builder {
         private final String size;
-        private boolean cheese = true;
+        private boolean cheese = true;                  // default: cheese is on
         private final List<String> toppings = new ArrayList<>();
 
         private Builder(String size) {
@@ -79,7 +80,7 @@ final class Pizza {
 
         Builder topping(String topping) {
             toppings.add(topping);
-            return this;
+            return this;                                // return 'this' so the calls can be chained
         }
 
         Builder noCheese() {
@@ -98,14 +99,14 @@ class PriceTicker {
         void priceChanged(int price);
     }
 
-    private final List<Listener> listeners = new ArrayList<>();
+    private final List<Listener> listeners = new ArrayList<>();     // everyone who subscribed
 
     void subscribe(Listener listener) {
         listeners.add(listener);
     }
 
     void publish(int price) {
-        for (Listener listener : listeners) {
+        for (Listener listener : listeners) {           // tell each subscriber, one by one
             listener.priceChanged(price);
         }
     }
