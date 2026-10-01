@@ -2,13 +2,16 @@ package topic19_nested_and_anonymous_classes;
 
 /*
  * Topic    : Nested classes: static nested, inner, local, anonymous
- * Key idea : a class can live inside another class when it only makes sense there.
- *   static nested - an ordinary class, namespaced by its outer class (Map.Entry is one)
- *   inner         - belongs to an OUTER OBJECT and can use its fields
- *   local         - declared inside a method, used only there
- *   anonymous     - a one-off class without a name, written right where it's needed
+ * Key idea : You can write a class INSIDE another class when it only makes sense there.
+ *            Like a room inside a house - you don't build a bedroom on the road.
+ *   static nested - a normal class that just lives inside another class's name.
+ *                   Java's Map.Entry is one. Needs no outer object.
+ *   inner         - belongs to ONE outer OBJECT and can use that object's fields.
+ *                   Like a car's spark plug - it belongs to that one particular engine.
+ *   local         - written inside a method, and usable only inside that method.
+ *   anonymous     - a one-time class with no name, written exactly where you need it.
  * Run      : java -cp out topic19_nested_and_anonymous_classes.NestedClasses
- * Try this : try to create an Engine.Spark with 'new Engine.Spark()' - why doesn't it compile?
+ * Try this : Try to create a spark with 'new Engine.Spark()' - why doesn't it compile?
  */
 public class NestedClasses {
 
@@ -24,7 +27,7 @@ public class NestedClasses {
             this.model = model;
         }
 
-        // static nested: no link to any Engine object; created as new Engine.Report(...)
+        // static nested: has no link to any Engine object. Create it as new Engine.Report(...)
         static class Report {
             private final String text;
 
@@ -38,10 +41,10 @@ public class NestedClasses {
             }
         }
 
-        // inner (not static): every Spark belongs to one Engine and can read its fields
+        // inner (no 'static'): every Spark belongs to one Engine, and can read that Engine's fields
         class Spark {
             void fire() {
-                starts++;                                   // the OUTER object's field
+                starts++;                                   // this is the OUTER Engine object's field
                 System.out.println("spark in " + model + ", starts = " + starts);
             }
         }
@@ -54,15 +57,15 @@ public class NestedClasses {
     public static void main(String[] args) {
         Engine engine = new Engine("V8");
 
-        Engine.Spark spark = engine.new Spark();             // an inner object needs an outer object
+        Engine.Spark spark = engine.new Spark();             // an inner object needs an outer object first: engine.new
         spark.fire();
         spark.fire();
         System.out.println(engine.report());
 
-        Engine.Report report = new Engine.Report("made directly");   // static nested: no Engine needed
+        Engine.Report report = new Engine.Report("made directly");   // static nested: no Engine object needed
         System.out.println(report);
 
-        // local class: only visible inside main
+        // local class: written inside main, so only main can use it
         class Shouter implements Greeter {
             public String greet(String name) {
                 return "HELLO, " + name.toUpperCase() + "!";
@@ -70,7 +73,7 @@ public class NestedClasses {
         }
         System.out.println(new Shouter().greet("asha"));
 
-        // anonymous class: implement the interface inline, once
+        // anonymous class: write the interface's method right here, use it once. No class name needed
         Greeter polite = new Greeter() {
             @Override
             public String greet(String name) {

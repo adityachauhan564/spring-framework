@@ -1,10 +1,13 @@
 package topic19_nested_and_anonymous_classes;
 
 /*
- * Exercises for topic 19. Complete the code below, then run:
- *   java -cp out topic19_nested_and_anonymous_classes.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 19.
+ * How to use:
+ *   - Complete the code below. Fill in every "TODO".
+ *   - Then run:  java -cp out topic19_nested_and_anonymous_classes.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
@@ -12,13 +15,14 @@ public class Exercises {
         boolean check(int value);
     }
 
-    // 2. Return a Checker, written as an ANONYMOUS class, that accepts values between min and max inclusive.
+    // 2. Return a Checker, written as an ANONYMOUS class, that says yes to values from min to max (both included).
     static Checker between(int min, int max) {
         throw new UnsupportedOperationException("TODO exercise 2");
     }
 
     public static void main(String[] args) {
-        // 1. A stack of ints: push adds on top, pop removes the top, peek looks at it
+        // 1. A stack of ints, like a stack of plates at a wedding buffet:
+        //    push puts a plate on top, pop takes the top plate off, peek just looks at the top plate
         LinkedStack stack = new LinkedStack();
         check(stack.isEmpty(), "exercise 1 a new stack is empty");
         stack.push(1);
@@ -32,13 +36,14 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
-// 1. Build it from nodes: a private static nested class Node { int value; Node next; }
-//    'top' points at the newest node. Nobody outside needs to know Node exists.
+// 1. Build the stack from "nodes": a private static nested class Node { int value; Node next; }
+//    'top' points to the newest node. No code outside needs to know that Node even exists.
 class LinkedStack {
     // TODO: the Node class and a 'top' field
 
