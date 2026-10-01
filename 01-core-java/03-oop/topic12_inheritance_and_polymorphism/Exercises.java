@@ -1,14 +1,17 @@
 package topic12_inheritance_and_polymorphism;
 
 /*
- * Exercises for topic 12. Complete the classes below this one, then run:
- *   java -cp out topic12_inheritance_and_polymorphism.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 12.
+ * How to use:
+ *   - Complete the classes written BELOW this one, and the totalArea method. Fill in every "TODO".
+ *   - Then run:  java -cp out topic12_inheritance_and_polymorphism.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
-    // 3. The total area of any shapes, WITHOUT checking which kind each one is (no instanceof).
+    // 3. Add up the area of all the shapes - WITHOUT checking what kind each one is (no instanceof).
     static double totalArea(Shape[] shapes) {
         throw new UnsupportedOperationException("TODO exercise 3");
     }
@@ -27,12 +30,14 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
-// Shape is complete: a name, a default area, and a describe() that uses whatever area() the object has.
+// Shape is already complete. It has a name, a default area of 0,
+// and a describe() method that uses whatever area() the actual object has.
 class Shape {
     private final String name;
 
@@ -49,8 +54,8 @@ class Shape {
     }
 }
 
-// 1. Rectangle and Circle extend Shape: pass the name up with super(...), and override area().
-// 2. describe() then works without being rewritten. Why?
+// 1. Rectangle and Circle both extend Shape. Send the name up with super(...), and override area().
+// 2. After that, describe() works for both without rewriting it. Think about why.
 class Rectangle extends Shape {
     Rectangle(double width, double height) {
         super("TODO");

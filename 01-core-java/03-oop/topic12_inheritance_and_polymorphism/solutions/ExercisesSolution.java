@@ -1,12 +1,12 @@
 package topic12_inheritance_and_polymorphism.solutions;
 
-// Solutions for topic12_inheritance_and_polymorphism/Exercises.java
+// Answers for topic12_inheritance_and_polymorphism/Exercises.java
 public class ExercisesSolution {
 
     static double totalArea(Shape[] shapes) {
         double total = 0;
         for (Shape shape : shapes) {
-            total += shape.area();          // dynamic dispatch: each object runs its own area()
+            total += shape.area();          // each object runs its own area() - Java decides while running
         }
         return total;
     }
@@ -25,6 +25,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
@@ -42,7 +43,7 @@ class Shape {
     }
 
     String describe() {
-        return String.format("%s with area %.2f", name, area());   // area() of the actual object
+        return String.format("%s with area %.2f", name, area());   // calls area() of the REAL object (Rectangle or Circle)
     }
 }
 
