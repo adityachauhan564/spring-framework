@@ -1,7 +1,8 @@
 package topic54_linked_lists_and_two_pointers.solutions;
 
-// Solutions for topic54_linked_lists_and_two_pointers/Exercises.java
-// (a copy of the small node class, because ListNode's fields are package-private)
+// Answers for topic54_linked_lists_and_two_pointers/Exercises.java
+// (This file has its own copy of the small node class, because ListNode's fields
+//  are package-private and can't be seen from this "solutions" package.)
 public class ExercisesSolution {
 
     static class Node {
@@ -27,34 +28,34 @@ public class ExercisesSolution {
         Node previous = null;
         Node current = head;
         while (current != null) {
-            Node next = current.next;          // remember the rest before we cut the link
-            current.next = previous;           // point backwards
-            previous = current;
+            Node next = current.next;          // remember the rest of the list BEFORE we cut the link
+            current.next = previous;           // turn this arrow to point backwards
+            previous = current;                // step forward
             current = next;
         }
-        return previous;                       // the old tail is the new head
+        return previous;                       // the old last node is the new first node
     }
 
     static Node removeNthFromEnd(Node head, int n) {
-        Node dummy = new Node(0);
+        Node dummy = new Node(0);              // a fake node in front of head
         dummy.next = head;
         Node fast = dummy;
         Node slow = dummy;
         for (int i = 0; i < n; i++) {
-            fast = fast.next;                  // fast is now n nodes ahead
+            fast = fast.next;                  // now fast is n nodes ahead of slow
         }
-        while (fast.next != null) {
+        while (fast.next != null) {            // move both, keeping the same gap
             fast = fast.next;
             slow = slow.next;
         }
-        slow.next = slow.next.next;            // slow is just before the node to remove
-        return dummy.next;                     // the dummy handles removing the first node
+        slow.next = slow.next.next;            // slow is just before the node to remove - skip over it
+        return dummy.next;                     // thanks to the dummy, removing the first node works too
     }
 
     static Node mergeSorted(Node a, Node b) {
         Node dummy = new Node(0);
         Node tail = dummy;
-        while (a != null && b != null) {
+        while (a != null && b != null) {       // like merging two sorted queues: always take the smaller front
             if (a.val <= b.val) {
                 tail.next = a;
                 a = a.next;
@@ -64,7 +65,7 @@ public class ExercisesSolution {
             }
             tail = tail.next;
         }
-        tail.next = a != null ? a : b;         // one list is used up: attach the rest of the other
+        tail.next = a != null ? a : b;         // one list is finished: attach whatever is left of the other
         return dummy.next;
     }
 
@@ -80,6 +81,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // helper: shows a list as text like "1 -> 2 -> null"
     private static String show(Node head) {
         StringBuilder text = new StringBuilder();
         for (Node node = head; node != null; node = node.next) {
@@ -88,6 +90,7 @@ public class ExercisesSolution {
         return text.append("null").toString();
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
