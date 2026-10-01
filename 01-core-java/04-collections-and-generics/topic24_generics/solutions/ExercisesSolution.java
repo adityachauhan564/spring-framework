@@ -3,11 +3,11 @@ package topic24_generics.solutions;
 import java.util.Arrays;
 import java.util.List;
 
-// Solutions for topic24_generics/Exercises.java
+// Answers for topic24_generics/Exercises.java
 public class ExercisesSolution {
 
     static <T> void swap(T[] array, int i, int j) {
-        T temp = array[i];                      // T is whatever the caller's array holds
+        T temp = array[i];                      // T is whatever type the caller's array holds
         array[i] = array[j];
         array[j] = temp;
     }
@@ -15,7 +15,7 @@ public class ExercisesSolution {
     static <T extends Comparable<T>> int countGreaterThan(List<T> items, T value) {
         int count = 0;
         for (T item : items) {
-            if (item.compareTo(value) > 0) {    // allowed because T extends Comparable<T>
+            if (item.compareTo(value) > 0) {    // we can call compareTo only because T extends Comparable<T>
                 count++;
             }
         }
@@ -23,8 +23,8 @@ public class ExercisesSolution {
     }
 
     static double maxValue(List<? extends Number> numbers) {
-        double max = Double.NEGATIVE_INFINITY;
-        for (Number n : numbers) {              // reading as Number is safe for any subtype
+        double max = Double.NEGATIVE_INFINITY;  // smaller than every real number, so the first one always wins
+        for (Number n : numbers) {              // reading each item as a Number is safe for any kind of number
             max = Math.max(max, n.doubleValue());
         }
         return max;
@@ -46,6 +46,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
@@ -69,6 +70,6 @@ class Pair<A, B> {
     }
 
     Pair<B, A> swap() {
-        return new Pair<>(second, first);       // the types swap places too
+        return new Pair<>(second, first);       // the values swap places, and so do their types
     }
 }
