@@ -1,14 +1,14 @@
 package topic01_first_program.solutions;
 
-// Solutions for topic01_first_program/Exercises.java
+// Answers for topic01_first_program/Exercises.java
 public class ExercisesSolution {
 
     static String nameCard(String name, String language) {
-        return "Hi, I'm " + name + " and I'm learning " + language + "!";
+        return "Hi, I'm " + name + " and I'm learning " + language + "!";   // + joins text pieces together
     }
 
     static int letterCount(String text) {
-        return text.length();
+        return text.length();               // length() counts every character, spaces also
     }
 
     public static void main(String[] args) {
@@ -18,12 +18,13 @@ public class ExercisesSolution {
         check(letterCount("") == 0, "exercise 2");
         System.out.println("All exercises pass");
 
-        // README exercise "fix the broken programs":
-        //   1. System.out.println("Hi")      -> add the missing ;
-        //   2. system.out.println("Hi");     -> System (capital S): Java is case-sensitive
+        // Answers for the README exercise "fix the broken programs":
+        //   1. System.out.println("Hi")      -> the ; at the end is missing, add it
+        //   2. system.out.println("Hi");     -> write System with a capital S. Java is case-sensitive
         //   3. public class Hello in a file named Greeting.java -> rename the file to Hello.java
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

@@ -1,6 +1,6 @@
 package topic11_encapsulation_and_access_modifiers.solutions;
 
-// Solutions for topic11_encapsulation_and_access_modifiers/Exercises.java
+// Answers for topic11_encapsulation_and_access_modifiers/Exercises.java
 public class ExercisesSolution {
 
     public static void main(String[] args) {
@@ -15,19 +15,20 @@ public class ExercisesSolution {
             new Temperature(-300);
             check(false, "exercise 3: -300 C is below absolute zero, the constructor must throw");
         } catch (IllegalArgumentException expected) {
-            // rejected, as it should be
+            // it was refused - that is the correct behaviour
         }
         try {
             t.warmBy(-400);
             check(false, "exercise 3: warmBy must keep the rule too");
         } catch (IllegalArgumentException expected) {
-            // rejected
+            // refused
         }
         check(t.getCelsius() == 25, "exercise 3: a rejected change must leave the value as it was");
 
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
@@ -46,15 +47,15 @@ class Temperature {
         return celsius;
     }
 
-    double getFahrenheit() {              // a derived value: computed, not stored
+    double getFahrenheit() {              // not stored anywhere - worked out from celsius every time it is asked
         return celsius * 9 / 5 + 32;
     }
 
     void warmBy(double degrees) {
-        celsius = validate(celsius + degrees);   // validate BEFORE changing the field
+        celsius = validate(celsius + degrees);   // check FIRST, change the field only if the check passes
     }
 
-    // one place for the rule, used by every way of changing the value
+    // the rule lives in ONE place, and every method that changes the value uses it
     private static double validate(double value) {
         if (value < ABSOLUTE_ZERO) {
             throw new IllegalArgumentException(value + " C is below absolute zero");

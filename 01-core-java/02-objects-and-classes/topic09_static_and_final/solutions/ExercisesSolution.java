@@ -1,6 +1,6 @@
 package topic09_static_and_final.solutions;
 
-// Solutions for topic09_static_and_final/Exercises.java
+// Answers for topic09_static_and_final/Exercises.java
 public class ExercisesSolution {
 
     public static void main(String[] args) {
@@ -17,34 +17,36 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
 class Ticket {
-    private static int lastNumber = 0;    // ONE copy for the whole class: shared by every ticket
-    private final int number;             // one copy PER ticket, set once
+    private static int lastNumber = 0;    // ONE copy for the whole class - the token machine, shared by every ticket
+    private final int number;             // one copy PER ticket - the number printed on it, set once
 
     Ticket() {
-        lastNumber++;
-        number = lastNumber;
+        lastNumber++;                     // machine moves to the next number
+        number = lastNumber;              // this ticket keeps that number
     }
 
     int getNumber() {
         return number;
     }
 
-    static int issued() {                 // static: uses only static fields, so it needs no object
+    static int issued() {                 // static: it only uses static fields, so no object is needed
         return lastNumber;
     }
 }
 
 class MathUtils {
-    static final double PI = 3.14159;     // a constant: static + final, UPPER_CASE
+    static final double PI = 3.14159;     // a constant: static + final, name in CAPITALS
 
     private MathUtils() {
-        // a private constructor: nobody needs a MathUtils object, like java.lang.Math
+        // private constructor: stops anyone from writing "new MathUtils()".
+        // Nobody needs an object of it - same idea as Java's own Math class
     }
 
     static int square(int n) {

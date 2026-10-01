@@ -1,22 +1,23 @@
 package topic03_operators.solutions;
 
-// Solutions for topic03_operators/Exercises.java
+// Answers for topic03_operators/Exercises.java
 public class ExercisesSolution {
 
     static boolean isEven(int n) {
-        return n % 2 == 0;
+        return n % 2 == 0;                  // remainder 0 when divided by 2 = even
     }
 
     static boolean isLeapYear(int year) {
+        // (divisible by 4 AND not by 100) OR divisible by 400
         return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
     }
 
     static int lastDigit(int n) {
-        return n % 10;
+        return n % 10;                      // the remainder after dividing by 10 is always the last digit
     }
 
     static double average(int a, int b) {
-        return (a + b) / 2.0;               // 2.0 makes it double division; (a + b) / 2 would be 3
+        return (a + b) / 2.0;               // 2.0 makes it decimal division. (a + b) / 2 would give 3, not 3.5
     }
 
     static String ageGroup(int age) {
@@ -33,6 +34,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

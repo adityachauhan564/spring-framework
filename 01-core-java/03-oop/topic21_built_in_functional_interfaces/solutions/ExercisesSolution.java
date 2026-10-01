@@ -5,21 +5,21 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-// Solutions for topic21_built_in_functional_interfaces/Exercises.java
+// Answers for topic21_built_in_functional_interfaces/Exercises.java
 public class ExercisesSolution {
 
     static final Predicate<String> IS_BLANK = String::isBlank;
     static final Predicate<String> IS_SHORT = s -> s.length() < 3;
 
-    static final Predicate<String> NOT_USEFUL = IS_BLANK.or(IS_SHORT);
+    static final Predicate<String> NOT_USEFUL = IS_BLANK.or(IS_SHORT);                 // blank OR short
 
     static final Function<String, String> TRIM = String::trim;
-    static final Function<String, String> CLEAN = TRIM.andThen(String::toUpperCase);   // trim first, then upper
+    static final Function<String, String> CLEAN = TRIM.andThen(String::toUpperCase);   // trim first, then upper case
 
-    static final BinaryOperator<Integer> MAX = (a, b) -> a >= b ? a : b;              // or Math::max
+    static final BinaryOperator<Integer> MAX = (a, b) -> a >= b ? a : b;              // Math::max also works
 
     static <T> T orElseGet(T value, Supplier<T> fallback) {
-        return value != null ? value : fallback.get();     // get() runs only on the null path
+        return value != null ? value : fallback.get();     // get() runs only when value is null
     }
 
     public static void main(String[] args) {
@@ -38,6 +38,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

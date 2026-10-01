@@ -1,20 +1,23 @@
 package topic18_custom_exceptions;
 
 /*
- * Exercises for topic 18. Complete the code below, then run:
- *   java -cp out topic18_custom_exceptions.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 18.
+ * How to use:
+ *   - Complete the code below. Fill in every "TODO".
+ *   - Then run:  java -cp out topic18_custom_exceptions.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
-    // 2. Accept ages 0-150; otherwise throw InvalidAgeException carrying the bad age.
+    // 2. Accept ages from 0 to 150. For anything else, throw an InvalidAgeException that carries the bad age.
     static int validateAge(int age) throws InvalidAgeException {
         throw new UnsupportedOperationException("TODO exercise 2");
     }
 
-    // 3. Read a port number from text. If the text isn't a number, throw a ConfigException
-    //    with the message "bad port: <text>" AND the NumberFormatException as its cause.
+    // 3. Read a port number from text. If the text is not a number, throw a ConfigException
+    //    with the message "bad port: <text>", AND pass the NumberFormatException along as its cause.
     static int parsePort(String text) {
         throw new UnsupportedOperationException("TODO exercise 3");
     }
@@ -40,12 +43,14 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
-// 1. A CHECKED exception (extends Exception) with the message "invalid age: <age>" and a getAge() getter.
+// 1. A CHECKED exception (it extends Exception).
+//    Its message must be "invalid age: <age>", and it needs a getAge() getter.
 class InvalidAgeException extends Exception {
     InvalidAgeException(int age) {
         // TODO: call super(...) with the message, and keep the age
@@ -56,7 +61,7 @@ class InvalidAgeException extends Exception {
     }
 }
 
-// 3. An UNCHECKED exception that can carry a cause: complete the constructor.
+// 3. An UNCHECKED exception that can also carry a "cause" (the original exception). Complete the constructor.
 class ConfigException extends RuntimeException {
     ConfigException(String message, Throwable cause) {
         // TODO: pass both to super

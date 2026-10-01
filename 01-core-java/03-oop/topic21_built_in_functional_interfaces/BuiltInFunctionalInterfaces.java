@@ -9,19 +9,24 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 /*
- * Topic    : The built-in functional interfaces in java.util.function
- * Key idea : you rarely write your own - Java already has one for each "shape":
+ * Topic    : The ready-made functional interfaces in java.util.function
+ * Key idea : You almost never need to write your own functional interface.
+ *            Java already gives you one for each common "shape" (what goes in -> what comes out):
  *
- *   Predicate<T>        T -> boolean   test()     used by filter()
- *   Function<T, R>      T -> R         apply()    used by map()
- *   Consumer<T>         T -> void      accept()   used by forEach()
- *   Supplier<T>         () -> T        get()      used by generate(), orElseGet()
- *   BiFunction<T, U, R> (T, U) -> R    apply()
- *   UnaryOperator<T>    T -> T         (a Function with the same in/out type)
- *   BinaryOperator<T>   (T, T) -> T    used by reduce()
+ *   Predicate<T>        T -> boolean   test()     a yes/no question     used by filter()
+ *   Function<T, R>      T -> R         apply()    turn one thing into another  used by map()
+ *   Consumer<T>         T -> void      accept()   take something, return nothing  used by forEach()
+ *   Supplier<T>         () -> T        get()      take nothing, give something  used by generate(), orElseGet()
+ *   BiFunction<T, U, R> (T, U) -> R    apply()    two inputs, one output
+ *   UnaryOperator<T>    T -> T         a Function where input and output are the same type
+ *   BinaryOperator<T>   (T, T) -> T    two of the same in, one of the same out   used by reduce()
+ *
+ * Easy way to remember:
+ *   Predicate = the gatekeeper (yes/no), Function = the converter,
+ *   Consumer = the dustbin (takes, gives nothing back), Supplier = the vending machine (gives without taking).
  *
  * Run      : java -cp out topic21_built_in_functional_interfaces.BuiltInFunctionalInterfaces
- * Try this : build a Predicate<String> "isLongCourse" and combine it with isSpring using or().
+ * Try this : Build a Predicate<String> "isLongCourse" and join it with isSpring using or().
  */
 public class BuiltInFunctionalInterfaces {
 
@@ -42,15 +47,16 @@ public class BuiltInFunctionalInterfaces {
         System.out.println("UnaryOp    shout.apply(\"hi\")      = " + shout.apply("hi"));
         System.out.println("BinaryOp   multiply.apply(4, 5)   = " + multiply.apply(4, 5));
 
-        // --- composing: build bigger functions from small ones ---
+        // --- joining small functions to make bigger ones, like Lego blocks ---
         Predicate<String> isSpring = course -> course.contains("Spring");
         Predicate<String> isShort = course -> course.length() < 8;
-        System.out.println("\nisSpring.and(isShort) \"Spring\"      = " + isSpring.and(isShort).test("Spring"));
+        System.out.println("\nisSpring.and(isShort) \"Spring\"      = " + isSpring.and(isShort).test("Spring"));         // both must be true
         System.out.println("isSpring.and(isShort) \"Spring Boot\" = " + isSpring.and(isShort).test("Spring Boot"));
-        System.out.println("isSpring.negate()     \"Docker\"      = " + isSpring.negate().test("Docker"));
+        System.out.println("isSpring.negate()     \"Docker\"      = " + isSpring.negate().test("Docker"));             // flips the answer
 
         Function<Integer, Integer> doubleIt = n -> n * 2;
         Function<Integer, Integer> addTen = n -> n + 10;
+        // andThen: do mine first, THEN the other.   compose: do the other first, then mine
         System.out.println("doubleIt.andThen(addTen).apply(5) = " + doubleIt.andThen(addTen).apply(5) + "   (5*2)+10");
         System.out.println("doubleIt.compose(addTen).apply(5) = " + doubleIt.compose(addTen).apply(5) + "   (5+10)*2");
     }

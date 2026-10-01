@@ -1,6 +1,9 @@
 package topic13_abstract_classes;
 
-/* A concrete subclass: it must implement every abstract method of Printer. */
+/*
+ * A normal (complete) child class of Printer.
+ * It MUST fill in every abstract method of Printer, otherwise it won't compile.
+ */
 public class ConsolePrinter extends Printer {
 
     @Override

@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-// Solutions for topic15_equals_and_hashcode/Exercises.java
+// Answers for topic15_equals_and_hashcode/Exercises.java
 public class ExercisesSolution {
 
     public static void main(String[] args) {
@@ -26,6 +26,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
@@ -45,17 +46,17 @@ class Book {
     @Override
     public boolean equals(Object other) {
         if (this == other) {
-            return true;
+            return true;                          // same object - obviously equal
         }
-        if (!(other instanceof Book book)) {       // also false for null
+        if (!(other instanceof Book book)) {       // not a Book (this is also false for null)
             return false;
         }
-        return isbn.equals(book.isbn);            // the identity of a book is its ISBN
+        return isbn.equals(book.isbn);            // what makes a book unique is its ISBN
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isbn);                // exactly the fields equals() uses
+        return Objects.hash(isbn);                // exactly the same field(s) that equals() uses
     }
 
     @Override

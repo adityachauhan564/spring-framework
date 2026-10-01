@@ -1,19 +1,19 @@
 package topic10_exception_basics.solutions;
 
-// Solutions for topic10_exception_basics/Exercises.java
+// Answers for topic10_exception_basics/Exercises.java
 public class ExercisesSolution {
 
     static int parseOrDefault(String text, int fallback) {
         try {
             return Integer.parseInt(text);
-        } catch (NumberFormatException e) {         // catch only what you expect, not Exception
+        } catch (NumberFormatException e) {         // catch only the problem you expect, not every Exception
             return fallback;
         }
     }
 
     static int divide(int a, int b) {
         if (b == 0) {
-            throw new IllegalArgumentException("divisor must not be zero");
+            throw new IllegalArgumentException("divisor must not be zero");     // stop bad input at the door
         }
         return a / b;
     }
@@ -22,10 +22,10 @@ public class ExercisesSolution {
         int count = 0;
         for (String text : texts) {
             try {
-                Integer.parseInt(text);
+                Integer.parseInt(text);             // if this works, it was a number
                 count++;
             } catch (NumberFormatException e) {
-                // not a number: skip it and keep going with the rest
+                // not a number: skip it and carry on with the rest
             }
         }
         return count;
@@ -47,6 +47,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

@@ -7,19 +7,19 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-// Solutions for topic27_queues_and_deques/Exercises.java
+// Answers for topic27_queues_and_deques/Exercises.java
 public class ExercisesSolution {
 
     static boolean isBalanced(String brackets) {
         Deque<Character> stack = new ArrayDeque<>();
         for (char c : brackets.toCharArray()) {
             switch (c) {
-                case '(', '[', '{' -> stack.push(c);
+                case '(', '[', '{' -> stack.push(c);          // an opening bracket: remember it
                 default -> {
                     if (stack.isEmpty()) {
-                        return false;                         // a closer with nothing open
+                        return false;                         // a closing bracket, but nothing was opened
                     }
-                    char open = stack.pop();
+                    char open = stack.pop();                  // the most recently opened bracket must close first
                     boolean matches = (open == '(' && c == ')') || (open == '[' && c == ']') || (open == '{' && c == '}');
                     if (!matches) {
                         return false;
@@ -27,11 +27,11 @@ public class ExercisesSolution {
                 }
             }
         }
-        return stack.isEmpty();                               // anything left open is unbalanced
+        return stack.isEmpty();                               // something still open at the end = not balanced
     }
 
     static List<Integer> smallest(int[] values, int k) {
-        Queue<Integer> heap = new PriorityQueue<>();          // poll() always gives the smallest
+        Queue<Integer> heap = new PriorityQueue<>();          // poll() always hands out the smallest
         for (int v : values) {
             heap.offer(v);
         }
@@ -46,14 +46,14 @@ public class ExercisesSolution {
         Deque<String> queue = new ArrayDeque<>();
         for (String job : jobs) {
             if (job.startsWith("URGENT:")) {
-                queue.offerFirst(job);                        // jump the queue
+                queue.offerFirst(job);                        // urgent: jump to the front of the line
             } else {
                 queue.offerLast(job);                         // normal: join at the back
             }
         }
         List<String> done = new ArrayList<>();
         while (!queue.isEmpty()) {
-            done.add(queue.pollFirst());
+            done.add(queue.pollFirst());                      // print from the front, one by one
         }
         return done;
     }
@@ -66,6 +66,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

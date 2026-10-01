@@ -6,23 +6,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-// Solutions for topic26_maps_and_hashing/Exercises.java
+// Answers for topic26_maps_and_hashing/Exercises.java
 public class ExercisesSolution {
 
     static Map<Character, Integer> charFrequency(String text) {
-        Map<Character, Integer> counts = new TreeMap<>();            // TreeMap: keys sorted
+        Map<Character, Integer> counts = new TreeMap<>();            // TreeMap keeps the keys sorted
         for (char c : text.toCharArray()) {
-            counts.merge(c, 1, Integer::sum);                        // 1 for a new key, otherwise old + 1
+            counts.merge(c, 1, Integer::sum);                        // new character -> 1, seen before -> old count + 1
         }
         return counts;
     }
 
     static char firstUnique(String text) {
-        Map<Character, Integer> counts = new LinkedHashMap<>();      // keeps first-seen order
+        Map<Character, Integer> counts = new LinkedHashMap<>();      // remembers the order characters first appeared
         for (char c : text.toCharArray()) {
             counts.merge(c, 1, Integer::sum);
         }
-        for (Map.Entry<Character, Integer> entry : counts.entrySet()) {
+        for (Map.Entry<Character, Integer> entry : counts.entrySet()) {   // walk in first-seen order
             if (entry.getValue() == 1) {
                 return entry.getKey();
             }
@@ -33,6 +33,7 @@ public class ExercisesSolution {
     static Map<Integer, List<String>> byLength(List<String> words) {
         Map<Integer, List<String>> groups = new TreeMap<>();
         for (String word : words) {
+            // "give me the list for this length - and if there isn't one yet, create an empty one first"
             groups.computeIfAbsent(word.length(), length -> new ArrayList<>()).add(word);
         }
         return groups;
@@ -46,6 +47,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

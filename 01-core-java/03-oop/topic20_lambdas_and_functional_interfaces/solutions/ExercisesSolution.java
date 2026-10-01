@@ -1,6 +1,6 @@
 package topic20_lambdas_and_functional_interfaces.solutions;
 
-// Solutions for topic20_lambdas_and_functional_interfaces/Exercises.java
+// Answers for topic20_lambdas_and_functional_interfaces/Exercises.java
 public class ExercisesSolution {
 
     @FunctionalInterface
@@ -20,13 +20,13 @@ public class ExercisesSolution {
     static int[] combine(int[] a, int[] b, Calculator op) {
         int[] result = new int[a.length];
         for (int i = 0; i < a.length; i++) {
-            result[i] = op.calculate(a[i], b[i]);        // the behaviour was passed in as a value
+            result[i] = op.calculate(a[i], b[i]);        // the "what to do" was passed in from outside, as a value
         }
         return result;
     }
 
     static Calculator addWithBonus(int bonus) {
-        return (a, b) -> a + b + bonus;                  // bonus is captured: it's effectively final
+        return (a, b) -> a + b + bonus;                  // the lambda remembers bonus - allowed because bonus never changes
     }
 
     public static void main(String[] args) {
@@ -38,6 +38,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

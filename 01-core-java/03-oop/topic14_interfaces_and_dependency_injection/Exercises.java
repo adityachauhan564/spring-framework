@@ -1,17 +1,20 @@
 package topic14_interfaces_and_dependency_injection;
 
 /*
- * Exercises for topic 14. Complete the two classes below this one, then run:
- *   java -cp out topic14_interfaces_and_dependency_injection.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 14.
+ * How to use:
+ *   - Complete the two classes written BELOW this one. Fill in every "TODO".
+ *   - Then run:  java -cp out topic14_interfaces_and_dependency_injection.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  *
- * PaymentService and OrderService are the ones from this topic - DON'T change them.
+ * Use the PaymentService and OrderService from this topic as they are - DON'T change them.
  */
 public class Exercises {
 
     public static void main(String[] args) {
-        // 1. A new payment type, used by OrderService without changing OrderService
+        // 1. A new payment type (like a Paytm wallet). OrderService must use it without any change.
         WalletPayment wallet = new WalletPayment(1000);
         new OrderService(wallet).placeOrder(300);
         check(wallet.getBalance() == 700, "exercise 1 the wallet pays");
@@ -22,8 +25,8 @@ public class Exercises {
             check(wallet.getBalance() == 700, "exercise 1 a refused payment must not change the balance");
         }
 
-        // 2. A fake payment for TESTS: it records the amounts instead of moving money.
-        //    Dependency injection is what makes swapping it in possible.
+        // 2. A FAKE payment, only for testing: it writes down the amounts instead of moving real money.
+        //    We can swap it in only because OrderService takes its payment from outside (dependency injection).
         RecordingPayment fake = new RecordingPayment();
         OrderService service = new OrderService(fake);
         service.placeOrder(10);
@@ -33,12 +36,13 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
-// 1. Pays from a balance; throws IllegalStateException when the balance is too low.
+// 1. Pays from a balance. Throws IllegalStateException when the balance is not enough.
 class WalletPayment implements PaymentService {
     WalletPayment(double openingBalance) {
         // TODO
@@ -54,7 +58,7 @@ class WalletPayment implements PaymentService {
     }
 }
 
-// 2. Remembers how many payments were made and their total.
+// 2. Remembers how many payments were made, and their total amount.
 class RecordingPayment implements PaymentService {
     @Override
     public void pay(double amount) {

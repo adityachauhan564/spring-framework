@@ -1,31 +1,40 @@
 package topic04_control_flow;
 
 /*
- * Exercises for topic 04. Replace each "TODO" line with your code, then run:
- *   java -cp out topic04_control_flow.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 04.
+ * How to use:
+ *   - Each method below has a "TODO" line. Delete that line and write your own code.
+ *   - Then run:  java -cp out topic04_control_flow.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
-    // 1. FizzBuzz for one number: "Fizz" if divisible by 3, "Buzz" if by 5, "FizzBuzz" if by both,
-    //    otherwise the number itself as text. Which check has to come first?
+    // 1. FizzBuzz for one number:
+    //      divisible by 3        -> "Fizz"
+    //      divisible by 5        -> "Buzz"
+    //      divisible by both     -> "FizzBuzz"
+    //      otherwise             -> the number itself, as text
+    //    Think: which check must come first?
     static String fizzBuzz(int n) {
         throw new UnsupportedOperationException("TODO exercise 1");
     }
 
-    // 2. The multiplication table of n as one line, from 1 to 5:  for 3 -> "3 6 9 12 15"
-    //    (numbers separated by one space, no space at the end).
+    // 2. The table (pahada) of n from 1 to 5, in one line. For 3 -> "3 6 9 12 15"
+    //    (one space between numbers, no space at the end).
     static String timesTable(int n) {
         throw new UnsupportedOperationException("TODO exercise 2");
     }
 
-    // 3. The sum of the digits of a positive number: 1234 -> 10. Use a while loop with % and /.
+    // 3. Add up the digits of a positive number: 1234 -> 1 + 2 + 3 + 4 = 10.
+    //    Use a while loop with % and /.
     static int digitSum(int n) {
         throw new UnsupportedOperationException("TODO exercise 3");
     }
 
-    // 4. Days in a month (1-12) of a non-leap year, with a switch expression. Return 0 for an invalid month.
+    // 4. Number of days in a month (1 to 12), for a non-leap year. Use a switch expression.
+    //    Return 0 if the month number is wrong.
     static int daysInMonth(int month) {
         throw new UnsupportedOperationException("TODO exercise 4");
     }
@@ -41,6 +50,7 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

@@ -6,18 +6,18 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-// Solutions for topic22_method_references/Exercises.java
+// Answers for topic22_method_references/Exercises.java
 public class ExercisesSolution {
 
     static boolean isVowel(char c) {
         return "aeiouAEIOU".indexOf(c) >= 0;
     }
 
-    static final Function<String, Integer> LENGTH = String::length;
-    static final Function<String, Integer> TO_NUMBER = Integer::valueOf;
-    static final Predicate<Character> VOWEL = ExercisesSolution::isVowel;
-    static final BiFunction<String, String, Boolean> SAME_TEXT = String::equalsIgnoreCase;
-    static final Supplier<StringBuilder> NEW_BUILDER = StringBuilder::new;
+    static final Function<String, Integer> LENGTH = String::length;                       // s -> s.length()
+    static final Function<String, Integer> TO_NUMBER = Integer::valueOf;                  // s -> Integer.valueOf(s)
+    static final Predicate<Character> VOWEL = ExercisesSolution::isVowel;                 // c -> isVowel(c)
+    static final BiFunction<String, String, Boolean> SAME_TEXT = String::equalsIgnoreCase; // (s, o) -> s.equalsIgnoreCase(o)
+    static final Supplier<StringBuilder> NEW_BUILDER = StringBuilder::new;                // () -> new StringBuilder()
 
     public static void main(String[] args) {
         check(LENGTH != null && LENGTH.apply("java") == 4, "exercise 1");
@@ -30,6 +30,7 @@ public class ExercisesSolution {
         print.accept("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

@@ -3,24 +3,29 @@ package topic07_methods;
 import java.util.Arrays;
 
 /*
- * Exercises for topic 07. Replace each "TODO" line with your code, then run:
- *   java -cp out topic07_methods.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 07.
+ * How to use:
+ *   - Each method below has a "TODO" line. Delete that line and write your own code.
+ *   - Then run:  java -cp out topic07_methods.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
-    // 1. true if n is a prime number (greater than 1, divisible only by 1 and itself).
+    // 1. Return true if n is a prime number (bigger than 1, and divisible only by 1 and itself).
     static boolean isPrime(int n) {
         throw new UnsupportedOperationException("TODO exercise 1");
     }
 
-    // 2. base to the power exp, with RECURSION (no loop, no Math.pow). What is the base case?
+    // 2. base to the power exp (like 2^10), using RECURSION. No loop, no Math.pow.
+    //    Think: what is the base case that stops it?
     static long power(int base, int exp) {
         throw new UnsupportedOperationException("TODO exercise 2");
     }
 
-    // 3. Two overloads named area: a circle from its radius, a rectangle from width and height.
+    // 3. Two methods with the same name "area" (overloading):
+    //    one for a circle (takes the radius), one for a rectangle (takes width and height).
     static double area(double radius) {
         throw new UnsupportedOperationException("TODO exercise 3");
     }
@@ -29,13 +34,13 @@ public class Exercises {
         throw new UnsupportedOperationException("TODO exercise 3");
     }
 
-    // 4. Double every value IN the caller's array (change the array itself, return nothing).
-    //    Then read main: why does this work when "number = number * 2" on an int parameter wouldn't?
+    // 4. Double every value INSIDE the caller's array. Change the array itself, return nothing.
+    //    Then look at main: why does this work, when "number = number * 2" on an int parameter would not?
     static void doubleAll(int[] numbers) {
         throw new UnsupportedOperationException("TODO exercise 4");
     }
 
-    // 5. The largest of any number of ints (varargs). Assume at least one.
+    // 5. Return the biggest of any number of ints (varargs). There is always at least one.
     static int max(int... values) {
         throw new UnsupportedOperationException("TODO exercise 5");
     }
@@ -52,6 +57,7 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

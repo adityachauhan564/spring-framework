@@ -9,17 +9,21 @@ import java.util.TreeMap;
 
 /*
  * Topic    : Choosing a Map, counting with merge(), and the Iterator
- * Key idea : HashMap (no order) / LinkedHashMap (insertion order) / TreeMap (sorted keys) -
- *            the same idea as the three Sets. Use an Iterator to remove while looping.
+ * Key idea : Same three choices as with Sets:
+ *              HashMap       - no order (fastest)
+ *              LinkedHashMap - remembers the order keys were added
+ *              TreeMap       - keys always sorted
+ *            To remove pairs while looping, use an Iterator.
  * Run      : java -cp out topic26_maps_and_hashing.MapsDemo
- * Try this : count the characters of "mississippi" instead of words.
+ * Try this : Count the characters of "mississippi" instead of words.
  */
 public class MapsDemo {
 
     public static void main(String[] args) {
         List<String> words = List.of("java", "is", "fun", "java", "is", "java");
 
-        // word count: merge() adds 1, or starts at 1 when the key is new
+        // counting words, like counting votes in a class monitor election.
+        // merge(word, 1, Integer::sum) means: new word -> start at 1, already there -> add 1
         Map<String, Integer> counts = new HashMap<>();
         for (String word : words) {
             counts.merge(word, 1, Integer::sum);
@@ -33,15 +37,15 @@ public class MapsDemo {
         }
         System.out.println("LinkedHashMap: " + ordered + "   (first-seen order)");
 
-        // loop over keys, values, or both
+        // you can loop over only the keys, only the values, or both together
         System.out.println("keys " + ordered.keySet() + ", values " + ordered.values());
         ordered.forEach((word, count) -> System.out.println("  " + word + " x" + count));
 
-        // TreeMap extras
+        // TreeMap extras: because keys are sorted, it can answer "nearest key" questions
         TreeMap<Integer, String> grades = new TreeMap<>(Map.of(90, "A", 80, "B", 70, "C"));
         System.out.println("grade for 85: " + grades.floorEntry(85).getValue() + "   (floorEntry = largest key <= 85)");
 
-        // remove while iterating: Iterator.remove() is safe, map.remove() inside for-each is not
+        // removing while looping: Iterator.remove() is safe. map.remove() inside a for-each is NOT
         Iterator<Map.Entry<String, Integer>> it = ordered.entrySet().iterator();
         while (it.hasNext()) {
             if (it.next().getValue() == 1) {

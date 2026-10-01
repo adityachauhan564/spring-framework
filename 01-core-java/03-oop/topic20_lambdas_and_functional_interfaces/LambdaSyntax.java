@@ -2,14 +2,17 @@ package topic20_lambdas_and_functional_interfaces;
 
 /*
  * Topic    : Lambdas and functional interfaces
- * Key idea : a functional interface has exactly ONE abstract method. A lambda is a short
- *            way to write that one method: (parameters) -> body.
+ * Key idea : - A functional interface is an interface with exactly ONE abstract method.
+ *            - A lambda is a short way to write that one method:  (parameters) -> body
+ *            Instead of writing a full class just to add two numbers, you write: (a, b) -> a + b
+ *            Like giving a short instruction to the auto driver - "left from the temple" -
+ *            instead of drawing him a full map.
  * Run      : java -cp out topic20_lambdas_and_functional_interfaces.LambdaSyntax
- * Try this : write a Calculator lambda for "power" using Math.pow.
+ * Try this : Write a Calculator lambda for "power" using Math.pow.
  */
 public class LambdaSyntax {
 
-    @FunctionalInterface                  // compiler error if a second abstract method is added
+    @FunctionalInterface                  // the compiler complains if someone adds a second abstract method
     interface Calculator {
         int calculate(int a, int b);
     }
@@ -20,7 +23,7 @@ public class LambdaSyntax {
     }
 
     public static void main(String[] args) {
-        // 1. the old way: an anonymous class
+        // 1. the old way: an anonymous class - 6 lines just to add two numbers
         Calculator addOld = new Calculator() {
             @Override
             public int calculate(int a, int b) {
@@ -28,18 +31,18 @@ public class LambdaSyntax {
             }
         };
 
-        // 2. the same thing as a lambda
+        // 2. exactly the same thing, as a lambda - 1 line
         Calculator add = (a, b) -> a + b;
 
-        // lambda forms
-        Calculator multiply = (int a, int b) -> a * b;          // explicit types (optional)
-        Calculator max = (a, b) -> {                            // block body needs 'return'
+        // different ways to write a lambda
+        Calculator multiply = (int a, int b) -> a * b;          // you may write the types, but it's optional
+        Calculator max = (a, b) -> {                            // more than one line? use { } and write 'return'
             if (a > b) {
                 return a;
             }
             return b;
         };
-        Greeter hello = name -> "Hello, " + name;              // one parameter: no brackets needed
+        Greeter hello = name -> "Hello, " + name;              // only one parameter: brackets not needed
 
         System.out.println("anonymous class: " + addOld.calculate(2, 3));
         System.out.println("add:      " + add.calculate(2, 3));
@@ -47,17 +50,18 @@ public class LambdaSyntax {
         System.out.println("max:      " + max.calculate(2, 3));
         System.out.println(hello.greet("Aditya"));
 
-        // lambdas are values: pass them to a method
+        // a lambda is a value - you can pass it to a method like any other value
         System.out.println("apply(add, 10, 5)      = " + apply(add, 10, 5));
         System.out.println("apply((a, b) -> a - b) = " + apply((a, b) -> a - b, 10, 5));
 
-        // a lambda can use local variables only if they are effectively final (never reassigned)
+        // a lambda can use a local variable only if that variable is never changed ("effectively final")
         int bonus = 100;
         Calculator addWithBonus = (a, b) -> a + b + bonus;
-        // bonus = 200;   // compile error: bonus is used in a lambda, so it can't change
+        // bonus = 200;   // compile error: bonus is used inside a lambda, so it can't be changed
         System.out.println("addWithBonus: " + addWithBonus.calculate(1, 2));
     }
 
+    // this method doesn't know WHAT operation it will do - the caller hands it over as a lambda
     static int apply(Calculator operation, int a, int b) {
         return operation.calculate(a, b);
     }

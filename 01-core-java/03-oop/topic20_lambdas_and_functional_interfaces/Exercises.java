@@ -1,10 +1,13 @@
 package topic20_lambdas_and_functional_interfaces;
 
 /*
- * Exercises for topic 20. Replace each "null" with a LAMBDA, then run:
- *   java -cp out topic20_lambdas_and_functional_interfaces.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 20.
+ * How to use:
+ *   - Replace each "null" (and each TODO) with a LAMBDA.
+ *   - Then run:  java -cp out topic20_lambdas_and_functional_interfaces.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
@@ -18,18 +21,19 @@ public class Exercises {
         boolean test(String text);
     }
 
-    // 1. a Calculator for a to the power b (hint: (int) Math.pow(a, b))
+    // 1. A Calculator for "a to the power b". Hint: (int) Math.pow(a, b)
     static final Calculator POWER = null;               // TODO
 
-    // 2. a TextCheck that is true for text longer than 5 characters
+    // 2. A TextCheck that is true when the text is longer than 5 characters
     static final TextCheck IS_LONG = null;              // TODO
 
-    // 3. Apply the calculator to every pair: {op(a[0], b[0]), op(a[1], b[1]), ...}
+    // 3. Use the calculator on every pair, one by one: {op(a[0], b[0]), op(a[1], b[1]), ...}
     static int[] combine(int[] a, int[] b, Calculator op) {
         throw new UnsupportedOperationException("TODO exercise 3");
     }
 
-    // 4. Return a Calculator that adds 'bonus' to the sum of a and b - a lambda that captures a variable
+    // 4. Return a Calculator that adds 'bonus' to the sum of a and b.
+    //    (A lambda that uses a variable from outside itself.)
     static Calculator addWithBonus(int bonus) {
         throw new UnsupportedOperationException("TODO exercise 4");
     }
@@ -43,6 +47,7 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

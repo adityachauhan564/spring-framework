@@ -7,11 +7,13 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /*
- * Exercises for topic 22. Replace each "null" with a METHOD REFERENCE doing the same as the
- * lambda in the comment, then run:
- *   java -cp out topic22_method_references.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 22.
+ * How to use:
+ *   - Replace each "null" with a METHOD REFERENCE (::) that does the same job as the lambda in its comment.
+ *   - Then run:  java -cp out topic22_method_references.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
@@ -19,19 +21,19 @@ public class Exercises {
         return "aeiouAEIOU".indexOf(c) >= 0;
     }
 
-    // 1. s -> s.length()                               (instance method of the argument)
+    // 1. s -> s.length()                               (a method of the argument itself)
     static final Function<String, Integer> LENGTH = null;
 
-    // 2. s -> Integer.valueOf(s)                       (static method)
+    // 2. s -> Integer.valueOf(s)                       (a static method)
     static final Function<String, Integer> TO_NUMBER = null;
 
     // 3. c -> Exercises.isVowel(c)                     (your own static method)
     static final Predicate<Character> VOWEL = null;
 
-    // 4. (s, other) -> s.equalsIgnoreCase(other)       (instance method of the first argument)
+    // 4. (s, other) -> s.equalsIgnoreCase(other)       (a method of the first argument)
     static final BiFunction<String, String, Boolean> SAME_TEXT = null;
 
-    // 5. () -> new StringBuilder()                     (constructor)
+    // 5. () -> new StringBuilder()                     (a constructor)
     static final Supplier<StringBuilder> NEW_BUILDER = null;
 
     public static void main(String[] args) {
@@ -41,10 +43,11 @@ public class Exercises {
         check(SAME_TEXT != null && SAME_TEXT.apply("Java", "JAVA"), "exercise 4");
         check(NEW_BUILDER != null && NEW_BUILDER.get().append("ok").toString().equals("ok"), "exercise 5");
 
-        Consumer<String> print = System.out::println;      // kind 2: a particular object's method
+        Consumer<String> print = System.out::println;      // kind 2: a method of one particular object (System.out)
         print.accept("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
