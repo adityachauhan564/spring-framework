@@ -3,7 +3,7 @@ package topic14_interfaces_and_dependency_injection.solutions;
 import topic14_interfaces_and_dependency_injection.OrderService;
 import topic14_interfaces_and_dependency_injection.PaymentService;
 
-// Solutions for topic14_interfaces_and_dependency_injection/Exercises.java
+// Answers for topic14_interfaces_and_dependency_injection/Exercises.java
 public class ExercisesSolution {
 
     public static void main(String[] args) {
@@ -26,12 +26,13 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
-// OrderService only knows PaymentService, so it accepts this class without any change
+// OrderService only knows PaymentService, so it happily accepts this new class without any change
 class WalletPayment implements PaymentService {
     private double balance;
 
@@ -41,7 +42,7 @@ class WalletPayment implements PaymentService {
 
     @Override
     public void pay(double amount) {
-        if (amount > balance) {
+        if (amount > balance) {           // check first, so a refused payment doesn't touch the balance
             throw new IllegalStateException("Wallet balance " + balance + " is too low for " + amount);
         }
         balance -= amount;
@@ -53,7 +54,7 @@ class WalletPayment implements PaymentService {
     }
 }
 
-// A test double: in a unit test you check what WOULD have been paid, without paying
+// A "test double" (a fake stand-in): in a unit test you check what WOULD have been paid, without paying anything
 class RecordingPayment implements PaymentService {
     private int count;
     private double total;
