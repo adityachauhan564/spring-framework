@@ -6,33 +6,38 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /*
- * Topic    : Higher-order functions - functions that take or return functions
- * Key idea : filter/map already TAKE functions. You can also write methods that RETURN a
- *            function, to build behaviour from parameters (a "function factory").
+ * Topic    : Higher-order functions - functions that take other functions, or give back functions
+ * Key idea : filter() and map() already TAKE a function as input.
+ *            You can also write a method that RETURNS a new function, built from its parameters.
+ *            This is called a "function factory".
+ *            Like a juice shop: you tell the shopkeeper "mango, less sugar" and he makes
+ *            exactly that juice for you. discount(10) makes a "10% off" function for you.
  * Run      : java -cp out topic37_higher_order_functions.HigherOrderFunctions
- * Try this : write timesTable(n) that returns a Function<Integer, Integer> multiplying by n.
+ * Try this : Write timesTable(n) that returns a Function<Integer, Integer> that multiplies by n.
  */
 public class HigherOrderFunctions {
 
-    // returns a function: the predicate is built from the parameter
+    // returns a function: the test is built from the length you pass in
     static Predicate<String> longerThan(int length) {
         return text -> text.length() > length;
     }
 
+    // returns a "percent off" function, like a coupon code at checkout
     static Function<Double, Double> discount(double percent) {
         return price -> price * (1 - percent / 100);
     }
 
-    // takes a function and returns a new, improved function
+    // takes a function and returns a NEW, improved function that also prints what it did
     static <T, R> Function<T, R> logged(String name, Function<T, R> function) {
         return input -> {
-            R output = function.apply(input);
-            System.out.println("  " + name + "(" + input + ") = " + output);
+            R output = function.apply(input);          // do the original work
+            System.out.println("  " + name + "(" + input + ") = " + output);   // the extra bit: print it
             return output;
         };
     }
 
-    // currying: a two-argument function turned into a chain of one-argument functions
+    // currying: turn a two-input function into a chain of one-input functions.
+    // adder().apply(5) gives a function that "adds 5 to whatever you give it"
     static Function<Integer, Function<Integer, Integer>> adder() {
         return a -> b -> a + b;
     }
@@ -44,7 +49,7 @@ public class HigherOrderFunctions {
         System.out.println("longer than 6: " + courses.stream().filter(longerThan(6)).toList());
 
         Function<Double, Double> tenPercentOff = discount(10);
-        Function<Double, Double> festiveSale = discount(10).andThen(discount(5));   // chained discounts
+        Function<Double, Double> festiveSale = discount(10).andThen(discount(5));   // 10% off, and then another 5% off on top
         System.out.println("1000 with 10% off: " + tenPercentOff.apply(1000.0));
         System.out.println("1000 with 10% then 5% off: " + festiveSale.apply(1000.0));
 
@@ -55,7 +60,7 @@ public class HigherOrderFunctions {
         Function<Integer, Integer> addFive = adder().apply(5);
         System.out.println("adder().apply(5).apply(10) = " + addFive.apply(10));
 
-        // deferred work: a Supplier runs only when get() is called
+        // putting work off until later: a Supplier does its work only when get() is called
         Supplier<String> expensive = () -> {
             System.out.println("  (expensive work running now)");
             return "report";

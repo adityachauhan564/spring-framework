@@ -5,30 +5,34 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /*
- * Exercises for topic 37. Replace each "TODO" line with your code, then run:
- *   java -cp out topic37_higher_order_functions.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 37.
+ * How to use:
+ *   - Each method below has a "TODO" line. Delete that line and write your own code.
+ *   - Then run:  java -cp out topic37_higher_order_functions.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
-    // 1. A function that multiplies by n: timesTable(3).apply(4) == 12
+    // 1. Return a function that multiplies by n, like a times table: timesTable(3).apply(4) == 12
     static Function<Integer, Integer> timesTable(int n) {
         throw new UnsupportedOperationException("TODO exercise 1");
     }
 
-    // 2. A predicate that is true for values from min to max inclusive.
+    // 2. Return a test that is true for values from min to max (both included).
     static Predicate<Integer> between(int min, int max) {
         throw new UnsupportedOperationException("TODO exercise 2");
     }
 
-    // 3. Take a function and return one that applies it TWICE: twice(x -> x + 3).apply(1) == 7
+    // 3. Take a function, and return a new one that runs it TWICE: twice(x -> x + 3).apply(1) == 7
     static Function<Integer, Integer> twice(Function<Integer, Integer> f) {
         throw new UnsupportedOperationException("TODO exercise 3");
     }
 
-    // 4. Chain any number of functions into one, applied left to right.
-    //    pipeline(List.of(add1, double)).apply(5) == 12. An empty list gives a function that changes nothing.
+    // 4. Join any number of functions into one, running them from left to right:
+    //    pipeline(List.of(add1, double)).apply(5) == 12.
+    //    An empty list must give back a function that changes nothing.
     static Function<Integer, Integer> pipeline(List<Function<Integer, Integer>> steps) {
         throw new UnsupportedOperationException("TODO exercise 4");
     }
@@ -45,6 +49,7 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

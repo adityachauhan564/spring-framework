@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-// Solutions for topic37_higher_order_functions/Exercises.java
+// Answers for topic37_higher_order_functions/Exercises.java
 public class ExercisesSolution {
 
     static Function<Integer, Integer> timesTable(int n) {
-        return x -> x * n;                              // n is captured: each call makes a new function
+        return x -> x * n;                              // the lambda remembers n, so each call makes a different function
     }
 
     static Predicate<Integer> between(int min, int max) {
@@ -16,11 +16,12 @@ public class ExercisesSolution {
     }
 
     static Function<Integer, Integer> twice(Function<Integer, Integer> f) {
-        return f.andThen(f);                            // or: x -> f.apply(f.apply(x))
+        return f.andThen(f);                            // run f, then run f again. Same as: x -> f.apply(f.apply(x))
     }
 
     static Function<Integer, Integer> pipeline(List<Function<Integer, Integer>> steps) {
-        return steps.stream().reduce(Function.identity(), Function::andThen);   // identity = "change nothing"
+        // start with identity ("change nothing"), then join each step on with andThen
+        return steps.stream().reduce(Function.identity(), Function::andThen);
     }
 
     public static void main(String[] args) {
@@ -35,6 +36,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
