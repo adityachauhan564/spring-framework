@@ -1,12 +1,12 @@
 package topic16_enums.solutions;
 
-// Solutions for topic16_enums/Exercises.java
+// Answers for topic16_enums/Exercises.java
 public class ExercisesSolution {
 
     static int total(Coin... coins) {
         int sum = 0;
         for (Coin coin : coins) {
-            sum += coin.paise();
+            sum += coin.paise();          // each coin tells us its own value
         }
         return sum;
     }
@@ -23,6 +23,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
@@ -32,7 +33,7 @@ enum TrafficLight {
     RED, GREEN, YELLOW;
 
     TrafficLight next() {
-        return switch (this) {            // exhaustive: a new constant is a compile error until handled
+        return switch (this) {            // covers every colour. Add a new one and this won't compile until you handle it
             case RED -> GREEN;
             case GREEN -> YELLOW;
             case YELLOW -> RED;
@@ -41,11 +42,11 @@ enum TrafficLight {
 }
 
 enum Coin {
-    FIFTY_PAISE(50), ONE_RUPEE(100), TWO_RUPEES(200);
+    FIFTY_PAISE(50), ONE_RUPEE(100), TWO_RUPEES(200);     // the number in brackets is sent to the constructor
 
     private final int paise;
 
-    Coin(int paise) {                     // enum constructors are always private
+    Coin(int paise) {                     // an enum constructor is always private
         this.paise = paise;
     }
 

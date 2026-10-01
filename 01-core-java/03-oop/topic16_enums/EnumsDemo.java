@@ -2,10 +2,13 @@ package topic16_enums;
 
 /*
  * Topic    : Enums
- * Key idea : an enum is a fixed set of named constants - safer than magic strings
- *            like "PENDING". Enums can have fields, constructors and methods.
+ * Key idea : An enum is a fixed list of named values that can never change.
+ *            Like the status of your Swiggy order: PLACED, SHIPPED, DELIVERED - nothing else.
+ *            Why not just use text like "PENDING"? Because a typing mistake like "PENDNIG"
+ *            compiles fine and breaks at runtime. With an enum, the compiler catches it.
+ *            Enums can also have their own fields, constructors and methods.
  * Run      : java -cp out topic16_enums.EnumsDemo
- * Try this : add a CANCELLED status and let the compiler show you the switch to update.
+ * Try this : Add a CANCELLED status - the compiler will show you the switch you must update.
  */
 public class EnumsDemo {
 
@@ -13,13 +16,13 @@ public class EnumsDemo {
         PLACED, SHIPPED, DELIVERED
     }
 
-    // an enum with a field, a constructor and a method
+    // an enum with a field, a constructor and a method - each planet carries its own gravity
     enum Planet {
-        MERCURY(3.7), EARTH(9.8), JUPITER(24.8);
+        MERCURY(3.7), EARTH(9.8), JUPITER(24.8);   // the value in brackets goes to the constructor
 
-        private final double gravity;      // m/s^2
+        private final double gravity;      // in m/s^2
 
-        Planet(double gravity) {           // enum constructors are always private
+        Planet(double gravity) {           // an enum constructor is always private - nobody outside can make new planets
             this.gravity = gravity;
         }
 
@@ -29,7 +32,7 @@ public class EnumsDemo {
     }
 
     static String message(OrderStatus status) {
-        // switch expression: must cover every constant, or it won't compile
+        // switch expression on an enum: it must handle EVERY value, otherwise it won't compile
         return switch (status) {
             case PLACED -> "We got your order";
             case SHIPPED -> "On the way";
@@ -41,12 +44,12 @@ public class EnumsDemo {
         OrderStatus status = OrderStatus.SHIPPED;
         System.out.println(status + ": " + message(status));
 
-        // built-in methods
-        for (OrderStatus s : OrderStatus.values()) {
-            System.out.println("  " + s.ordinal() + " " + s.name());
+        // methods every enum gets for free
+        for (OrderStatus s : OrderStatus.values()) {                 // values() = all the constants, in order
+            System.out.println("  " + s.ordinal() + " " + s.name()); // ordinal() = position (from 0), name() = the text
         }
-        System.out.println("valueOf(\"DELIVERED\"): " + OrderStatus.valueOf("DELIVERED"));
-        System.out.println("compare with == is safe: " + (status == OrderStatus.SHIPPED));
+        System.out.println("valueOf(\"DELIVERED\"): " + OrderStatus.valueOf("DELIVERED"));   // text -> enum
+        System.out.println("compare with == is safe: " + (status == OrderStatus.SHIPPED));   // each constant exists only once, so == works
 
         for (Planet planet : Planet.values()) {
             System.out.printf("  70 kg on %-8s weighs %6.1f N%n", planet, planet.weightOf(70));
