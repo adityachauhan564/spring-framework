@@ -1,6 +1,6 @@
 package topic18_custom_exceptions.solutions;
 
-// Solutions for topic18_custom_exceptions/Exercises.java
+// Answers for topic18_custom_exceptions/Exercises.java
 public class ExercisesSolution {
 
     static int validateAge(int age) throws InvalidAgeException {
@@ -14,8 +14,9 @@ public class ExercisesSolution {
         try {
             return Integer.parseInt(text);
         } catch (NumberFormatException e) {
-            // translate a low-level error into one that makes sense here, but KEEP the cause:
-            // the stack trace then shows both, which is what you need when debugging
+            // Change the low-level error into one that makes sense here ("bad port"),
+            // but KEEP the original as the cause. Then the error report shows both -
+            // exactly what you need when you are hunting a bug.
             throw new ConfigException("bad port: " + text, e);
         }
     }
@@ -41,6 +42,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
@@ -50,7 +52,7 @@ class InvalidAgeException extends Exception {
     private final int age;
 
     InvalidAgeException(int age) {
-        super("invalid age: " + age);          // becomes getMessage()
+        super("invalid age: " + age);          // this text becomes getMessage()
         this.age = age;
     }
 
@@ -61,6 +63,6 @@ class InvalidAgeException extends Exception {
 
 class ConfigException extends RuntimeException {
     ConfigException(String message, Throwable cause) {
-        super(message, cause);                 // becomes getMessage() and getCause()
+        super(message, cause);                 // these become getMessage() and getCause()
     }
 }
