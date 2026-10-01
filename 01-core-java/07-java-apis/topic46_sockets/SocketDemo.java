@@ -5,17 +5,18 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /*
- * Topic    : Server and clients in one program
- * Key idea : the server runs on a background thread; two clients talk to it AT THE SAME TIME.
- *            Port 0 asks the operating system for any free port, so this never clashes.
+ * Topic    : Server and clients together in one program
+ * Key idea : The server runs on a background thread, and two clients talk to it AT THE SAME TIME.
+ *            Port 0 means "operating system, give me any free port" - so it never clashes
+ *            with something else already running on your computer.
  * Run      : java -cp out topic46_sockets.SocketDemo
- * Try this : change the pool size in Server.serve to 1 and see the clients wait for each other.
+ * Try this : Change the pool size in Server.serve to 1 and watch the clients wait for each other.
  */
 public class SocketDemo {
 
     public static void main(String[] args) throws Exception {
         try (ServerSocket serverSocket = new ServerSocket(0)) {
-            int port = serverSocket.getLocalPort();
+            int port = serverSocket.getLocalPort();          // which free port did we get?
             System.out.println("server on port " + port);
 
             Thread server = new Thread(() -> {
@@ -27,6 +28,7 @@ public class SocketDemo {
             });
             server.start();
 
+            // two clients, running at the same time
             CompletableFuture<List<String>> asha = CompletableFuture.supplyAsync(() -> talk(port, "I'm Asha"));
             CompletableFuture<List<String>> ravi = CompletableFuture.supplyAsync(() -> talk(port, "I'm Ravi"));
             System.out.println("asha got: " + asha.join());
@@ -35,6 +37,7 @@ public class SocketDemo {
         }
     }
 
+    // helper: Client.talk throws a checked IOException, which a lambda can't throw - so wrap it in an unchecked one
     private static List<String> talk(int port, String message) {
         try {
             return Client.talk("localhost", port, List.of(message));

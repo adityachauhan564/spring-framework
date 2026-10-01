@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-// Solutions for topic44_file_io/Exercises.java
+// Answers for topic44_file_io/Exercises.java
 public class ExercisesSolution {
 
     static int countLinesContaining(Path file, String word) throws IOException {
         String lowerWord = word.toLowerCase();
         int count = 0;
-        try (BufferedReader reader = Files.newBufferedReader(file)) {    // closed even if reading fails
+        try (BufferedReader reader = Files.newBufferedReader(file)) {    // gets closed even if reading fails
             String line;
-            while ((line = reader.readLine()) != null) {                // one line in memory at a time
+            while ((line = reader.readLine()) != null) {                // only one line in memory at a time
                 if (line.toLowerCase().contains(lowerWord)) {
                     count++;
                 }
@@ -27,15 +27,15 @@ public class ExercisesSolution {
     }
 
     static void saveSettings(Path file, Map<String, String> settings) throws IOException {
-        List<String> lines = new TreeMap<>(settings).entrySet().stream()
+        List<String> lines = new TreeMap<>(settings).entrySet().stream()    // TreeMap sorts the keys for us
                 .map(entry -> entry.getKey() + "=" + entry.getValue())
                 .toList();
-        Files.write(file, lines);                                        // creates or replaces
+        Files.write(file, lines);                                        // creates the file, or replaces it
     }
 
     static void appendLog(Path file, String message) throws IOException {
-        Files.writeString(file, message + System.lineSeparator(),
-                StandardOpenOption.CREATE, StandardOpenOption.APPEND);   // CREATE: fine if it doesn't exist
+        Files.writeString(file, message + System.lineSeparator(),       // lineSeparator: the right "new line" for this computer
+                StandardOpenOption.CREATE, StandardOpenOption.APPEND);   // CREATE: no problem if the file isn't there yet
     }
 
     public static void main(String[] args) throws IOException {
@@ -55,6 +55,7 @@ public class ExercisesSolution {
             check(Files.readAllLines(log).equals(List.of("started", "stopped")), "exercise 3");
             System.out.println("All exercises pass");
         } finally {
+            // clean up: delete every file in the temporary folder, then the folder itself
             try (var files = Files.list(folder)) {
                 for (Path p : files.toList()) {
                     Files.delete(p);
@@ -64,6 +65,7 @@ public class ExercisesSolution {
         }
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

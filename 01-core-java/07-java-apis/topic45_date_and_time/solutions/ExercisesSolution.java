@@ -9,25 +9,26 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
-// Solutions for topic45_date_and_time/Exercises.java
+// Answers for topic45_date_and_time/Exercises.java
 public class ExercisesSolution {
 
     static int ageOn(LocalDate birthday, LocalDate today) {
-        return Period.between(birthday, today).getYears();       // calendar-aware: handles months and leap years
+        return Period.between(birthday, today).getYears();       // understands the calendar: months, leap years, all of it
     }
 
     static long daysUntil(LocalDate today, LocalDate deadline) {
-        return ChronoUnit.DAYS.between(today, deadline);
+        return ChronoUnit.DAYS.between(today, deadline);         // goes negative by itself when the deadline is in the past
     }
 
     static boolean isOpen(LocalDateTime when) {
         LocalTime time = when.toLocalTime();
         boolean workingDay = when.getDayOfWeek() != DayOfWeek.SUNDAY;
+        // "not before 09:30" means 09:30 or later. "before 18:00" means 18:00 itself is closed
         return workingDay && !time.isBefore(LocalTime.of(9, 30)) && time.isBefore(LocalTime.of(18, 0));
     }
 
     static String pretty(LocalDate date) {
-        // the Locale fixes the month names; without it the result depends on the computer's language
+        // Locale.ENGLISH fixes the month names. Without it, a computer set to Hindi would print Hindi month names
         return date.format(DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH));
     }
 
@@ -44,6 +45,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

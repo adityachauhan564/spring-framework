@@ -5,40 +5,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * Topic    : Memory leaks in a garbage-collected language
- * Key idea : the garbage collector frees objects that are UNREACHABLE. An object that is still
- *            referenced - by a static list, a cache, a listener registry - can never be freed,
- *            even if your code will never use it again. That's a Java memory leak.
+ * Topic    : Memory leaks - yes, even in Java, where the garbage collector cleans up for you
+ * Key idea : The garbage collector only removes objects that NOTHING points to any more.
+ *            If an object is still pointed to - by a static list, a cache, a list of listeners -
+ *            it can never be removed, even if your code will never use it again.
+ *            That is a memory leak in Java.
+ *            Like a storeroom where you keep the receipt for everything you ever bought:
+ *            the safai wala can't throw anything away while its receipt is still on file.
  * Run      : java -cp out topic48_jvm_memory.LeakDemo
- * Try this : remove the LEAKED.clear() line - the "kept" object can then never be collected.
+ * Try this : Remove the LEAKED.clear() line - the "kept" object can then never be cleaned up.
  */
 public class LeakDemo {
 
-    // a classic leak: a static collection that only ever grows
+    // a classic leak: a static list that only ever grows, and lives as long as the program
     private static final List<byte[]> LEAKED = new ArrayList<>();
 
     public static void main(String[] args) throws InterruptedException {
-        byte[] temporary = new byte[1_000_000];
+        byte[] temporary = new byte[1_000_000];            // about 1 MB
         byte[] kept = new byte[1_000_000];
-        LEAKED.add(kept);                                  // still reachable through the static list
+        LEAKED.add(kept);                                  // the static list still points to this one
 
-        // a WeakReference doesn't keep its object alive: it lets us watch the GC work
+        // a WeakReference does NOT keep its object alive - it only lets us check whether the GC removed it
         WeakReference<byte[]> watchTemporary = new WeakReference<>(temporary);
         WeakReference<byte[]> watchKept = new WeakReference<>(kept);
 
-        temporary = null;                                  // drop our references
+        temporary = null;                                  // let go of our own arrows
         kept = null;
         collectGarbage();
 
         System.out.println("temporary collected? " + (watchTemporary.get() == null) + "   (unreachable: freed)");
         System.out.println("kept collected?      " + (watchKept.get() == null) + "  (the static list still refers to it)");
 
-        LEAKED.clear();                                    // the fix: remove what you no longer need
+        LEAKED.clear();                                    // the fix: remove what you don't need any more
         collectGarbage();
         System.out.println("after clear():       " + (watchKept.get() == null));
-        // System.gc() is only a request; the demo retries so the result is reliable.
+        // System.gc() is only a REQUEST, not an order - so we ask a few times to get a reliable result.
     }
 
+    // helper: politely ask the garbage collector to run, a few times
     private static void collectGarbage() throws InterruptedException {
         for (int i = 0; i < 5; i++) {
             System.gc();

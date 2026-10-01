@@ -3,35 +3,35 @@ package topic30_intermediate_operations.solutions;
 import java.util.Comparator;
 import java.util.List;
 
-// Solutions for topic30_intermediate_operations/Exercises.java
+// Answers for topic30_intermediate_operations/Exercises.java
 public class ExercisesSolution {
 
     static List<Integer> oddSquaresDescending(List<Integer> numbers) {
         return numbers.stream()
-                .filter(n -> n % 2 != 0)
-                .distinct()
-                .map(n -> n * n)
-                .sorted(Comparator.reverseOrder())
+                .filter(n -> n % 2 != 0)                // only odd
+                .distinct()                             // no repeats
+                .map(n -> n * n)                        // square each
+                .sorted(Comparator.reverseOrder())      // biggest first
                 .toList();
     }
 
     static List<String> twoLongest(List<String> courses) {
         return courses.stream()
-                .sorted(Comparator.comparingInt(String::length).reversed())   // sorted() is stable: ties keep their order
+                .sorted(Comparator.comparingInt(String::length).reversed())   // sorted() is "stable": equal items keep their old order
                 .limit(2)
                 .toList();
     }
 
     static List<String> header(List<String> lines) {
         return lines.stream()
-                .takeWhile(line -> !line.isBlank())     // stops at the FIRST blank line, unlike filter
+                .takeWhile(line -> !line.isBlank())     // stops completely at the FIRST blank line. filter() would keep going
                 .map(String::trim)
                 .toList();
     }
 
     static List<String> page2(List<String> items) {
         int pageSize = 3;
-        return items.stream().skip(pageSize).limit(pageSize).toList();   // skip page 1, take page 2
+        return items.stream().skip(pageSize).limit(pageSize).toList();   // skip page 1, then take one page
     }
 
     public static void main(String[] args) {
@@ -43,6 +43,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

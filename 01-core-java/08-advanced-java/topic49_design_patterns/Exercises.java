@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * Exercises for topic 49. Complete the code below, then run:
- *   java -cp out topic49_design_patterns.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 49.
+ * How to use:
+ *   - Complete the code below. Fill in every "TODO".
+ *   - Then run:  java -cp out topic49_design_patterns.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
@@ -15,9 +18,9 @@ public class Exercises {
         String pay(double amount);
     }
 
-    // 1. STRATEGY + FACTORY: return the right Payment for "upi", "card" or "wallet" (as lambdas),
-    //    answering "UPI paid <amount>", "Card paid <amount>", "Wallet paid <amount>".
-    //    Throw IllegalArgumentException for anything else.
+    // 1. STRATEGY + FACTORY: return the right Payment for "upi", "card" or "wallet" (write each as a lambda).
+    //    They answer "UPI paid <amount>", "Card paid <amount>", "Wallet paid <amount>".
+    //    For any other type, throw an IllegalArgumentException.
     static Payment paymentFor(String type) {
         throw new UnsupportedOperationException("TODO exercise 1");
     }
@@ -29,16 +32,16 @@ public class Exercises {
             paymentFor("cash");
             check(false, "exercise 1 must reject an unknown type");
         } catch (IllegalArgumentException expected) {
-            // rejected
+            // refused - correct
         }
 
-        // 2. BUILDER: size is required; cheese defaults to true; toppings are optional
+        // 2. BUILDER: size is required, cheese is on by default, toppings are optional
         Pizza pizza = Pizza.size("large").topping("olive").topping("onion").build();
         check(pizza.toString().equals("large pizza, cheese, toppings [olive, onion]"), "exercise 2");
         check(Pizza.size("small").noCheese().build().toString().equals("small pizza, no cheese, toppings []"),
                 "exercise 2 defaults");
 
-        // 3. OBSERVER: every subscriber hears each new price
+        // 3. OBSERVER: every subscriber must hear each new price
         PriceTicker ticker = new PriceTicker();
         List<String> heard = new ArrayList<>();
         ticker.subscribe(price -> heard.add("A:" + price));
@@ -48,12 +51,14 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
-// 2. Complete the builder: size(...) starts it, topping(...) adds, noCheese() turns cheese off, build() creates
+// 2. Complete the builder: size(...) starts it, topping(...) adds one topping,
+//    noCheese() turns cheese off, and build() creates the Pizza.
 final class Pizza {
     private final String size;
     private final boolean cheese;
@@ -95,7 +100,7 @@ final class Pizza {
     }
 }
 
-// 3. Keep the listeners and notify each of them in publish()
+// 3. Keep a list of the listeners, and in publish() tell each one of them the new price.
 class PriceTicker {
     interface Listener {
         void priceChanged(int price);

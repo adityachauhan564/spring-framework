@@ -5,29 +5,34 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /*
- * Exercises for topic 45. Replace each "TODO" line with your code, then run:
- *   java -cp out topic45_date_and_time.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 45.
+ * How to use:
+ *   - Each method below has a "TODO" line. Delete that line and write your own code.
+ *   - Then run:  java -cp out topic45_date_and_time.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
-    // 1. Age in whole years on a given day (Period.between).
+    // 1. Age in full years on a given day. (Use Period.between.)
     static int ageOn(LocalDate birthday, LocalDate today) {
         throw new UnsupportedOperationException("TODO exercise 1");
     }
 
-    // 2. Days from today until the deadline; negative if it has passed (ChronoUnit.DAYS.between).
+    // 2. Days from today until the deadline. Negative if the deadline has already passed.
+    //    (Use ChronoUnit.DAYS.between.)
     static long daysUntil(LocalDate today, LocalDate deadline) {
         throw new UnsupportedOperationException("TODO exercise 2");
     }
 
-    // 3. Is the shop open? Open 09:30 to 18:00 (18:00 itself is closed), Monday to Saturday.
+    // 3. Is the shop open? It is open from 09:30 to 18:00 (at exactly 18:00 it is already closed),
+    //    Monday to Saturday. Sunday is a holiday.
     static boolean isOpen(LocalDateTime when) {
         throw new UnsupportedOperationException("TODO exercise 3");
     }
 
-    // 4. Format as "15 Aug 1947" (pattern "d MMM yyyy", English month names).
+    // 4. Format a date like "15 Aug 1947" (pattern "d MMM yyyy", with English month names).
     static String pretty(LocalDate date) {
         throw new UnsupportedOperationException("TODO exercise 4");
     }
@@ -45,6 +50,7 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

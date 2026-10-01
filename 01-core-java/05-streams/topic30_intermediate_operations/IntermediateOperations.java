@@ -4,11 +4,19 @@ import java.util.Comparator;
 import java.util.List;
 
 /*
- * Topic    : Intermediate operations - each one returns a NEW stream
- * Key idea : map (transform), filter (keep), distinct, sorted, limit, skip, takeWhile, dropWhile.
- *            They chain together; the original list is never changed.
+ * Topic    : Intermediate operations - each one gives back a NEW stream
+ * Key idea : Think of a factory conveyor belt. Each station does one job and passes items on:
+ *              map       - change each item (square it, take its length...)
+ *              filter    - keep only some items
+ *              distinct  - remove duplicates
+ *              sorted    - put items in order
+ *              limit     - keep only the first n
+ *              skip      - throw away the first n
+ *              takeWhile - keep items until the first one that fails the test, then stop
+ *              dropWhile - throw items away until the first one that fails the test, keep the rest
+ *            You can chain as many as you like. The original list is NEVER changed.
  * Run      : java -cp out topic30_intermediate_operations.IntermediateOperations
- * Try this : print the squares of the distinct odd numbers, largest first.
+ * Try this : Print the squares of the distinct odd numbers, largest first.
  */
 public class IntermediateOperations {
 
@@ -27,7 +35,7 @@ public class IntermediateOperations {
         System.out.println("takeWhile(> 5):    " + numbers.stream().takeWhile(n -> n > 5).toList() + "   (stops at the first failure)");
         System.out.println("dropWhile(> 5):    " + numbers.stream().dropWhile(n -> n > 5).toList());
 
-        // chaining: distinct even numbers, squared, sorted
+        // chaining stations together: keep evens -> remove duplicates -> square -> sort
         List<Integer> result = numbers.stream()
                 .filter(n -> n % 2 == 0)
                 .distinct()

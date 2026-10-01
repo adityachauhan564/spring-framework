@@ -4,19 +4,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-// Solutions for topic52_complexity/Exercises.java
+// Answers for topic52_complexity/Exercises.java
 public class ExercisesSolution {
 
     enum BigO { CONSTANT, LOG_N, N, N_LOG_N, N_SQUARED, TODO }
 
-    //   a) one step                         b) one pass               c) a loop in a loop
-    //   d) a good comparison sort           e) halving each step      f) i doubles: log2(n) steps
+    //   a) just one step                     b) one pass                c) a loop inside a loop
+    //   d) a good sorting method             e) halves every step       f) i doubles each time: log2(n) steps
     static final List<BigO> ANSWERS = List.of(BigO.CONSTANT, BigO.N, BigO.N_SQUARED, BigO.N_LOG_N, BigO.LOG_N, BigO.LOG_N);
 
     static boolean hasDuplicate(int[] values) {
-        Set<Integer> seen = new HashSet<>();            // O(1) add/contains, so O(n) overall
+        Set<Integer> seen = new HashSet<>();            // add/contains on a HashSet is O(1), so the whole thing is O(n)
         for (int v : values) {
-            if (!seen.add(v)) {
+            if (!seen.add(v)) {                         // add() gives false when v was already there
                 return true;
             }
         }
@@ -26,13 +26,13 @@ public class ExercisesSolution {
     static int indexOf(int[] sorted, int target) {
         int low = 0, high = sorted.length - 1;
         while (low <= high) {
-            int mid = (low + high) >>> 1;
+            int mid = (low + high) >>> 1;               // the middle position
             if (sorted[mid] == target) {
                 return mid;
             } else if (sorted[mid] < target) {
                 low = mid + 1;                          // the target can only be in the right half
             } else {
-                high = mid - 1;
+                high = mid - 1;                         // the target can only be in the left half
             }
         }
         return -1;
@@ -55,6 +55,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

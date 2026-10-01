@@ -2,7 +2,7 @@ package topic40_synchronization.solutions;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-// Solutions for topic40_synchronization/Exercises.java
+// Answers for topic40_synchronization/Exercises.java
 public class ExercisesSolution {
 
     public static void main(String[] args) throws InterruptedException {
@@ -40,16 +40,17 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
 class HitCounter {
-    private final AtomicInteger hits = new AtomicInteger();   // lock-free and atomic
+    private final AtomicInteger hits = new AtomicInteger();   // safe for many threads, and needs no lock
 
     void hit() {
-        hits.incrementAndGet();
+        hits.incrementAndGet();                               // read + add + write as ONE unbreakable step
     }
 
     int total() {
@@ -67,8 +68,8 @@ class Wallet {
     }
 
     static void transfer(Wallet from, Wallet to, int amount) {
-        Wallet first = from.id < to.id ? from : to;               // every thread locks the lower id first,
-        Wallet second = first == from ? to : from;                // so no circle of waiting can form
+        Wallet first = from.id < to.id ? from : to;               // every thread locks the smaller id first,
+        Wallet second = first == from ? to : from;                // so a circle of waiting can never form
         synchronized (first) {
             synchronized (second) {
                 from.balance -= amount;

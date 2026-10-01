@@ -1,26 +1,28 @@
 package topic49_design_patterns;
 
 /*
- * Pattern  : Singleton - exactly ONE instance, shared by everyone
- * Use for  : shared configuration, a registry, a connection pool.
- * Key idea : a private constructor stops 'new'; the class hands out its one instance.
- *            An enum with one constant is the simplest thread-safe version.
- * Spring   : every bean is a singleton by default - the container does this for you, and you
- *            can still create extra instances in tests (a hand-written singleton makes that hard).
+ * Pattern  : Singleton - exactly ONE object of a class, shared by everyone
+ * Use for  : shared settings, a registry, a database connection pool.
+ *            Like a country having only one Prime Minister at a time - everyone talks to the same one.
+ * Key idea : A private constructor stops anyone outside from writing 'new'.
+ *            The class makes its one object itself and hands out that same object every time.
+ *            An enum with one constant is the simplest version that is also thread-safe.
+ * Spring   : Every Spring bean is a singleton by default - Spring does this for you.
+ *            And you can still make extra objects in tests (a hand-written singleton makes that hard).
  * Run      : java -cp out topic49_design_patterns.SingletonPattern
  */
 public class SingletonPattern {
 
-    // classic version: private constructor + a static final instance, created when the class loads
+    // classic version: private constructor + one static final object, made when the class is loaded
     static final class AppConfig {
-        private static final AppConfig INSTANCE = new AppConfig();
+        private static final AppConfig INSTANCE = new AppConfig();      // the one and only object
         private final String environment = "dev";
 
-        private AppConfig() {
+        private AppConfig() {                                            // private: nobody outside can call 'new'
             System.out.println("  (AppConfig created - this line prints once)");
         }
 
-        static AppConfig getInstance() {
+        static AppConfig getInstance() {                                 // everyone gets the SAME object
             return INSTANCE;
         }
 
@@ -29,13 +31,13 @@ public class SingletonPattern {
         }
     }
 
-    // enum version: the JVM guarantees one instance, even across threads and serialization
+    // enum version: Java itself guarantees only one object - even with many threads, even with serialization
     enum IdGenerator {
         INSTANCE;
 
         private int next = 1;
 
-        synchronized int nextId() {
+        synchronized int nextId() {           // synchronized: two threads can never get the same id
             return next++;
         }
     }

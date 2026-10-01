@@ -3,19 +3,19 @@ package topic33_flatmap.solutions;
 import java.util.Arrays;
 import java.util.List;
 
-// Solutions for topic33_flatmap/Exercises.java
+// Answers for topic33_flatmap/Exercises.java
 public class ExercisesSolution {
 
     static int total(List<List<Integer>> groups) {
         return groups.stream()
-                .flatMap(List::stream)            // each inner list becomes part of ONE stream
-                .mapToInt(Integer::intValue)
+                .flatMap(List::stream)            // every inner list is poured into ONE stream
+                .mapToInt(Integer::intValue)      // Integer -> int, so we can use sum()
                 .sum();
     }
 
     static List<String> distinctWords(List<String> sentences) {
         return sentences.stream()
-                .flatMap(sentence -> Arrays.stream(sentence.toLowerCase().split(" ")))
+                .flatMap(sentence -> Arrays.stream(sentence.toLowerCase().split(" ")))   // each sentence -> its words
                 .distinct()
                 .sorted()
                 .toList();
@@ -23,7 +23,7 @@ public class ExercisesSolution {
 
     static List<String> combinations(List<String> sizes, List<String> colours) {
         return sizes.stream()
-                .flatMap(size -> colours.stream().map(colour -> size + "-" + colour))   // a stream per size
+                .flatMap(size -> colours.stream().map(colour -> size + "-" + colour))   // one small stream for each size
                 .toList();
     }
 
@@ -35,6 +35,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-// Solutions for topic36_laziness_and_pipeline/Exercises.java
+// Answers for topic36_laziness_and_pipeline/Exercises.java
 public class ExercisesSolution {
 
-    // One element at a time: Spring fails the filter, API passes, findFirst stops - the rest are never read
+    // Items go one at a time: "Spring" fails the filter, "API" passes, findFirst stops right there.
+    // The remaining courses are never even looked at.
     static final List<String> PREDICTED_TRACE = List.of("Spring", "API");
 
     static List<Integer> firstPrimes(int n) {
-        return Stream.iterate(2, x -> x + 1)       // 2, 3, 4, ... forever
+        return Stream.iterate(2, x -> x + 1)       // 2, 3, 4, ... never ends on its own
                 .filter(ExercisesSolution::isPrime)
-                .limit(n)                          // laziness: only as many numbers as needed are generated
+                .limit(n)                          // thanks to laziness, only as many numbers as needed are ever made
                 .toList();
     }
 
@@ -22,9 +23,10 @@ public class ExercisesSolution {
                 .map(x -> x * x)
                 .filter(square -> square > limit)
                 .findFirst()
-                .orElseThrow();                    // an infinite stream always finds one here
+                .orElseThrow();                    // an endless stream will always find one, so this never throws here
     }
 
+    // helper: true if n is a prime number
     static boolean isPrime(int n) {
         for (int d = 2; d * d <= n; d++) {
             if (n % d == 0) {
@@ -47,6 +49,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

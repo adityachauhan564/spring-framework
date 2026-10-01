@@ -5,9 +5,10 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-// Solutions for topic43_completable_future_and_concurrent_collections/Exercises.java
+// Answers for topic43_completable_future_and_concurrent_collections/Exercises.java
 public class ExercisesSolution {
 
+    // helper: pretends to ask a shop for a price - takes 300 ms, then returns the value
     static int slowPrice(int value) {
         try {
             Thread.sleep(300);
@@ -18,20 +19,20 @@ public class ExercisesSolution {
     }
 
     static CompletableFuture<Integer> lowestPrice(int a, int b) {
-        CompletableFuture<Integer> first = CompletableFuture.supplyAsync(() -> slowPrice(a));    // both start now
-        CompletableFuture<Integer> second = CompletableFuture.supplyAsync(() -> slowPrice(b));
-        return first.thenCombine(second, Math::min);             // runs when BOTH are done, no blocking
+        CompletableFuture<Integer> first = CompletableFuture.supplyAsync(() -> slowPrice(a));    // both start right now,
+        CompletableFuture<Integer> second = CompletableFuture.supplyAsync(() -> slowPrice(b));   // side by side
+        return first.thenCombine(second, Math::min);             // runs once BOTH are ready - nobody sits and waits
     }
 
     static CompletableFuture<Integer> withFallback(RuntimeException error, int fallback) {
-        return CompletableFuture.<Integer>failedFuture(error).exceptionally(e -> fallback);
+        return CompletableFuture.<Integer>failedFuture(error).exceptionally(e -> fallback);   // failed? use the backup value
     }
 
     static Map<String, Integer> countWords(List<String> words) {
         Map<String, Integer> counts = new ConcurrentHashMap<>();
-        words.parallelStream().forEach(word -> counts.merge(word, 1, Integer::sum));   // merge is atomic per key
+        words.parallelStream().forEach(word -> counts.merge(word, 1, Integer::sum));   // merge is one safe step for each key
         return counts;
-        // simpler still: words.parallelStream().collect(Collectors.groupingByConcurrent(w -> w, Collectors.summingInt(w -> 1)))
+        // even simpler: words.parallelStream().collect(Collectors.groupingByConcurrent(w -> w, Collectors.summingInt(w -> 1)))
     }
 
     public static void main(String[] args) {
@@ -48,6 +49,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

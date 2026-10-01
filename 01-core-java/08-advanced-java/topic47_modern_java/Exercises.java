@@ -1,10 +1,13 @@
 package topic47_modern_java;
 
 /*
- * Exercises for topic 47. Replace each "TODO" line with your code, then run:
- *   java -cp out topic47_modern_java.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 47.
+ * How to use:
+ *   - Each method below has a "TODO" line. Delete that line and write your own code.
+ *   - Then run:  java -cp out topic47_modern_java.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
@@ -16,13 +19,13 @@ public class Exercises {
 
     record Triangle(double base, double height) implements Shape { }
 
-    // 1. The area of any Shape, with a pattern-matching switch and NO default branch.
-    //    (Because Shape is sealed, the compiler knows these are all the cases.)
+    // 1. The area of any Shape, using a pattern-matching switch with NO default branch.
+    //    (Shape is sealed, so the compiler already knows these three are the only cases.)
     static double area(Shape shape) {
         throw new UnsupportedOperationException("TODO exercise 1");
     }
 
-    // 2. Describe any value with a switch over its TYPE, using guards (when):
+    // 2. Describe any value with a switch on its TYPE, using guards (the word "when"):
     //      a positive Integer  -> "positive number"
     //      any other Integer   -> "number"
     //      a String            -> "text of length N"
@@ -32,7 +35,7 @@ public class Exercises {
         throw new UnsupportedOperationException("TODO exercise 2");
     }
 
-    // 3. Build this JSON with a TEXT BLOCK and .formatted(name, age) - no \n, no + between lines:
+    // 3. Build this JSON with a TEXT BLOCK and .formatted(name, age) - no \n, and no + between lines:
     //    {
     //      "name": "<name>",
     //      "age": <age>
@@ -53,6 +56,7 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

@@ -5,11 +5,14 @@ import java.lang.management.ThreadMXBean;
 
 /*
  * Topic    : Deadlock, and the fix: always take locks in the same order
- * Key idea : thread 1 holds lock A and waits for B; thread 2 holds B and waits for A.
- *            Neither can continue, ever. If every thread takes the locks in ONE agreed order
- *            (here: the lower account id first), the circle can't form.
+ * Key idea : Thread 1 holds lock A and waits for lock B. Thread 2 holds lock B and waits for lock A.
+ *            Neither can ever move. This is a deadlock.
+ *            Like two cars meeting on a narrow one-lane bridge from opposite sides -
+ *            each waits for the other to reverse, and nobody ever moves.
+ *            The fix: every thread takes the locks in ONE agreed order
+ *            (here: the account with the smaller id first). Then the circle can never form.
  * Run      : java -cp out topic40_synchronization.DeadlockDemo
- * Try this : remove the id ordering in safeTransfer and run again.
+ * Try this : Remove the id ordering in safeTransfer and run again.
  */
 public class DeadlockDemo {
 
@@ -22,10 +25,11 @@ public class DeadlockDemo {
         }
     }
 
-    // WRONG: locks 'from' then 'to' - two opposite transfers lock in opposite orders
+    // WRONG: always locks 'from' first, then 'to'.
+    // A->B and B->A at the same time lock in opposite orders - and get stuck
     static void unsafeTransfer(Account from, Account to, int amount) {
         synchronized (from) {
-            pause();                                     // makes the bad timing near-certain
+            pause();                                     // a small wait, so the bad timing happens almost every time
             synchronized (to) {
                 from.balance -= amount;
                 to.balance += amount;
@@ -33,7 +37,7 @@ public class DeadlockDemo {
         }
     }
 
-    // RIGHT: the account with the smaller id is always locked first
+    // RIGHT: the account with the smaller id is ALWAYS locked first, whichever way the money goes
     static void safeTransfer(Account from, Account to, int amount) {
         Account first = from.id < to.id ? from : to;
         Account second = first == from ? to : from;
@@ -50,16 +54,16 @@ public class DeadlockDemo {
         Account a = new Account(1);
         Account b = new Account(2);
 
-        // daemon threads: a stuck daemon thread doesn't stop the program from ending
+        // daemon threads: if one gets stuck forever, it still won't stop the program from ending
         Thread t1 = daemon(() -> unsafeTransfer(a, b, 10));
         Thread t2 = daemon(() -> unsafeTransfer(b, a, 20));
         t1.start();
         t2.start();
-        t1.join(1000);                                   // wait at most 1 second
+        t1.join(1000);                                   // wait at most 1 second, not forever
         t2.join(1000);
 
         ThreadMXBean jvm = ManagementFactory.getThreadMXBean();
-        long[] stuck = jvm.findDeadlockedThreads();      // the JVM can detect it - but not undo it
+        long[] stuck = jvm.findDeadlockedThreads();      // the JVM can spot a deadlock - but it cannot fix it
         System.out.println("unsafe transfers: " + (stuck == null ? "finished (lucky timing)" : stuck.length + " threads deadlocked"));
 
         Account c = new Account(3);
@@ -73,17 +77,19 @@ public class DeadlockDemo {
         System.out.println("safe transfers:   finished, balances " + c.balance + " + " + d.balance + " = " + (c.balance + d.balance));
     }
 
+    // helper: makes a daemon thread (a background thread that doesn't keep the program alive)
     private static Thread daemon(Runnable work) {
         Thread thread = new Thread(work);
         thread.setDaemon(true);
         return thread;
     }
 
+    // helper: sleep for 100 milliseconds
     private static void pause() {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            Thread.currentThread().interrupt();          // someone asked us to stop - remember that request
         }
     }
 }
