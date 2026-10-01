@@ -1,20 +1,22 @@
 package topic08_classes_and_objects;
 
 /*
- * Topic    : How objects behave (Head First Java, chapter 4)
- * Key idea : instance variables live in each object, so song1 and song2
- *            keep their own title/artist. Methods use that state.
+ * Topic    : How objects behave (from Head First Java, chapter 4)
+ * Key idea : Instance variables live INSIDE each object. So song1 and song2 each keep
+ *            their own title and artist - like two songs in your Spotify playlist.
+ *            When you call play(), it uses the data of THAT object only.
  * Run      : java -cp out topic08_classes_and_objects.Song
- * Try this : add a 'duration' field and print it in play().
+ * Try this : Add a 'duration' field and print it inside play().
  */
 public class Song {
 
-    // instance variables: one copy per Song object
+    // instance variables: every Song object gets its own copy of these
     private String title;
     private String artist;
 
+    // setter: a method to change a private field from outside
     public void setTitle(String title) {
-        this.title = title;   // 'this.title' is the field, 'title' is the parameter
+        this.title = title;   // 'this.title' = the field of this object, 'title' = the value passed in
     }
 
     public void setArtist(String artist) {

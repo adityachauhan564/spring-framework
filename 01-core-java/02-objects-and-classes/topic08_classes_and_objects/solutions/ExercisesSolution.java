@@ -1,6 +1,6 @@
 package topic08_classes_and_objects.solutions;
 
-// Solutions for topic08_classes_and_objects/Exercises.java
+// Answers for topic08_classes_and_objects/Exercises.java
 public class ExercisesSolution {
 
     public static void main(String[] args) {
@@ -22,18 +22,19 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
 class Book {
-    private final String title;       // final: set once, in the constructor
+    private final String title;       // final: given a value once in the constructor, then never changed
     private final String author;
     private final int pages;
 
     Book(String title, String author, int pages) {
-        this.title = title;           // this.title = the field, title = the parameter
+        this.title = title;           // this.title = the field, title = the value passed in
         this.author = author;
         this.pages = pages;
     }
@@ -57,7 +58,7 @@ class Book {
 }
 
 class Counter {
-    private int count;                // a field starts at 0; each Counter object has its own
+    private int count;                // an int field starts at 0 by itself. Every Counter object has its own count
 
     void increment() {
         count++;
