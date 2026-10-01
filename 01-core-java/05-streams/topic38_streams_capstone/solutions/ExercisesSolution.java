@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import topic38_streams_capstone.Course;
 
-// Solutions for topic38_streams_capstone/Exercises.java
+// Answers for topic38_streams_capstone/Exercises.java
 public class ExercisesSolution {
 
     static final List<Course> COURSES = List.of(
@@ -22,10 +22,10 @@ public class ExercisesSolution {
 
     static Optional<String> biggestCategory(List<Course> courses) {
         return courses.stream()
-                .collect(Collectors.groupingBy(Course::category, Collectors.summingInt(Course::noOfStudents)))
-                .entrySet().stream()                      // a second stream, over the map's entries
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey);
+                .collect(Collectors.groupingBy(Course::category, Collectors.summingInt(Course::noOfStudents)))   // category -> total students
+                .entrySet().stream()                      // a second stream, this time over the map's pairs
+                .max(Map.Entry.comparingByValue())        // the pair with the biggest total
+                .map(Map.Entry::getKey);                  // we only want the category name
     }
 
     static Map<String, Double> averageScoreByCategory(List<Course> courses) {
@@ -49,6 +49,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
