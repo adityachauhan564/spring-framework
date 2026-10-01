@@ -4,10 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /*
- * Exercises for topic 15. Complete the Book class below this one, then run:
- *   java -cp out topic15_equals_and_hashcode.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 15.
+ * How to use:
+ *   - Complete the Book class written BELOW this one. Fill in every "TODO".
+ *   - Then run:  java -cp out topic15_equals_and_hashcode.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
@@ -16,11 +19,12 @@ public class Exercises {
         Book sameIsbn = new Book("978-0596009205", "Head First Java (2nd printing)", 2006);
         Book other = new Book("978-1491910740", "Head First Java 3e", 2022);
 
-        // 1. Two books are equal when their ISBN is equal - title and year don't matter
+        // 1. Two books are equal when their ISBN is equal. The title and year don't matter
+        //    (like two people are the same person if their Aadhaar number is the same).
         check(a.equals(sameIsbn) && !a.equals(other), "exercise 1 equals");
         check(!a.equals(null) && !a.equals("978-0596009205"), "exercise 1 equals with null / another type");
 
-        // 2. ...so equal books must have equal hash codes, or a HashSet keeps both
+        // 2. ...so equal books must also have equal hash codes, otherwise a HashSet keeps both
         check(a.hashCode() == sameIsbn.hashCode(), "exercise 2 hashCode");
         Set<Book> shelf = new HashSet<>();
         shelf.add(a);
@@ -28,11 +32,12 @@ public class Exercises {
         shelf.add(other);
         check(shelf.size() == 2, "exercise 2 HashSet removes the duplicate");
 
-        // 3. toString: "Head First Java (978-0596009205)"
+        // 3. toString must give: "Head First Java (978-0596009205)"
         check(a.toString().equals("Head First Java (978-0596009205)"), "exercise 3 toString");
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
