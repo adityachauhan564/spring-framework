@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import topic50_unit_testing.PasswordValidator;
 
-// Solutions for topic50_unit_testing/ExercisesTest.java
+// Answers for topic50_unit_testing/ExercisesTest.java
 class ExercisesSolutionTest {
 
     private final PasswordValidator validator = new PasswordValidator();
@@ -20,12 +20,13 @@ class ExercisesSolutionTest {
         assertTrue(validator.isValid("Secret123"));
     }
 
+    // one test method, run once for each bad password below
     @ParameterizedTest(name = "\"{0}\" is invalid")
     @ValueSource(strings = {
             "Sec123",          // too short
             "SecretWord",      // no digit
-            "secret123",       // no upper-case letter
-            "Secret 123"       // a space
+            "secret123",       // no capital letter
+            "Secret 123"       // has a space
     })
     void eachBrokenRuleMakesItInvalid(String password) {
         assertFalse(validator.isValid(password));
@@ -33,8 +34,8 @@ class ExercisesSolutionTest {
 
     @Test
     void eightCharactersIsTheMinimum() {
-        assertTrue(validator.isValid("Secret12"));       // 8
-        assertFalse(validator.isValid("Secre12"));       // 7
+        assertTrue(validator.isValid("Secret12"));       // 8 characters - just enough
+        assertFalse(validator.isValid("Secre12"));       // 7 characters - one too few
     }
 
     @Test
