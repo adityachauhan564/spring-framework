@@ -2,35 +2,41 @@ package topic09_static_and_final;
 
 /*
  * Topic    : static vs instance members, and final
- * Key idea : an instance field belongs to each object; a static field belongs to the
- *            CLASS and is shared by all objects. static methods have no 'this'.
+ * Key idea : Think of a classroom:
+ *            - instance field = each student's own roll number. Every object has its own copy.
+ *            - static field   = the class teacher's name. ONE copy, shared by every student.
+ *              It belongs to the CLASS, not to any one object.
+ *            - A static method also belongs to the class, so it has no 'this' (no "my object").
+ *              That is why it cannot read instance fields.
+ *            - final = the value is set once and can never change.
  * Run      : java -cp out topic09_static_and_final.StaticVsInstance
- * Try this : make 'count' non-static and see what totalCreated() does (it won't compile - why?).
+ * Try this : Make 'count' non-static and see what happens in totalCreated()
+ *            (it won't compile - can you see why?).
  */
 public class StaticVsInstance {
 
     static class Counter {
-        static final int MAX = 3;          // constant: static + final, UPPER_CASE name
-        private static int count = 0;      // one copy, shared by every Counter
+        static final int MAX = 3;          // a constant: static + final. By habit, constants are written in CAPITALS
+        private static int count = 0;      // only ONE copy, shared by every Counter object
 
-        private final int id;              // one copy per object, set once
+        private final int id;              // every object gets its OWN id, set once
 
         Counter() {
-            count++;
-            id = count;
+            count++;                       // the shared count goes up for every new object
+            id = count;                    // this object remembers its own number
         }
 
-        int getId() {                      // instance method: needs an object
+        int getId() {                      // instance method: you need an object to call it (first.getId())
             return id;
         }
 
-        static int totalCreated() {        // static method: called on the class
+        static int totalCreated() {        // static method: you call it on the class (Counter.totalCreated())
             return count;
-            // return id;   // compile error: which object's id?
+            // return id;   // compile error: there is no object here, so whose id?
         }
     }
 
-    // static block: runs once, when the class is first loaded
+    // static block: runs only once, the first time Java loads this class
     static {
         System.out.println("(static block ran - class loaded)");
     }
