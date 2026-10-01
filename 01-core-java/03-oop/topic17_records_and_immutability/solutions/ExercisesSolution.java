@@ -2,7 +2,7 @@ package topic17_records_and_immutability.solutions;
 
 import java.util.Arrays;
 
-// Solutions for topic17_records_and_immutability/Exercises.java
+// Answers for topic17_records_and_immutability/Exercises.java
 public class ExercisesSolution {
 
     public static void main(String[] args) {
@@ -13,7 +13,7 @@ public class ExercisesSolution {
             new Employee(2, " ");
             check(false, "exercise 1 must reject a blank name");
         } catch (IllegalArgumentException expected) {
-            // rejected
+            // refused - correct
         }
 
         Money ten = new Money(10);
@@ -29,13 +29,14 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
 }
 
 record Employee(int id, String name) {
-    Employee {                                  // runs before the fields are assigned
+    Employee {                                  // compact constructor: runs BEFORE the fields get their values
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("name must not be blank");
         }
@@ -44,7 +45,7 @@ record Employee(int id, String name) {
 
 record Money(int rupees) {
     Money plus(Money other) {
-        return new Money(rupees + other.rupees);   // never change this one: make a new one
+        return new Money(rupees + other.rupees);   // never change this object - make a new one with the sum
     }
 }
 
@@ -52,10 +53,10 @@ final class Playlist {
     private final String[] songs;
 
     Playlist(String[] songs) {
-        this.songs = songs.clone();
+        this.songs = songs.clone();             // copy IN
     }
 
     String[] songs() {
-        return songs.clone();
+        return songs.clone();                   // copy OUT
     }
 }
