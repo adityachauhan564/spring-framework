@@ -7,18 +7,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// Solutions for topic53_arrays_and_hashing/Exercises.java
+// Answers for topic53_arrays_and_hashing/Exercises.java
 public class ExercisesSolution {
 
     static void moveZeros(int[] nums) {
-        int write = 0;                                  // next slot for a non-zero number
+        int write = 0;                                  // the next free spot for a non-zero number
         for (int read = 0; read < nums.length; read++) {
             if (nums[read] != 0) {
-                nums[write++] = nums[read];             // non-zeros keep their order
+                nums[write++] = nums[read];             // copy non-zeros forward - they keep their order
             }
         }
         while (write < nums.length) {
-            nums[write++] = 0;                          // fill the rest with zeros
+            nums[write++] = 0;                          // fill whatever is left at the end with zeros
         }
     }
 
@@ -26,10 +26,10 @@ public class ExercisesSolution {
         Map<String, Integer> groups = new HashMap<>();
         for (String word : words) {
             char[] letters = word.toCharArray();
-            Arrays.sort(letters);                       // "tea" and "eat" both become "aet"
+            Arrays.sort(letters);                       // "tea" and "eat" both become "aet" - the same key
             groups.merge(new String(letters), 1, Integer::sum);
         }
-        return groups.size();
+        return groups.size();                           // one key per group
     }
 
     static int longestConsecutive(int[] nums) {
@@ -38,7 +38,7 @@ public class ExercisesSolution {
 
         int best = 0;
         for (int n : all) {
-            if (!all.contains(n - 1)) {                 // n starts a run: count upwards from it
+            if (!all.contains(n - 1)) {                 // nothing just below n, so n STARTS a run: count up from it
                 int length = 1;
                 while (all.contains(n + length)) {
                     length++;
@@ -46,7 +46,7 @@ public class ExercisesSolution {
                 best = Math.max(best, length);
             }
         }
-        return best;                                    // each number is counted at most twice: O(n)
+        return best;                                    // each number is looked at at most twice, so this is O(n)
     }
 
     public static void main(String[] args) {
@@ -60,6 +60,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
