@@ -1,6 +1,6 @@
 package topic47_modern_java.solutions;
 
-// Solutions for topic47_modern_java/Exercises.java
+// Answers for topic47_modern_java/Exercises.java
 public class ExercisesSolution {
 
     sealed interface Shape permits Circle, Square, Triangle { }
@@ -12,7 +12,7 @@ public class ExercisesSolution {
     record Triangle(double base, double height) implements Shape { }
 
     static double area(Shape shape) {
-        return switch (shape) {                          // exhaustive: add a 4th shape and this stops compiling
+        return switch (shape) {                          // covers every case: add a 4th shape and this stops compiling
             case Circle c -> Math.PI * c.radius() * c.radius();
             case Square s -> s.side() * s.side();
             case Triangle t -> t.base() * t.height() / 2;
@@ -21,8 +21,8 @@ public class ExercisesSolution {
 
     static String describe(Object value) {
         return switch (value) {
-            case null -> "nothing";                      // switch can handle null explicitly (Java 21)
-            case Integer i when i > 0 -> "positive number";   // a guard: the more specific case first
+            case null -> "nothing";                      // since Java 21, a switch can handle null directly
+            case Integer i when i > 0 -> "positive number";   // a guard ("when"): the more specific case must come first
             case Integer i -> "number";
             case String s -> "text of length " + s.length();
             default -> "something else";
@@ -30,12 +30,14 @@ public class ExercisesSolution {
     }
 
     static String json(String name, int age) {
+        // %s = put text here, %d = put a whole number here.
+        // The spaces to the left of the closing """ are removed from every line automatically
         return """
                 {
                   "name": "%s",
                   "age": %d
                 }
-                """.formatted(name, age);                // indentation up to the closing """ is removed
+                """.formatted(name, age);
     }
 
     public static void main(String[] args) {
@@ -50,6 +52,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
