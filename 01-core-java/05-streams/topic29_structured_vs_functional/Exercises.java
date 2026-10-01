@@ -3,11 +3,14 @@ package topic29_structured_vs_functional;
 import java.util.List;
 
 /*
- * Exercises for topic 29. Each method below has a LOOP version in the comment.
- * Write the same thing as ONE stream pipeline, then run:
- *   java -cp out topic29_structured_vs_functional.Exercises
- * It stops at the first exercise that isn't solved yet. "All exercises pass" means you're done.
- * Stuck? See solutions/ExercisesSolution.java - but try first.
+ * Exercises for topic 29.
+ * How to use:
+ *   - Above each method, the comment shows the old LOOP way of doing it.
+ *     Write the same thing as ONE stream pipeline instead. Delete the "TODO" line.
+ *   - Then run:  java -cp out topic29_structured_vs_functional.Exercises
+ *   - It stops at the first exercise that is not solved yet.
+ *   - When you see "All exercises pass", you are done.
+ * Stuck? See solutions/ExercisesSolution.java - but please try yourself first.
  */
 public class Exercises {
 
@@ -39,6 +42,7 @@ public class Exercises {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }

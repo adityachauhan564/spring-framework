@@ -2,11 +2,11 @@ package topic29_structured_vs_functional.solutions;
 
 import java.util.List;
 
-// Solutions for topic29_structured_vs_functional/Exercises.java
+// Answers for topic29_structured_vs_functional/Exercises.java
 public class ExercisesSolution {
 
     static List<Integer> evens(List<Integer> numbers) {
-        return numbers.stream().filter(n -> n % 2 == 0).toList();
+        return numbers.stream().filter(n -> n % 2 == 0).toList();                 // keep the evens, collect into a list
     }
 
     static List<String> startingWith(List<String> courses, String prefix) {
@@ -14,7 +14,7 @@ public class ExercisesSolution {
     }
 
     static long countLong(List<String> courses) {
-        return courses.stream().filter(course -> course.length() >= 6).count();
+        return courses.stream().filter(course -> course.length() >= 6).count();  // count() replaces the count++ loop
     }
 
     public static void main(String[] args) {
@@ -27,6 +27,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
