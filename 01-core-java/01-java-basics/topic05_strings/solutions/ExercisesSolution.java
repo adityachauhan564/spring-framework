@@ -1,18 +1,18 @@
 package topic05_strings.solutions;
 
-// Solutions for topic05_strings/Exercises.java
+// Answers for topic05_strings/Exercises.java
 public class ExercisesSolution {
 
     static boolean isPalindrome(String word) {
-        String lower = word.toLowerCase();                  // assign the result: Strings never change in place
-        return new StringBuilder(lower).reverse().toString().equals(lower);
+        String lower = word.toLowerCase();                  // store the result - a String never changes by itself
+        return new StringBuilder(lower).reverse().toString().equals(lower);   // reversed text == original text?
     }
 
     static int countVowels(String text) {
         String lower = text.toLowerCase();
         int count = 0;
         for (int i = 0; i < lower.length(); i++) {
-            if ("aeiou".indexOf(lower.charAt(i)) >= 0) {    // indexOf is -1 when the char isn't there
+            if ("aeiou".indexOf(lower.charAt(i)) >= 0) {    // indexOf gives -1 when the letter is not in "aeiou"
                 count++;
             }
         }
@@ -21,17 +21,17 @@ public class ExercisesSolution {
 
     static String capitalizeWords(String sentence) {
         StringBuilder result = new StringBuilder();
-        boolean startOfWord = true;
+        boolean startOfWord = true;                         // the very first letter starts a word
         for (int i = 0; i < sentence.length(); i++) {
             char c = sentence.charAt(i);
             result.append(startOfWord ? Character.toUpperCase(c) : c);
-            startOfWord = c == ' ';                         // the next char starts a word after a space
+            startOfWord = c == ' ';                         // after a space, the next letter starts a new word
         }
         return result.toString();
     }
 
     static String mask(String cardNumber) {
-        int hidden = Math.max(0, cardNumber.length() - 4);
+        int hidden = Math.max(0, cardNumber.length() - 4);  // how many digits to hide (never less than 0)
         return "*".repeat(hidden) + cardNumber.substring(hidden);
     }
 
@@ -44,6 +44,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
