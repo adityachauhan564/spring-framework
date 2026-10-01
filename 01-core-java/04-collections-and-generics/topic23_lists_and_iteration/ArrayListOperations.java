@@ -4,22 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
- * Topic    : Everyday ArrayList operations (Head First Java, chapter 6)
- * Key idea : add / get / set / remove / indexOf / contains / isEmpty / loop.
- *            Indexes start at 0, like arrays.
+ * Topic    : Everyday ArrayList operations (from Head First Java, chapter 6)
+ * Key idea : The methods you will use daily: add, get, set, remove, indexOf, contains, isEmpty,
+ *            and looping. Positions (indexes) start at 0, same as arrays.
+ *            Think of it as your grocery list on the phone - add, change, tick off, clear.
  * Run      : java -cp out topic23_lists_and_iteration.ArrayListOperations
- * Try this : remove "Mango" by index instead of by value.
+ * Try this : Remove "Mango" using its index instead of its value.
  */
 public class ArrayListOperations {
 
     public static void main(String[] args) {
         List<String> fruits = new ArrayList<>();
 
-        // add
+        // add - puts it at the end
         fruits.add("Apple");
         fruits.add("Banana");
         fruits.add("Mango");
-        fruits.add(1, "Kiwi");                                  // insert at index 1
+        fruits.add(1, "Kiwi");                                  // add at position 1 - the others move one step right
         System.out.println("After add:       " + fruits);      // [Apple, Kiwi, Banana, Mango]
 
         // read
@@ -29,26 +30,26 @@ public class ArrayListOperations {
         System.out.println("indexOf(Grape):  " + fruits.indexOf("Grape") + "  (-1 = not found)");
         System.out.println("contains(Mango): " + fruits.contains("Mango"));
 
-        // update
+        // update - replace what is at a position
         fruits.set(0, "Green Apple");
         System.out.println("After set(0):    " + fruits);
 
         // remove
-        fruits.remove("Kiwi");                                  // by value
-        fruits.remove(0);                                       // by index
+        fruits.remove("Kiwi");                                  // remove by value
+        fruits.remove(0);                                       // remove by position
         System.out.println("After remove:    " + fruits);      // [Banana, Mango]
 
-        // loop
+        // loop through every item
         for (String fruit : fruits) {
             System.out.println("  - " + fruit);
         }
 
-        // remove while looping: use removeIf, not remove() inside a for-each
-        // (that throws ConcurrentModificationException)
-        fruits.removeIf(fruit -> fruit.startsWith("B"));
+        // Want to remove items while looping? Use removeIf.
+        // Calling remove() inside a for-each loop crashes with ConcurrentModificationException
+        fruits.removeIf(fruit -> fruit.startsWith("B"));        // "remove every fruit that starts with B"
         System.out.println("After removeIf:  " + fruits);      // [Mango]
 
-        fruits.clear();
+        fruits.clear();                                         // empty the whole list
         System.out.println("isEmpty():       " + fruits.isEmpty());
     }
 }
