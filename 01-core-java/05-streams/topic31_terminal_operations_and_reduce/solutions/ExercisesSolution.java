@@ -2,21 +2,21 @@ package topic31_terminal_operations_and_reduce.solutions;
 
 import java.util.List;
 
-// Solutions for topic31_terminal_operations_and_reduce/Exercises.java
+// Answers for topic31_terminal_operations_and_reduce/Exercises.java
 public class ExercisesSolution {
 
     static String longest(List<String> names) {
         return names.stream()
-                .reduce((best, next) -> next.length() > best.length() ? next : best)   // > keeps the earlier on ties
-                .orElseThrow();                   // reduce without a start value returns an Optional
+                .reduce((best, next) -> next.length() > best.length() ? next : best)   // only > (not >=), so on a tie the earlier one stays
+                .orElseThrow();                   // reduce with no start value returns an Optional (the list might be empty)
     }
 
     static int product(List<Integer> numbers) {
-        return numbers.stream().reduce(1, (a, b) -> a * b);   // 1 is the identity for *: 1 * x == x
+        return numbers.stream().reduce(1, (a, b) -> a * b);   // start at 1, because 1 * x == x. Starting at 0 would give 0
     }
 
     static boolean allLowerCase(List<String> words) {
-        return words.stream().allMatch(word -> word.equals(word.toLowerCase()));   // stops at the first failure
+        return words.stream().allMatch(word -> word.equals(word.toLowerCase()));   // stops at the first word that fails
     }
 
     static int firstAbove(List<Integer> numbers, int limit) {
@@ -31,6 +31,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
