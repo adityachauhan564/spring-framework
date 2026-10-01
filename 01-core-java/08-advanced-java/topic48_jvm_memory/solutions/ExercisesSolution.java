@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-// Solutions for topic48_jvm_memory/Exercises.java
+// Answers for topic48_jvm_memory/Exercises.java
 public class ExercisesSolution {
 
     static long sumRecursive(int n) {
@@ -15,17 +15,17 @@ public class ExercisesSolution {
 
     static long sumIterative(int n) {
         long sum = 0;
-        for (int i = 1; i <= n; i++) {        // one stack frame, however large n is
+        for (int i = 1; i <= n; i++) {        // just one stack frame, no matter how big n is
             sum += i;
         }
         return sum;
     }
 
     static <K, V> Map<K, V> boundedCache(int maxSize) {
-        return new LinkedHashMap<>(16, 0.75f, true) {          // true = order by ACCESS, not insertion
+        return new LinkedHashMap<>(16, 0.75f, true) {          // true = keep entries in order of USE, not order of adding
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-                return size() > maxSize;                        // drop the least recently used
+                return size() > maxSize;                        // too many? throw out the one used longest ago
             }
         };
     }
@@ -53,6 +53,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
@@ -66,7 +67,7 @@ class EventBus {
     }
 
     void unsubscribe(Consumer<String> listener) {
-        listeners.remove(listener);           // unreachable again, so the GC can free it
+        listeners.remove(listener);           // nothing points to it any more, so the GC is free to clean it up
     }
 
     void publish(String event) {
