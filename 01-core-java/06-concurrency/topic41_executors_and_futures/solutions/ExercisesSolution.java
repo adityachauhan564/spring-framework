@@ -7,22 +7,23 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-// Solutions for topic41_executors_and_futures/Exercises.java
+// Answers for topic41_executors_and_futures/Exercises.java
 public class ExercisesSolution {
 
+    // Pretends to download a web page: slow (200 ms), returns the page's size.
     static int download(String url) throws InterruptedException {
         Thread.sleep(200);
         return url.length() * 100;
     }
 
     static int totalSize(List<String> urls) throws InterruptedException, ExecutionException {
-        try (ExecutorService pool = Executors.newFixedThreadPool(4)) {   // close() shuts it down
+        try (ExecutorService pool = Executors.newFixedThreadPool(4)) {   // close() at the end shuts the pool down
             List<Future<Integer>> sizes = new ArrayList<>();
             for (String url : urls) {
-                sizes.add(pool.submit(() -> download(url)));   // a Callable: returns a value, may throw
+                sizes.add(pool.submit(() -> download(url)));   // a Callable: it returns a value, and is allowed to throw
             }
             int total = 0;
-            for (Future<Integer> size : sizes) {               // submit ALL first, then wait
+            for (Future<Integer> size : sizes) {               // submit ALL jobs first, only then start waiting
                 total += size.get();
             }
             return total;
@@ -39,6 +40,7 @@ public class ExercisesSolution {
         System.out.println("All exercises pass");
     }
 
+    // stops the program with a clear message when an answer is wrong
     private static void check(boolean ok, String exercise) {
         if (!ok) throw new AssertionError(exercise + " gives the wrong answer");
     }
