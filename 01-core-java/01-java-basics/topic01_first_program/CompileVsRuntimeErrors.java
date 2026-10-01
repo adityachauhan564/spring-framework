@@ -1,23 +1,27 @@
 package topic01_first_program;
 
 /*
- * Topic    : Compile-time vs runtime errors
- * Key idea : the COMPILER (javac) rejects code that breaks Java's rules, before anything runs.
- *            Code that compiles can still fail while RUNNING (java), when a value is wrong.
- *            Compile errors are the friendly kind: the message gives the file, the line and the reason.
+ * Topic    : Compile-time errors vs runtime errors
+ * Key idea : There are two kinds of mistakes:
+ *              1. Compile-time error - javac checks your code BEFORE it runs. If you break
+ *                 a Java rule (like a missing ;), it refuses to make the .class file.
+ *              2. Runtime error - the code compiles fine, but crashes WHILE running,
+ *                 because some value is wrong (like dividing by zero).
+ *            Compile errors are the easy ones - the message tells you the file, the line
+ *            and the reason. Like a teacher marking your copy before the exam.
  * Run      : java -cp out topic01_first_program.CompileVsRuntimeErrors
- * Try this : un-comment one broken line at a time, compile, and read the message.
+ * Try this : Remove the // from ONE broken line at a time, compile, and read the message.
  */
 public class CompileVsRuntimeErrors {
 
     public static void main(String[] args) {
         System.out.println("This program compiles and runs.");
 
-        // --- compile-time errors: javac refuses the file ---
+        // --- compile-time errors: javac will not even make the .class file ---
         // System.out.println("missing semicolon")          error: ';' expected
-        // system.out.println("wrong case");                error: package system does not exist (Java is case-sensitive)
+        // system.out.println("wrong case");                error: package system does not exist (Java is case-sensitive: S and s are different)
         // int count = "five";                              error: incompatible types: String cannot be converted to int
-        // System.out.println(undefinedName);               error: cannot find symbol
+        // System.out.println(undefinedName);               error: cannot find symbol (this name was never created)
 
         // --- runtime errors: it compiles, then crashes while running ---
         int[] numbers = {10, 20, 30};
