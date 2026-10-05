@@ -14,14 +14,15 @@ import io.github.resilience4j.retry.annotation.Retry;
 
 /*
  * Topic    : Fault tolerance with Resilience4j
- * Key idea : in a microservice system, the services you call WILL sometimes be slow or down.
- *            Without protection, one failing service drags every caller down with it.
- *   @Retry          - try again a few times (transient network blips), then use the fallback
- *   @CircuitBreaker - after many failures, STOP calling for a while ("open" circuit) and answer
- *                     with the fallback at once, giving the broken service time to recover
- *   @RateLimiter    - allow at most N calls per period, reject the rest
- *   The fallbackMethod has the same signature plus a Throwable, and returns a safe default.
- *   Every setting (attempts, thresholds, limits) lives in application.properties.
+ * Key idea : In a microservice system, the services you call WILL sometimes be slow or down.
+ *            Without protection, one failing service pulls every caller down with it.
+ *   @Retry          - try again a few times (for short network hiccups), then use the fallback
+ *   @CircuitBreaker - after many failures, STOP calling for a while (the circuit is "open") and
+ *                     answer with the fallback straight away, giving the broken service time to recover.
+ *                     Like the fuse/MCB in your house: it trips to protect everything else.
+ *   @RateLimiter    - allow at most N calls in a time period, and reject the rest
+ *   The fallbackMethod has the same parameters plus a Throwable, and returns a safe default answer.
+ *   Every setting (attempts, thresholds, limits) is in application.properties.
  * Try this : curl localhost:8000/sample-api           (retries, then the fallback - watch the log)
  *            for i in $(seq 1 20); do curl -s localhost:8000/sample-api/circuit-breaker; echo; done
  *            curl localhost:8000/actuator/circuitbreakers   (state: CLOSED -> OPEN)
@@ -32,7 +33,7 @@ public class CircuitBreakerController {
 
     private static final Logger log = LoggerFactory.getLogger(CircuitBreakerController.class);
 
-    // a URL where nothing is listening, to simulate a dependency that is down
+    // a URL where nothing is listening - to act like a service that is down
     private static final String BROKEN_SERVICE = "http://localhost:8080/some-dummy-url";
 
     private final RestClient restClient;
