@@ -19,8 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import feign.FeignException;
 
 /*
- * The Feign proxy is replaced by a mock, so no currency-exchange-service is needed:
- * the test scripts what the remote service "returns" and checks our side of the contract.
+ * The Feign proxy is replaced by a mock (a fake), so no currency-exchange-service is needed.
+ * The test decides what the remote service "returns", and checks our side of the contract.
  */
 @SpringBootTest
 @AutoConfigureMockMvc

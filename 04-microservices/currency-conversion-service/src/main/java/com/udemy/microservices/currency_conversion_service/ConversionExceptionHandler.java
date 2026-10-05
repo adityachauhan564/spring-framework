@@ -11,9 +11,9 @@ import feign.FeignException;
 
 /*
  * What to answer when the service we depend on fails:
- *   it says the currency pair doesn't exist (404) -> pass on 404: the CLIENT asked for something wrong
- *   it is down or unreachable                     -> 503 Service Unavailable: OUR dependency failed
- * Without this, both cases leak out as a confusing 500 with a stack-trace message.
+ *   it says the currency pair doesn't exist (404) -> pass on the 404: the CLIENT asked for something wrong
+ *   it is down or cannot be reached               -> 503 Service Unavailable: the service WE need has failed
+ * Without this, both cases come out as a confusing 500 with a stack-trace message.
  */
 @RestControllerAdvice
 public class ConversionExceptionHandler {
@@ -25,7 +25,7 @@ public class ConversionExceptionHandler {
 
     @ExceptionHandler({FeignException.class, RestClientException.class, IllegalStateException.class})
     public ProblemDetail exchangeUnavailable(Exception e) {
-        // IllegalStateException: the load balancer found NO registered currency-exchange instance
+        // IllegalStateException: the load balancer found NO currency-exchange instance registered in Eureka
         return ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE,
                 "currency-exchange is not available right now (" + e.getClass().getSimpleName() + ")");
     }

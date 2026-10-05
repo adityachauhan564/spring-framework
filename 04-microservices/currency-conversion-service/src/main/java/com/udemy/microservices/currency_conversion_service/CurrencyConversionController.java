@@ -12,9 +12,10 @@ import org.springframework.web.client.RestClient;
 /*
  * Topic    : One service calling another - two ways
  *   /currency-conversion/...       RestClient: you build the request yourself (the modern
- *                                  replacement for RestTemplate, which the course uses and is legacy)
- *   /currency-conversion-feign/... Feign: you only declared an interface (CurrencyExchangeProxy)
- *   Both find "currency-exchange" through Eureka and load-balance, so neither has a hard-coded port.
+ *                                  replacement for RestTemplate, which the course uses and is now old)
+ *   /currency-conversion-feign/... Feign: you only wrote an interface (CurrencyExchangeProxy)
+ *   Both find "currency-exchange" through Eureka and share calls between its instances,
+ *   so neither has a port number written into the code.
  * Try this : curl localhost:8100/currency-conversion/from/USD/to/INR/quantity/10
  *            curl localhost:8100/currency-conversion-feign/from/USD/to/INR/quantity/10
  *            then stop currency-exchange-service and call again -> 503 (ConversionExceptionHandler)
@@ -28,7 +29,7 @@ public class CurrencyConversionController {
     private final CurrencyExchangeProxy proxy;
 
     public CurrencyConversionController(RestClient currencyExchangeRestClient, CurrencyExchangeProxy proxy) {
-        this.restClient = currencyExchangeRestClient;      // load-balanced, see RestClientConfig
+        this.restClient = currencyExchangeRestClient;      // load-balanced (spreads calls across instances), see RestClientConfig
         this.proxy = proxy;
     }
 
