@@ -6,34 +6,35 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /*
- * SpEL (Spring Expression Language): #{ ... } is EVALUATED when the bean is created.
- * Don't mix it up with ${ ... }, which only looks up a property (topic12).
+ * SpEL (Spring Expression Language): #{ ... } is CALCULATED when the bean is created.
+ * Don't mix it up with ${ ... }. That one only looks up a value from a properties file (topic12).
+ * Easy way to remember: # = calculate, $ = look up.
  */
 @Component
 public class SpelExamples {
 
-    @Value("#{22 + 11}")                                   // arithmetic
+    @Value("#{22 + 11}")                                   // maths
     private int sum;
 
-    @Value("#{T(java.lang.Math).sqrt(25)}")                // T(...) = a class, to call static methods
+    @Value("#{T(java.lang.Math).sqrt(25)}")                // T(...) means "this class", so you can call its static methods
     private double squareRoot;
 
-    @Value("#{8 > 3 and 2 > 5}")                           // logic
+    @Value("#{8 > 3 and 2 > 5}")                           // logic (true and false = false)
     private boolean bothTrue;
 
-    @Value("#{'hello spring'.toUpperCase()}")              // method call on a literal
+    @Value("#{'hello spring'.toUpperCase()}")              // calling a method on a fixed String
     private String shout;
 
-    @Value("#{pricing.basePrice * 1.18}")                  // another bean's property, by bean name
+    @Value("#{pricing.basePrice * 1.18}")                  // reads another bean's value by its bean name (+18% GST)
     private double priceWithTax;
 
-    @Value("#{pricing.basePrice > 500 ? 'premium' : 'basic'}")   // ternary
+    @Value("#{pricing.basePrice > 500 ? 'premium' : 'basic'}")   // ternary: if-else in one line
     private String tier;
 
-    @Value("#{pricing.prices.?[#this > 100]}")             // selection: keep matching elements
+    @Value("#{pricing.prices.?[#this > 100]}")             // selection: keeps only the elements that match
     private List<Integer> expensivePrices;
 
-    @Value("#{systemProperties['user.name'] ?: 'unknown'}")     // Elvis: default when null
+    @Value("#{systemProperties['user.name'] ?: 'unknown'}")     // Elvis operator ?: gives a default value when it is null
     private String currentUser;
 
     @Override
