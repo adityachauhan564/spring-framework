@@ -3,7 +3,7 @@ package com.springcore.topic04_injecting_collections;
 import java.util.List;
 import java.util.Map;
 
-/* Receives collections that are defined once as standalone <util:*> beans and shared by reference. */
+/* Gets collections that are defined only once, as separate <util:*> beans, and shared (by reference) with anyone who needs them. */
 public class Team {
 
     private List<String> members;

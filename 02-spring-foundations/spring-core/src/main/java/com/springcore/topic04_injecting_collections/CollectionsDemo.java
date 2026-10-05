@@ -4,11 +4,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /*
  * Topic    : Injecting List, Set, Map and Properties
- * Key idea : <list>/<set>/<map>/<props> build a collection INSIDE one bean.
- *            <util:list>/<util:map> define a collection as its OWN bean, so several beans can
- *            share it - and you can choose the implementation class (list-class, map-class).
+ * Key idea : Spring can fill List, Set, Map and Properties fields from XML. Two ways:
+ *            - <list>/<set>/<map>/<props> build a collection INSIDE one bean.
+ *              Only that bean can use it.
+ *            - <util:list>/<util:map> make the collection its OWN bean, so many beans can share it.
+ *              You can also pick the exact class (list-class, map-class), e.g. LinkedList or TreeMap.
+ *            - Like a tiffin made for one person vs one big pot that the whole family shares.
  * Run      : ./mvnw -q -pl spring-core compile exec:java -Dexec.mainClass=com.springcore.topic04_injecting_collections.CollectionsDemo
- * Try this : add a duplicate <value> to the <set> and see it disappear.
+ * Try this : Add a duplicate <value> to the <set> and see it disappear.
  */
 public class CollectionsDemo {
 
@@ -28,6 +31,7 @@ public class CollectionsDemo {
         }
     }
 
+    // prints the real class name Spring used, e.g. ArrayList or LinkedHashSet
     private static String type(Object collection) {
         return collection.getClass().getSimpleName();
     }
