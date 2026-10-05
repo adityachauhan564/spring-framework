@@ -7,10 +7,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.config.TopicBuilder;
 
 /*
- * Only with the "kafka" profile. Producer, consumer and KafkaTemplate need no code: Boot builds them
- * from the spring.kafka.* properties (application-kafka.properties). The course built them by hand,
- * with localhost:9092 hard-coded.
- * The one thing left is the topic: this bean makes Boot's KafkaAdmin create it if it doesn't exist.
+ * Used only with the "kafka" profile. Kafka = a message queue: one part of the app drops a message,
+ * another part picks it up later. Like a post box - the sender doesn't wait for the receiver.
+ * The producer, consumer and KafkaTemplate need no code: Boot builds them from the spring.kafka.*
+ * properties (application-kafka.properties). The course built them by hand, with localhost:9092 hard-coded.
+ * The only thing left is the topic: this bean makes Boot's KafkaAdmin create it if it doesn't exist yet.
  */
 @Configuration
 @Profile("kafka")

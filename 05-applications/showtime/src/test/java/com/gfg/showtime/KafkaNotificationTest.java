@@ -22,7 +22,7 @@ import com.gfg.showtime.service.TicketService;
 /*
  * The "kafka" profile end to end, with a real Kafka broker started inside the test (@EmbeddedKafka):
  * book -> KafkaNotificationPublisher -> topic TICKET_BOOKED -> KafkaNotificationConsumer -> NotificationService.
- * The consumer runs on its own thread, so the check waits (timeout) instead of expecting it at once.
+ * The consumer runs on its own thread, so the check waits (with a timeout) instead of expecting it at once.
  */
 @SpringBootTest(properties = {
         "spring.datasource.url=jdbc:h2:mem:kafka-test",

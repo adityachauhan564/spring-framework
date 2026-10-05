@@ -21,8 +21,8 @@ import com.jayway.jsonpath.JsonPath;
 
 /*
  * The API over HTTP (MockMvc), with the DataSeeder sample data and REAL logins: httpBasic(...) sends
- * the Authorization header, so the password is checked against the BCrypt hash like in production.
- * Each test class names its own H2 database, so test classes with different setups never share data.
+ * the Authorization header, so the password is checked against the BCrypt hash just like in production.
+ * Each test class uses its own named H2 database, so test classes with different setups never share data.
  */
 @SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:api-test")
 @AutoConfigureMockMvc
@@ -37,7 +37,7 @@ class ApiSecurityTest {
     @Test
     void readingIsPublic() throws Exception {
         mvc.perform(get("/movie/1")).andExpect(jsonPath("$.title").value("Inception"));
-        mvc.perform(get("/show/search").param("city", "MUMBAI")).andExpect(jsonPath("$", hasSize(2)));  // city ignores case
+        mvc.perform(get("/show/search").param("city", "MUMBAI")).andExpect(jsonPath("$", hasSize(2)));  // capital or small letters don't matter for city
         mvc.perform(get("/show/search").param("city", "Mumbai").param("movieName", "3 Idiots"))
                 .andExpect(jsonPath("$", hasSize(1)));
     }
@@ -58,7 +58,7 @@ class ApiSecurityTest {
                 {"name":"Ravi","password":"secret-pass","mobile":"9111111111","email":"ravi@example.com","role":"ADMIN"}""";
         mvc.perform(json(post("/user/signup"), body))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.role").value("USER"))                // "role":"ADMIN" was ignored
+                .andExpect(jsonPath("$.role").value("USER"))                // the "role":"ADMIN" we sent was ignored
                 .andExpect(jsonPath("$.password").doesNotExist());
 
         assertThat(users.findByEmail("ravi@example.com").orElseThrow().getPassword()).startsWith("$2");   // BCrypt
@@ -98,7 +98,7 @@ class ApiSecurityTest {
         }
         mvc.perform(get("/movie/3")).andExpect(jsonPath("$.rating").value(4.0)).andExpect(jsonPath("$.reviews", hasSize(2)));
         mvc.perform(get("/movie/top").param("genre", "SCI_FI"))
-                .andExpect(jsonPath("$", hasSize(1)))                       // Inception has no reviews, so no rating yet
+                .andExpect(jsonPath("$", hasSize(1)))                       // Inception has no reviews, so it has no rating yet
                 .andExpect(jsonPath("$[0].title").value("Interstellar"));
     }
 

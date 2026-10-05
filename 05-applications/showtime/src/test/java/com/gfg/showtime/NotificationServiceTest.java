@@ -19,7 +19,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import com.gfg.showtime.notification.BookingNotification;
 import com.gfg.showtime.notification.NotificationService;
 
-// A plain unit test with Mockito mocks: no Spring context, no mail server
+// A plain unit test with Mockito mocks (fakes): no Spring context, no mail server
 class NotificationServiceTest {
 
     final BookingNotification booking = new BookingNotification(7, "Asha", "asha@example.com", "98765",
@@ -39,11 +39,11 @@ class NotificationServiceTest {
 
     @Test
     void noMailServerOrAFailingOneIsNotAnError() {
-        service(null).send(booking);                          // no JavaMailSender bean: only logged
+        service(null).send(booking);                          // no JavaMailSender bean: the email is only logged
 
         JavaMailSender broken = mock(JavaMailSender.class);
         doThrow(new MailSendException("SMTP down")).when(broken).send(any(SimpleMailMessage.class));
-        service(broken).send(booking);                        // logged, not thrown
+        service(broken).send(booking);                        // the error is logged, not thrown
     }
 
     @SuppressWarnings("unchecked")

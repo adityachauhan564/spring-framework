@@ -12,7 +12,8 @@ import tools.jackson.databind.json.JsonMapper;
 
 /*
  * "kafka" profile: reads TICKET_BOOKED messages and sends the notifications.
- * groupId: consumers in the same group share the messages (each one is handled once per group).
+ * groupId: consumers in the same group share the messages (each message is handled only once per group),
+ * like delivery partners from one restaurant sharing the orders between them.
  */
 @Component
 @Profile("kafka")

@@ -29,7 +29,7 @@ public class TicketController {
 		this.ticketService = ticketService;
 	}
 
-	// The ticket is booked for the logged-in user; the body only says which show and seats
+	// The ticket is booked for the logged-in user. The body only says which show and which seats
 	@PostMapping("/book")
 	@ResponseStatus(HttpStatus.CREATED)
 	public TicketResource bookTicket(@RequestBody @Valid BookingResource booking, @AuthenticationPrincipal UserDetails user) {

@@ -14,8 +14,8 @@ import tools.jackson.databind.json.JsonMapper;
 /*
  * "kafka" profile: after the booking commits, publish it to the TICKET_BOOKED topic as JSON.
  * Whoever sends the email (here KafkaNotificationConsumer; in a real system, another service) reads it
- * from there. The booking request doesn't wait for the email, and still works while the mail side is down:
- * Kafka keeps the message until a consumer takes it.
+ * from there. The booking request does not wait for the email, and still works while the mail side is down:
+ * Kafka keeps the message safe until a consumer takes it - like a parcel waiting at the post office.
  */
 @Component
 @Profile("kafka")
@@ -34,7 +34,7 @@ public class KafkaNotificationPublisher {
     @TransactionalEventListener
     public void onBooking(BookingNotification booking) {
         String json = jsonMapper.writeValueAsString(booking);
-        // key = ticket id: messages with the same key always go to the same partition, in order
+        // key = ticket id: messages with the same key always go to the same partition, so they stay in order
         kafkaTemplate.send(KafkaConfig.TICKET_BOOKED, String.valueOf(booking.ticketId()), json);
         log.info("Published to {}: {}", KafkaConfig.TICKET_BOOKED, json);
     }

@@ -38,7 +38,7 @@ public class Show {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	// A date AND a time. The course mapped this to a TIME column, which silently dropped the date.
+	// A date AND a time. The course mapped this to a TIME column, which silently threw the date away.
 	@Column(name = "show_time", nullable = false)
 	private LocalDateTime showTime;
 

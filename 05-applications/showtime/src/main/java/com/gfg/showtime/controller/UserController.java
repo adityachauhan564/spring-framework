@@ -34,7 +34,7 @@ public class UserController {
 	}
 
 	// Your own profile and tickets. There is no "GET /user/{id}" for normal users: it would let
-	// anyone read anyone's details by counting ids.
+	// anyone read anyone else's details just by trying ids 1, 2, 3...
 	@GetMapping("/me")
 	public UserResource me(@AuthenticationPrincipal UserDetails user) {
 		return userService.getByEmail(user.getUsername());

@@ -24,7 +24,7 @@ public class ReviewService {
         this.userRepository = userRepository;
     }
 
-    // One transaction: the review and the movie's new average are saved together, or not at all
+    // One transaction: the review and the movie's new average rating are saved together, or not at all
     @Transactional
     public ReviewResource addReview(ReviewResource request, String userEmail) {
         Movie movie = movieRepository.findById(request.movieId())
@@ -35,7 +35,7 @@ public class ReviewService {
                 .movieReview(request.movieReview())
                 .rating(request.rating())
                 .build());
-        reviewRepository.flush();                                  // so the average query below sees this review
+        reviewRepository.flush();                                  // send the INSERT now, so the average query below sees this review
         movie.setRating(reviewRepository.averageRating(movie.getId()));
         return Review.toResource(review);
     }

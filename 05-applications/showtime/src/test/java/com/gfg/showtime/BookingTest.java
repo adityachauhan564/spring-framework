@@ -33,7 +33,7 @@ import com.gfg.showtime.service.TicketService;
 
 /*
  * The booking rules, tested on the service (seeded show 1: seats 1A-1E regular, 2A-2E recliners).
- * NotificationService is a mock: the tests check WHEN it's called, without sending anything.
+ * NotificationService is a mock (a fake): the tests check WHEN it is called, without really sending anything.
  */
 @SpringBootTest(properties = "spring.datasource.url=jdbc:h2:mem:booking-test")
 class BookingTest {
@@ -66,11 +66,11 @@ class BookingTest {
 
         assertThrows(ConflictException.class, () -> book("admin@showtime.local", SeatType.REGULAR, "1D"));   // already taken
         assertThrows(ConflictException.class, () -> book("admin@showtime.local", SeatType.RECLINER, "1C"));  // 1C is REGULAR
-        verify(notificationService, org.mockito.Mockito.times(1)).send(any());                               // only the first
+        verify(notificationService, org.mockito.Mockito.times(1)).send(any());                               // only for the first booking
     }
 
-    // Two customers press "book" for the same seat at the same moment. Whichever way the threads
-    // interleave, exactly one gets it: either the second sees the seat already booked (409), or both
+    // Two customers press "book" for the same seat at the same moment. Whatever order the threads
+    // run in, exactly one gets it: either the second sees the seat already booked (409), or both
     // read it as free and @Version makes the second commit fail (optimistic locking, also 409).
     @Test
     void twoCustomersRacingForOneSeatGetOneTicket() throws Exception {
@@ -97,8 +97,9 @@ class BookingTest {
         assertThat(tickets).isEqualTo(1);
     }
 
-    // The same race, made deterministic: this transaction reads seat 1B, someone else books it and
-    // commits, then this transaction writes its stale copy. @Version turns that lost update into an error.
+    // The same race, but made to happen in a fixed order: this transaction reads seat 1B, someone else
+    // books it and commits, then this transaction writes its old (stale) copy.
+    // @Version turns that lost update into an error.
     @Test
     void versionStopsAWriteBasedOnAStaleRead() {
         ShowSeat seat1B = seats.findAll().stream().filter(s -> s.getShow().getId() == 1 && s.getSeatNumber().equals("1B")).findFirst().orElseThrow();

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 /*
  * Sends the "your tickets" email (and pretends to send an SMS).
  * Boot creates a JavaMailSender only when spring.mail.host is set (the "mail" profile points it at
- * Mailpit). ObjectProvider lets this class work either way: no mail server = the email is only logged.
+ * Mailpit). ObjectProvider lets this class work either way: with no mail server, the email is only logged.
  */
 @Service
 public class NotificationService {
@@ -51,7 +51,7 @@ public class NotificationService {
             sender.send(mail);
             log.info("Email sent to {}", booking.email());
         } catch (MailException e) {
-            // the booking is already committed: a mail problem is logged, never turned into a failed booking
+            // the booking is already saved: a mail problem is only logged, never turned into a failed booking
             log.error("Email to {} failed: {}", booking.email(), e.getMessage());
         }
     }
