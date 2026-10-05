@@ -15,7 +15,7 @@ import com.spring.orm.topic01_entity_mapping.Student;
 import com.spring.orm.topic02_session_factory_config.HibernateConfig;
 import com.spring.orm.topic03_hibernate_crud_and_hql.StudentDao;
 
-/* DB_URL blanked: always the in-memory H2 database. */
+/* DB_URL is set to empty, so this test always uses the in-memory H2 database. */
 @SpringJUnitConfig({HibernateConfig.class, StudentDao.class})
 @TestPropertySource(properties = "DB_URL=")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
