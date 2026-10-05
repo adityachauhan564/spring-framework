@@ -10,10 +10,11 @@ import jakarta.persistence.PersistenceContext;
 
 /*
  * Topic    : JPA with EntityManager - Hibernate writes the SQL
- * Key idea : map the class once (@Entity), then work with OBJECTS: merge, find, remove.
- *            Compare 02-spring-foundations/spring-orm topic05 - there you also wrote the
- *            EntityManagerFactory and transaction manager beans; Boot creates them here.
- *            Look at the console: spring.jpa.show-sql prints every statement Hibernate sends.
+ * Key idea : - Map the class once (@Entity), then work only with OBJECTS: merge, find, remove.
+ *              No SQL written by you.
+ *            - Compare 02-spring-foundations/spring-orm topic05: there you also wrote the
+ *              EntityManagerFactory and transaction manager beans. Here Boot creates them.
+ *            - Look at the console: spring.jpa.show-sql prints every statement Hibernate sends.
  */
 @Repository
 @Transactional
@@ -23,7 +24,7 @@ public class CourseJpaRepository {
     private EntityManager entityManager;
 
     public void insert(Course course) {
-        entityManager.merge(course);          // merge: insert or update (the id is set by us)
+        entityManager.merge(course);          // merge = insert if new, update if it exists (we set the id ourselves)
     }
 
     @Transactional(readOnly = true)
