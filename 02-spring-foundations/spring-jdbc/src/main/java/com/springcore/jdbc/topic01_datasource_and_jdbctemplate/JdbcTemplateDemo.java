@@ -10,11 +10,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 /*
  * Run      : ./mvnw -q -pl spring-jdbc compile exec:java -Dexec.mainClass=com.springcore.jdbc.topic01_datasource_and_jdbctemplate.JdbcTemplateDemo
- * Key idea : update() for INSERT/UPDATE/DELETE (returns the number of changed rows),
- *            queryForObject() for a single value. Always use ? placeholders - never
- *            build SQL by string concatenation (that invites SQL injection).
- * Try this : insert the same id twice and read the DuplicateKeyException - Spring turned the
- *            vendor-specific SQLException into a portable DataAccessException.
+ * Key idea : - update() is for INSERT / UPDATE / DELETE. It returns how many rows changed.
+ *            - queryForObject() is for reading a single value.
+ *            - Always use ? placeholders for values. Never build SQL by joining strings with +.
+ *              That opens the door to SQL injection (a user typing SQL into a form to attack your database).
+ * Try this : Insert the same id twice and read the DuplicateKeyException.
+ *            Spring turned the database's own SQLException (different for every database)
+ *            into a common DataAccessException that is the same for all databases.
  */
 public class JdbcTemplateDemo {
 

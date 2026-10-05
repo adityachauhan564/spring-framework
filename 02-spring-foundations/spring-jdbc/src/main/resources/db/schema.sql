@@ -1,5 +1,5 @@
--- Runs on every start (JdbcConfig.schemaInitializer), on H2 and on MySQL.
--- DROP + CREATE means every run starts from empty tables, so the demos can be re-run.
+-- Runs on every start (see JdbcConfig.schemaInitializer), on both H2 and MySQL.
+-- DROP + CREATE means every run starts with empty tables, so you can run the demos again and again.
 DROP TABLE IF EXISTS student;
 DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS account;
