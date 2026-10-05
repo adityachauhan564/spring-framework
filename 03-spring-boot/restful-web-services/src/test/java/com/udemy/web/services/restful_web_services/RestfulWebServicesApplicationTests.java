@@ -11,8 +11,8 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
 /*
- * @SpringBootTest starts the WHOLE application (slower than @WebMvcTest, but proves all the
- * pieces fit together). One or two of these per app is usually enough.
+ * @SpringBootTest starts the WHOLE application. It is slower than @WebMvcTest, but it proves
+ * that all the pieces fit together. One or two of these per app is usually enough.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
