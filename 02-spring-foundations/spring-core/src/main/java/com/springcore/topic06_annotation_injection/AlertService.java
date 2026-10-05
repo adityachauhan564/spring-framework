@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 /*
- * 2. @Qualifier overrides @Primary: "I want exactly the bean named smsSender".
+ * 2. @Qualifier wins over @Primary. It says: "I want exactly the bean named smsSender, nothing else".
+ *    Like asking for one particular delivery person by name instead of whoever is free.
  */
 public class AlertService {
 
