@@ -1,8 +1,10 @@
 package com.springcore.topic02_xml_setter_injection;
 
 /*
- * A plain Java class (a "POJO"). Spring needs two things for setter injection:
- * a no-argument constructor and a setter per property.
+ * A plain Java class (called a "POJO" - Plain Old Java Object, no Spring code inside).
+ * For setter injection, Spring needs only two things:
+ *   - a no-argument constructor, so it can create an empty object
+ *   - one setter for each property, so it can fill the values
  */
 public class Student {
 

@@ -5,7 +5,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- 1. long form: a <value> element inside <property> -->
+    <!-- 1. Long form: a <value> element inside <property>. Easy to read, but more typing. -->
     <bean id="student1" class="com.springcore.topic02_xml_setter_injection.Student">
         <property name="studentId">
             <value>1</value>
@@ -18,14 +18,14 @@
         </property>
     </bean>
 
-    <!-- 2. short form: the value attribute (same result) -->
+    <!-- 2. Short form: the value attribute. Same result, fewer lines. -->
     <bean id="student2" class="com.springcore.topic02_xml_setter_injection.Student">
         <property name="studentId" value="2"/>
         <property name="studentName" value="Khushi Chauhan"/>
         <property name="studentAddress" value="Lucknow"/>
     </bean>
 
-    <!-- 3. shortest form: the p: namespace (needs xmlns:p at the top) -->
+    <!-- 3. Shortest form: the p: namespace (p = property). Needs xmlns:p at the top of the file. -->
     <bean id="student3" class="com.springcore.topic02_xml_setter_injection.Student"
           p:studentId="3" p:studentName="Roshan Chauhan" p:studentAddress="Dehradun"/>
 </beans>
