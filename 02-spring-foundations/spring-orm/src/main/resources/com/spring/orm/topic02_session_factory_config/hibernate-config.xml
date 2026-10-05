@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- The same bean chain as HibernateConfig.java, written in XML (this file was empty before). -->
+<!-- The same chain of beans as HibernateConfig.java, but written in XML (this file was empty before). -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:tx="http://www.springframework.org/schema/tx"
@@ -14,7 +14,7 @@
     <!-- 1. DataSource: an in-memory H2 database -->
     <jdbc:embedded-database id="dataSource" type="H2" generate-name="true"/>
 
-    <!-- 2. SessionFactory: knows the entities and the Hibernate settings -->
+    <!-- 2. SessionFactory: knows the entity classes and the Hibernate settings -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan" value="com.spring.orm.topic01_entity_mapping"/>
@@ -25,7 +25,7 @@
         </property>
     </bean>
 
-    <!-- 3. TransactionManager + <tx:annotation-driven/> = @Transactional works -->
+    <!-- 3. TransactionManager + <tx:annotation-driven/> together make @Transactional work -->
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
