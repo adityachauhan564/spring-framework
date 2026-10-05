@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%-- shared navigation. <c:url> adds the context path (/springmvc), so links work wherever the app is deployed --%>
+<%-- shared navigation menu. <c:url> adds the context path (/springmvc) in front, so the links work wherever the app is deployed --%>
 <nav class="mb-4">
   <a href="<c:url value='/'/>">Home</a> |
   <a href="<c:url value='/about'/>">About</a> |
