@@ -4,11 +4,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 /*
  * Topic    : Bean scopes - singleton, prototype, and @Lazy
- * Key idea : singleton (default) = one shared instance per container, created at startup.
- *            prototype           = a new instance on every getBean / injection.
- *            Web apps add request and session scopes (see spring-mvc).
+ * Key idea : Scope = how many objects Spring makes of a bean, and when.
+ *            - singleton (the default) = ONE shared object per container, made at startup.
+ *            - prototype               = a NEW object every time you call getBean or inject it.
+ *            - @Lazy                   = still one object, but made only when someone first asks.
+ *            - Web apps also have request and session scopes (see spring-mvc).
  * Run      : ./mvnw -q -pl spring-core compile exec:java -Dexec.mainClass=com.springcore.topic08_bean_scopes.BeanScopesDemo
- * Try this : remove @Scope("prototype") from ShoppingCart and predict every line of output.
+ * Try this : Remove @Scope("prototype") from ShoppingCart, and guess every line of output before you run it.
  */
 public class BeanScopesDemo {
 

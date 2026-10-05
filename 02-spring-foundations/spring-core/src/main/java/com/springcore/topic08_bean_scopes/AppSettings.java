@@ -2,7 +2,11 @@ package com.springcore.topic08_bean_scopes;
 
 import org.springframework.stereotype.Component;
 
-/* Singleton (the default scope): ONE object per container, shared by everyone who asks. */
+/*
+ * Singleton (the default scope): Spring makes only ONE object of this class,
+ * and gives that same object to everyone who asks for it.
+ * Like the one notice board in a college - every student reads the same board.
+ */
 @Component
 public class AppSettings {
 

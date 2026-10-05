@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-/* Prototype: a NEW object every time the container is asked for one. */
+/* Prototype: Spring makes a NEW object every time someone asks for one. Every customer gets their own cart. */
 @Component
 @Scope("prototype")
 public class ShoppingCart {
