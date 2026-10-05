@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- the id "address" matters for byName: it must equal the property name -->
+    <!-- The id "address" is important for byName: it must be the same as the property name (setAddress) -->
     <bean id="address" class="com.springcore.topic05_xml_autowiring.Address">
         <property name="street" value="Hazratganj"/>
         <property name="city" value="Lucknow"/>
