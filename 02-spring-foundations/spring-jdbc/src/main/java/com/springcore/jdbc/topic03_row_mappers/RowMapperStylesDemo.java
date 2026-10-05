@@ -14,13 +14,14 @@ import com.springcore.jdbc.topic02_crud_dao.StudentRowMapper;
 
 /*
  * Topic    : Row mappers - turning rows into objects
- * Key idea : the same query, mapped four ways. All give the same Students:
- *              1. a RowMapper class          - reusable, testable (topic02)
- *              2. a lambda                   - RowMapper is a functional interface
- *              3. BeanPropertyRowMapper      - maps columns to setters by name (name -> setName)
- *              4. queryForList               - no class at all: a Map per row
+ * Key idea : A row mapper turns a database row into a Java object.
+ *            Here the same query is mapped in four ways. All four give the same Students:
+ *              1. a RowMapper class          - can be reused and tested on its own (topic02)
+ *              2. a lambda                   - works because RowMapper has only one method (a functional interface)
+ *              3. BeanPropertyRowMapper      - matches columns to setters by name (name -> setName)
+ *              4. queryForList               - no class at all: you get one Map per row
  * Run      : ./mvnw -q -pl spring-jdbc compile exec:java -Dexec.mainClass=com.springcore.jdbc.topic03_row_mappers.RowMapperStylesDemo
- * Try this : alias a column ("select name as full_name") - which mappers still work?
+ * Try this : Rename a column in the query ("select name as full_name"). Which mappers still work?
  */
 public class RowMapperStylesDemo {
 
