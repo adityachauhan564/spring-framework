@@ -2,13 +2,13 @@
 
 > A product-inventory app in two parts that work together: a Spring Boot REST API and an Angular frontend. They run side by side, the API on `:8080` and the UI on `:4200`, and the browser connects them.
 
-**Before this:** [03-spring-boot](../03-spring-boot) for the backend half. No earlier stage covers Angular; the frontend README explains each piece as it's used.
+**Before this:** [03-spring-boot](../03-spring-boot) for the backend half. No earlier stage covers Angular, so the frontend README explains each piece when it is first used.
 
 ## Why this stage
 Everything so far was tested with curl, Postman and MockMvc. A browser adds its own rules and needs:
-- **CORS:** a page may only read responses from its own origin unless the server allows it;
+- **CORS:** a page may only read responses from its own origin (scheme + host + port), unless the server allows it. The browser enforces this, not the server;
 - **JSON keys** that match the frontend's model;
-- **errors** a form can show next to the right field;
+- **errors** that a form can show next to the right field;
 - **status codes** the UI can react to.
 
 This stage builds both sides, so you see each of these from both ends.
@@ -21,7 +21,7 @@ cd product-inventory-frontend && npm ci && npx ng serve       # UI on http://loc
 ```
 Open http://localhost:4200: list, search, create, edit and delete products.
 
-Tests, neither of which needs the other side running:
+Tests (neither one needs the other side running):
 ```bash
 cd product-service-backend && ./mvnw test                     # 6 tests
 cd product-inventory-frontend && npx ng test --watch=false    # 12 tests
@@ -64,7 +64,7 @@ sequenceDiagram
 - [ ] How do Java getter names become JSON keys (`getPName()` → `"pname"`)?
 - [ ] Where do app-wide providers go in a standalone Angular app?
 - [ ] Why does a zoneless app keep its state in signals? What do `computed` and `update` do?
-- [ ] Why validate in both the form and the backend?
+- [ ] Why check the data in both the form and the backend?
 - [ ] What does status 0 mean in an Angular `HttpErrorResponse`?
 - [ ] How do you test a component without HTTP, and a service without a server?
-- [ ] Why run `npm ci` rather than `npm install` on a fresh clone?
+- [ ] Why run `npm ci` and not `npm install` on a fresh clone?
