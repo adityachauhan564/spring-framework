@@ -10,13 +10,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.stereotype.Component;
 
 /*
- * An in-memory store standing in for a database (the books API does the real thing with JPA).
- * The old version used a static ArrayList and a static int counter: two requests at the same
- * time could get the same id or corrupt the list. Every request runs on its own thread,
- * so shared state must be thread-safe:
- *   ConcurrentHashMap - safe concurrent reads and writes
- *   AtomicInteger     - incrementAndGet() never hands out the same number twice
- * And no 'static': the store is a singleton BEAN, so Spring already shares one instance.
+ * An in-memory store that stands in for a database (the books API does the real thing with JPA).
+ * The old version used a static ArrayList and a static int counter. Two requests at the same
+ * time could get the same id, or break the list. Every request runs on its own thread,
+ * so anything shared must be thread-safe:
+ *   ConcurrentHashMap - safe when many threads read and write at the same time
+ *   AtomicInteger     - incrementAndGet() never gives out the same number twice
+ *                       (like a token machine at a bank - two people never get the same token)
+ * And no 'static': the store is a singleton BEAN, so Spring already shares one object.
  */
 @Component
 public class UserStore {
