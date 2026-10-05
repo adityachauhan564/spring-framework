@@ -9,20 +9,23 @@ import com.spring.orm.topic02_session_factory_config.HibernateConfig;
 
 /*
  * Topic    : Entity states and the Session - how Hibernate really behaves
- * Key idea : an object is in one of these states:
- *              transient  - new Student(...): Hibernate doesn't know it
- *              persistent - attached to an open Session: changes are saved AUTOMATICALLY at commit
- *                           (dirty checking), and get() returns the same object (first-level cache)
- *              detached   - its Session closed: changes are NOT saved until you merge() it
- *            Knowing this explains "why did my change save without update()?" and
- *            "why didn't my change save?" - the two most common Hibernate surprises.
+ * Key idea : Every entity object is in one of these states:
+ *              transient  - just made with new Student(...). Hibernate does not know about it yet.
+ *              persistent - attached to an open Session. Changes are saved AUTOMATICALLY at commit
+ *                           (this is "dirty checking"), and get() gives back the same object
+ *                           (this is the "first-level cache").
+ *              detached   - its Session is closed. Changes are NOT saved until you merge() it.
+ *            - Like a library book: on the shelf (transient), issued in your name (persistent),
+ *              taken home after the library closed (detached - the library can't see your notes).
+ *            - This explains the two most common Hibernate surprises:
+ *              "why did my change save without update()?" and "why didn't my change save?"
  * Run      : ./mvnw -q -pl spring-orm compile exec:java -Dexec.mainClass=com.spring.orm.topic04_entity_states_and_session.EntityStatesDemo
- * Try this : call session.detach(student) before the setter in step 2 - is the change still saved?
+ * Try this : Call session.detach(student) before the setter in step 2. Is the change still saved?
  *
- * (Written with SessionFactory.inTransaction(...) instead of @Transactional, so each
- *  Session's start and end is visible right here in the code.)
- * The old tutorial's HibernateTemplate is covered in the README's "legacy" note: it
- * cannot run on Hibernate 6.
+ * (Written with SessionFactory.inTransaction(...) instead of @Transactional, so you can see
+ *  exactly where each Session starts and ends, right here in the code.)
+ * The old tutorial's HibernateTemplate is covered in the README's "legacy" note:
+ * it cannot run on Hibernate 6.
  */
 public class EntityStatesDemo {
 
@@ -38,14 +41,14 @@ public class EntityStatesDemo {
             System.out.println("   after persist + commit, id = " + student.getStudentId());
             int id = student.getStudentId();
 
-            // 2. dirty checking: change a persistent object, never call update()
+            // 2. dirty checking: change a persistent object, and never call update()
             sessionFactory.inTransaction(session -> {
                 Student loaded = session.get(Student.class, id);
                 loaded.setStudentCity("Mumbai");
             });
             System.out.println("2. dirty checking: city in DB is now " + readCity(sessionFactory, id) + " (no update() called)");
 
-            // 3. first-level cache: the same id twice in ONE session = one SELECT, same object
+            // 3. first-level cache: asking for the same id twice in ONE session = only one SELECT, and the same object
             stats.clear();
             sessionFactory.inTransaction(session -> {
                 Student first = session.get(Student.class, id);
@@ -53,10 +56,10 @@ public class EntityStatesDemo {
                 System.out.println("3. same object? " + (first == second) + ", SELECTs sent: " + stats.getPrepareStatementCount());
             });
 
-            // 4. detached: the Session is closed, so the change is ignored...
+            // 4. detached: the Session is closed, so this change is ignored...
             student.setStudentCity("Delhi");
             System.out.println("4. detached change: city in DB is still " + readCity(sessionFactory, id));
-            // ...until merge() copies it onto a persistent instance
+            // ...until merge() copies it onto a persistent object
             sessionFactory.inTransaction(session -> session.merge(student));
             System.out.println("   after merge():     city in DB is " + readCity(sessionFactory, id));
         }
