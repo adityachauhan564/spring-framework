@@ -5,7 +5,8 @@ import org.springframework.beans.factory.InitializingBean;
 
 /*
  * Way 2: implement Spring's InitializingBean / DisposableBean interfaces.
- * Works without XML settings, but ties the class to Spring - the least preferred way.
+ * Works without any XML settings, but now the class depends on Spring
+ * (it imports Spring's interfaces). That is why this is the least preferred way.
  */
 public class CacheWarmer implements InitializingBean, DisposableBean {
 

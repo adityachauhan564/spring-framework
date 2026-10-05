@@ -7,19 +7,19 @@
            http://www.springframework.org/schema/context
            https://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!-- needed for @PostConstruct / @PreDestroy (way 3) -->
+    <!-- Needed so that @PostConstruct / @PreDestroy work (way 3) -->
     <context:annotation-config/>
 
-    <!-- way 1: name the methods here -->
+    <!-- Way 1: write the method names here -->
     <bean id="connectionPool" class="com.springcore.topic09_bean_lifecycle.ConnectionPool"
           init-method="open" destroy-method="close">
         <property name="size" value="10"/>
     </bean>
 
-    <!-- way 2: the interfaces are detected automatically -->
+    <!-- Way 2: nothing to write - Spring sees the interfaces on its own -->
     <bean id="cacheWarmer" class="com.springcore.topic09_bean_lifecycle.CacheWarmer"/>
 
-    <!-- way 3: the annotations are detected by annotation-config -->
+    <!-- Way 3: annotation-config (above) finds the annotations -->
     <bean id="reportScheduler" class="com.springcore.topic09_bean_lifecycle.ReportScheduler">
         <property name="subject" value="Maths"/>
     </bean>
