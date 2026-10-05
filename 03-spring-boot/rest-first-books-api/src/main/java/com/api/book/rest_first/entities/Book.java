@@ -9,9 +9,10 @@ import jakarta.persistence.Table;
 
 /*
  * ENTITY layer: one row of the books table.
- * GenerationType.IDENTITY = the database's auto-increment column. The old AUTO strategy made
- * Hibernate create and use a hidden sequence table on MySQL - surprising and slower.
- * The entity never leaves the service layer: the API sends BookResponse instead (dto package).
+ * GenerationType.IDENTITY = the database's auto-increment column (1, 2, 3... by itself).
+ * The old AUTO strategy made Hibernate create and use a hidden sequence table on MySQL -
+ * surprising, and slower.
+ * The entity never leaves the service layer. The API sends a BookResponse instead (dto package).
  */
 @Entity
 @Table(name = "books")
@@ -28,7 +29,7 @@ public class Book {
     private String author;
 
     protected Book() {
-        // required by JPA
+        // needed by JPA: it creates an empty object first, then fills the fields
     }
 
     public Book(String title, String author) {

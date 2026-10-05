@@ -12,9 +12,10 @@ import com.api.book.rest_first.entities.Book;
 import com.api.book.rest_first.exceptions.BookNotFoundException;
 
 /*
- * SERVICE layer: business logic and the transaction boundary.
- * It speaks DTOs to the controller and entities to the repository, so neither side
- * depends on the other's details. @Service (not @Component) says what the class is for.
+ * SERVICE layer: business logic, and the place where transactions start and end.
+ * It talks in DTOs to the controller and in entities to the repository, so neither side
+ * depends on the other's details. Like a translator between two people.
+ * @Service (not @Component) tells readers what the class is for.
  */
 @Service
 @Transactional
@@ -45,7 +46,7 @@ public class BookService {
 
     public BookResponse replace(int id, BookRequest request) {
         Book book = load(id);
-        book.update(request.title(), request.author());   // saved at commit (dirty checking)
+        book.update(request.title(), request.author());   // saved automatically at commit (dirty checking) - no save() call needed
         return BookResponse.from(book);
     }
 

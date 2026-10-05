@@ -15,9 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 /*
- * End to end through every layer (controller -> service -> repository -> H2).
+ * End to end, through every layer (controller -> service -> repository -> H2).
  * The old version of this test needed a running MySQL, so `./mvnw test` failed on any machine
- * without one. The default datasource is now in-memory H2.
+ * that didn't have one. Now the default database is in-memory H2.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
