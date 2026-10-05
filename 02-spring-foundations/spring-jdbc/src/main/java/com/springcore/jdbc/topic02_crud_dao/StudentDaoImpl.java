@@ -7,9 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 /*
- * @Repository = @Component for data-access classes. Spring also uses it to translate
- * database exceptions into DataAccessException.
- * The JdbcTemplate arrives through the constructor (topic06 of spring-core).
+ * @Repository = @Component, but for classes that talk to the database.
+ * Spring also uses it to convert database errors into its own DataAccessException.
+ * The JdbcTemplate comes in through the constructor (constructor injection, spring-core topic06).
  */
 @Repository
 public class StudentDaoImpl implements StudentDao {
@@ -41,8 +41,8 @@ public class StudentDaoImpl implements StudentDao {
 
     @Override
     public Optional<Student> findById(int studentId) {
-        // query() returns an empty list when nothing matches; queryForObject() would throw
-        // EmptyResultDataAccessException instead
+        // query() gives back an empty list when nothing matches.
+        // queryForObject() would throw EmptyResultDataAccessException instead.
         return jdbcTemplate.query("select id, name, city from student where id = ?", ROW_MAPPER, studentId)
                 .stream()
                 .findFirst();
