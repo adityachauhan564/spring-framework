@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Size;
 /*
  * The JSON keys come from the getter names: getName() -> "name".
  * The course named the fields pName / pPrice, so the getters were getPName(), which Jackson turns into
- * "pname" (it lower-cases the leading capitals). The Angular model expected "pName" and got nothing.
+ * "pname" (it makes the leading capital letters small). The Angular model expected "pName" and got nothing.
  * Plain names avoid the whole problem.
  */
 @Entity

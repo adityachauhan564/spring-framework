@@ -20,13 +20,13 @@ import com.bootcamp.productservice.service.ProductService;
 import jakarta.validation.Valid;
 
 /*
- * REST style: one resource URL, the HTTP method says what happens.
+ * REST style: one resource URL, and the HTTP method says what happens to it.
  *   GET    /api/products?search=pen   list (optionally filtered)     200
  *   GET    /api/products/{id}         one product                     200 / 404
  *   POST   /api/products              create                          201 / 400
  *   PUT    /api/products/{id}         replace                         200 / 400 / 404
  *   DELETE /api/products/{id}         delete                          204 / 404
- * The course used verbs in the paths (/save, /update/{id}, /delete/{id}): the method already says that.
+ * The course used verbs in the paths (/save, /update/{id}, /delete/{id}). Not needed: the HTTP method already says that.
  */
 @RestController
 @RequestMapping("/api/products")
@@ -60,7 +60,7 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)     // success, and nothing to send back
+	@ResponseStatus(HttpStatus.NO_CONTENT)     // 204: it worked, and there is nothing to send back
 	public void delete(@PathVariable Integer id) {
 		productService.delete(id);
 	}
