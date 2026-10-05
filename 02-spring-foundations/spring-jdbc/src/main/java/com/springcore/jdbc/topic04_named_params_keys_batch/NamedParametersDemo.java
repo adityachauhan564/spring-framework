@@ -8,9 +8,10 @@ import com.springcore.jdbc.topic01_datasource_and_jdbctemplate.JdbcConfig;
 
 /*
  * Run      : ./mvnw -q -pl spring-jdbc compile exec:java -Dexec.mainClass=com.springcore.jdbc.topic04_named_params_keys_batch.NamedParametersDemo
- * Key idea : NamedParameterJdbcTemplate = JdbcTemplate with :names instead of ? positions.
- *            KeyHolder gives you the generated id; batchUpdate sends many rows in one go.
- * Try this : add findByTitleLike(String text) using "where title like :pattern".
+ * Key idea : - NamedParameterJdbcTemplate = JdbcTemplate, but with :names instead of ? positions.
+ *            - KeyHolder gives you the id that the database generated.
+ *            - batchUpdate sends many rows in one go.
+ * Try this : Add findByTitleLike(String text) using "where title like :pattern".
  */
 public class NamedParametersDemo {
 

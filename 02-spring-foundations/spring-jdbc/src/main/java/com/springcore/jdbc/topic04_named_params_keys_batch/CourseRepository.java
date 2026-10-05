@@ -24,8 +24,8 @@ public class CourseRepository {
         this.jdbc = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    // 1. named parameters (:title) instead of ? - readable, and order no longer matters
-    // 2. KeyHolder receives the id the database generated (AUTO_INCREMENT)
+    // 1. named parameters (:title) instead of ? - easier to read, and the order no longer matters
+    // 2. KeyHolder catches the id that the database generated (AUTO_INCREMENT)
     public Course save(Course course) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource params = new MapSqlParameterSource()
@@ -35,8 +35,9 @@ public class CourseRepository {
         return new Course(keyHolder.getKey().intValue(), course.title(), course.fee());
     }
 
-    // 3. batch: one round trip to the database for many rows. Named parameters are read
-    //    from the record's accessors (title(), fee()).
+    // 3. batch: many rows sent to the database in ONE trip, not one trip per row.
+    //    Like a delivery van carrying 50 parcels at once instead of 50 separate bike rides.
+    //    The named parameters are read from the record's methods (title(), fee()).
     public int saveAll(List<Course> courses) {
         int[] counts = jdbc.batchUpdate("insert into course (title, fee) values (:title, :fee)",
                 SqlParameterSourceUtils.createBatch(courses));
