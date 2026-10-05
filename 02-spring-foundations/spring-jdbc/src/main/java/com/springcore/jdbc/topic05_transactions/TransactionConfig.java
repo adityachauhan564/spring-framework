@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.springcore.jdbc.topic01_datasource_and_jdbctemplate.JdbcConfig;
 
 /*
- * Two things switch transactions on:
- *   @EnableTransactionManagement - wrap @Transactional beans in a transaction proxy
- *   a PlatformTransactionManager  - knows HOW to begin/commit/rollback; for plain JDBC
- *                                   that's DataSourceTransactionManager (spring-orm uses
+ * Two things are needed to switch transactions on:
+ *   @EnableTransactionManagement - wraps @Transactional beans in a transaction proxy
+ *   a PlatformTransactionManager  - knows HOW to begin / commit / roll back. For plain JDBC
+ *                                   that is DataSourceTransactionManager (spring-orm uses
  *                                   HibernateTransactionManager / JpaTransactionManager)
  */
 @Configuration

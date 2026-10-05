@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 /*
  * Topic    : Transactions
  * Read     : AccountRepository -> TransferService -> TransactionConfig -> TransactionsDemo
- * Each method is ONE SQL statement. Whether several statements succeed or fail
- * TOGETHER is decided one level up, in the service.
+ * Each method here runs just ONE SQL statement.
+ * Whether several statements succeed or fail TOGETHER is decided one level up, in the service.
  */
 @Repository
 public class AccountRepository {
@@ -23,7 +23,7 @@ public class AccountRepository {
     }
 
     public void changeBalance(int id, int delta) {
-        // the CHECK (balance >= 0) constraint in schema.sql rejects an overdraft
+        // the CHECK (balance >= 0) rule in schema.sql refuses to let a balance go below zero
         jdbc.update("update account set balance = balance + ? where id = ?", delta, id);
     }
 
