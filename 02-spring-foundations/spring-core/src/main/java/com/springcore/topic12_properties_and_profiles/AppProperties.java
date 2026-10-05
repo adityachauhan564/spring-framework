@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /*
- * ${key} looks a value up in the Environment (property files, system properties,
- * environment variables). ${key:default} supplies a fallback when the key is missing.
- * Spring converts the text to the field type (here String and int).
+ * ${key} looks up a value in the Environment.
+ * (The Environment = all the places Spring reads settings from: property files,
+ * system properties, and environment variables.)
+ * ${key:default} gives a backup value when the key is missing.
+ * Spring also converts the text into the field's type (here String and int).
  */
 @Component
 public class AppProperties {
@@ -20,7 +22,7 @@ public class AppProperties {
     @Value("${app.greeting}")
     private String greeting;
 
-    @Value("${app.timeout-seconds:30}")      // not in app.properties -> 30
+    @Value("${app.timeout-seconds:30}")      // this key is not in app.properties, so the default 30 is used
     private int timeoutSeconds;
 
     @Override
