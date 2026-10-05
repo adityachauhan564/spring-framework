@@ -10,10 +10,10 @@ import com.udemy.web.services.restful_web_services.topic01_hello_world.HelloWorl
 
 /*
  * Topic    : Reading data from a request
- * Key idea : the three places a client puts data in a GET request:
- *   path     /hello-world/path-variable/Adi   -> @PathVariable  (identifies a resource)
- *   query    /greet?name=Adi&times=2          -> @RequestParam  (options, filters, paging)
- *   header   Accept-Language: hi              -> @RequestHeader (metadata about the request)
+ * Key idea : A client can put data in three places in a GET request:
+ *   path     /hello-world/path-variable/Adi   -> @PathVariable  (says WHICH thing, like a house number)
+ *   query    /greet?name=Adi&times=2          -> @RequestParam  (extra options, filters, paging)
+ *   header   Accept-Language: hi              -> @RequestHeader (information about the request itself)
  *   A JSON body (@RequestBody) comes with POST/PUT - see topic03.
  * Try this : curl "localhost:8080/greet?name=Adi&times=3"
  *            curl -H "Accept-Language: hi" localhost:8080/greet
