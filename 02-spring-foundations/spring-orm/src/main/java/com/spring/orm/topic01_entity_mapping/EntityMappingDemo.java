@@ -12,10 +12,11 @@ import com.spring.orm.topic02_session_factory_config.HibernateConfig;
 
 /*
  * Run      : ./mvnw -q -pl spring-orm compile exec:java -Dexec.mainClass=com.spring.orm.topic01_entity_mapping.EntityMappingDemo
- * Key idea : you never wrote CREATE TABLE - Hibernate generated student_detail from the
- *            annotations on Student. This demo reads the table back from the database to prove it.
- *            (The wiring in HibernateConfig is explained in topic02.)
- * Try this : rename a field without @Column and run again - the column name follows the field.
+ * Key idea : You never wrote CREATE TABLE. Hibernate made the student_detail table by itself,
+ *            just by reading the annotations on Student.
+ *            This demo reads the table details back from the database to prove it.
+ *            (How HibernateConfig is wired is explained in topic02.)
+ * Try this : Rename a field that has no @Column and run again - the column name changes with the field.
  */
 public class EntityMappingDemo {
 
