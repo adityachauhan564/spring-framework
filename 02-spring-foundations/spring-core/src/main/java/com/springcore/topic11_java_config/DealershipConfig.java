@@ -4,9 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /*
- * A second configuration class. Split config by area (web, data, security...) and
- * combine the parts with @Import.
- * Here the dependency arrives as a METHOD PARAMETER - Spring passes the Car bean in.
+ * A second configuration class. In big apps you split config by area
+ * (web, data, security...) and join the parts together with @Import.
+ * Like chapters of one book: each chapter is separate, the index (@Import) links them.
+ * Here the dependency comes in as a METHOD PARAMETER - Spring passes the Car bean in for you.
  */
 @Configuration
 public class DealershipConfig {

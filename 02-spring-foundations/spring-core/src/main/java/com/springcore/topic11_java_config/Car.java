@@ -1,6 +1,6 @@
 package com.springcore.topic11_java_config;
 
-/* Needs an Engine - wired in AppConfig.car(), not with annotations in this class. */
+/* A Car needs an Engine. The wiring happens in AppConfig.car(), not with annotations in this class. */
 public class Car {
 
     private final Engine engine;
