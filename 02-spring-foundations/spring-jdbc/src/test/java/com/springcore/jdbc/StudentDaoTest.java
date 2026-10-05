@@ -14,10 +14,10 @@ import com.springcore.jdbc.topic02_crud_dao.Student;
 import com.springcore.jdbc.topic02_crud_dao.StudentDao;
 import com.springcore.jdbc.topic02_crud_dao.StudentDaoImpl;
 
-/* DB_URL is blanked so tests always use in-memory H2, never a real MySQL database. */
+/* DB_URL is set to empty here, so tests always use the in-memory H2 database - never a real MySQL database. */
 @SpringJUnitConfig({JdbcConfig.class, StudentDaoImpl.class})
 @TestPropertySource(properties = "DB_URL=")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)   // fresh database per test
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)   // a fresh, empty database for every test
 class StudentDaoTest {
 
     @Autowired
