@@ -15,7 +15,8 @@ import com.spring.orm.topic02_session_factory_config.HibernateConfig;
  *                           (this is "dirty checking"), and get() gives back the same object
  *                           (this is the "first-level cache").
  *              detached   - its Session is closed. Changes are NOT saved until you merge() it.
- *            - Like a library book: on the shelf (transient), issued in your name (persistent),
+ *            - Like a book and a library: a book you just bought yourself (transient - the library
+ *              has no record of it), a book issued in your name (persistent - the library tracks it),
  *              taken home after the library closed (detached - the library can't see your notes).
  *            - This explains the two most common Hibernate surprises:
  *              "why did my change save without update()?" and "why didn't my change save?"

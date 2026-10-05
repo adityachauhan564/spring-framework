@@ -11,8 +11,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *              constructor - same as byType, but passes it through the constructor
  *            - byType fails when two beans have the same type. Spring cannot choose.
  *              The second XML file shows this on purpose.
- *            - Like a courier: byName = deliver by flat number, byType = "give it to whoever is the watchman".
- *              If there are two watchmen, the courier gets confused.
+ *            - Like a courier: byName = deliver by flat number, byType = "give it to whoever is the security guard".
+ *              If there are two security guards, the courier gets confused.
  * Run      : ./mvnw -q -pl spring-core compile exec:java -Dexec.mainClass=com.springcore.topic05_xml_autowiring.XmlAutowiringDemo
  * Next     : topic06 does the same with @Autowired and fixes the ambiguity with @Qualifier.
  */

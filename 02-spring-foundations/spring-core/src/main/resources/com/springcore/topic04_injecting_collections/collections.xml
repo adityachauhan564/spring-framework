@@ -38,7 +38,7 @@
     </bean>
 
     <!-- 2. Standalone collections: each one is its own bean, so other beans can share it.
-         list-class / map-class choose the exact Java class (LinkedList keeps order, TreeMap sorts the keys). -->
+         list-class / map-class choose the exact Java class (e.g. LinkedList instead of ArrayList, TreeMap so the keys come out sorted). -->
     <util:list id="memberList" list-class="java.util.LinkedList">
         <value>Aditya</value>
         <value>Roshan</value>

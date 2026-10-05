@@ -9,7 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * CORS: the Angular app is served from http://localhost:4200 and calls http://localhost:8080.
  * A different port = a different ORIGIN, and browsers block such calls unless the server answers
  * with "Access-Control-Allow-Origin: http://localhost:4200".
- * Like a society guard who lets in only visitors whose names are on the resident's list.
+ * Like your own building's guard (the browser) who checks the other society's guest list
+ * (the backend's allowed origins) before handing you their reply. The request itself still reaches the server.
  * For PUT/DELETE and JSON bodies the browser first sends an OPTIONS "preflight" request to ask
  * permission. Spring answers it from this configuration.
  * CORS is checked by the BROWSER only: curl and Postman ignore it - that is why the API "worked" before.
