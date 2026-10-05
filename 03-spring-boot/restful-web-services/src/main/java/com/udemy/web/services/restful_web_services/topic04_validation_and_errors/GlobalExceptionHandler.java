@@ -18,11 +18,12 @@ import com.udemy.web.services.restful_web_services.topic03_crud_resource.UserNot
 
 /*
  * Topic    : Validation and consistent error responses
- * Key idea : 1. @Valid on a @RequestBody checks the annotations on User (@Size, @Past...);
- *               a violation throws MethodArgumentNotValidException BEFORE the method runs.
+ * Key idea : 1. @Valid on a @RequestBody checks the rules written on User (@Size, @Past...).
+ *               If a rule is broken, MethodArgumentNotValidException is thrown BEFORE the method runs.
+ *               Like a security guard checking your ID before you enter the office.
  *            2. ONE @RestControllerAdvice turns every error into the same JSON shape:
  *               ProblemDetail (RFC 9457) - {"type","title","status","detail","instance",...}.
- *            Extending ResponseEntityExceptionHandler gives ProblemDetail bodies for all of
+ *            Extending ResponseEntityExceptionHandler gives the same ProblemDetail bodies for
  *            Spring MVC's own errors too (bad JSON, wrong method, missing parameter...).
  * Try this : curl -i -u admin:admin123 -X POST localhost:8080/users -H "Content-Type: application/json" -d "{\"name\":\"A\",\"birthDate\":\"2999-01-01\"}"
  */
@@ -36,7 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problem;
     }
 
-    // override the built-in handling of @Valid failures to list every field error
+    // replaces the built-in handling of @Valid failures, so that every field error is listed
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
             HttpHeaders headers, HttpStatusCode status, WebRequest request) {
