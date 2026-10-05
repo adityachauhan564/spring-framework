@@ -2,7 +2,7 @@
 
 > A Spring Boot backend for movies, theatres, shows, reviews and ticket booking. It has real security (BCrypt and roles), safe booking when many people book at once (transactions and optimistic locking), and booking notifications that run inside the app or through **Kafka**, with email. Built during the GeeksforGeeks JBDL course (package `com.gfg.showtime`).
 
-**Before this:** [digital-library](../digital-library) (relationships, validation, errors). ShowTime adds the problems a real booking system has: who may do what, two people wanting the same seat, and side effects like emails that must not break a booking or send it twice.
+**Before this:** [digital-library](../digital-library) (relationships, validation, errors). ShowTime adds the problems a real booking system has: who may do what, two people wanting the same seat, and side effects like emails, which must not break a booking or create a second one.
 
 ## Why it matters
 Booking looks like "mark a seat as taken". Doing it correctly means answering four questions:

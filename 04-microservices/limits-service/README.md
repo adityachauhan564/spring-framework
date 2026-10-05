@@ -46,7 +46,7 @@ curl localhost:8080/limits                       # the new value
 - The config server finds files by `spring.application.name`: `limit-service-microservices` → `limit-service-microservices[-profile].properties`.
 - Values from the config server **override** the local `application.properties`.
 - `optional:configserver:` = start with the local values if the server can't be reached. Without `optional:`, startup fails.
-- `/actuator/refresh` reads the config again and **rebinds `@ConfigurationProperties` beans** (fills them with the new values). A plain `@Value` field is *not* updated unless its bean is `@RefreshScope`. That is why `LimitsProperties` is a class with setters that can change, not a record.
+- `/actuator/refresh` reads the config again and **rebinds `@ConfigurationProperties` beans** (fills them with the new values). A plain `@Value` field is *not* updated unless its bean is `@RefreshScope`. That is why `LimitsProperties` is a class with setters (so its values can be changed), not a record.
 - Refresh updates only one instance (one running copy of the service). With many instances, Spring Cloud Bus sends the refresh to all of them (not covered here).
 - The config class used to be called `Configuration`, which clashes with Spring's `@Configuration`. It is now `LimitsProperties`.
 - This service does **not** register with Eureka, because nothing calls it.

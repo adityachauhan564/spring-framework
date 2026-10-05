@@ -49,7 +49,7 @@ For MySQL: `export DB_PASSWORD=...`, then `./mvnw spring-boot:run -Dspring-boot.
 7. `src/test/java/.../ProductApiTest.java`
 
 ## Revision notes
-- **CORS is enforced by the browser only.** A page and an API on different ports are different *origins* (an origin = scheme + host + port). The browser sends the request (or first an `OPTIONS` preflight, for PUT/DELETE and JSON bodies). The request still reaches the server, but the browser only lets the page read the answer if the server replies with `Access-Control-Allow-Origin: <that origin>`. curl and Postman ignore all of this, so "it works in Postman" proves nothing about the browser.
+- **CORS is enforced by the browser only.** A page and an API on different ports are different *origins* (an origin = scheme + host + port). The browser sends the request (or first an `OPTIONS` preflight, for PUT/DELETE and JSON bodies). The request still reaches the server (for a preflighted call, at least the OPTIONS check does), but the browser only lets the page read the answer if the server replies with `Access-Control-Allow-Origin: <that origin>`. curl and Postman ignore all of this, so "it works in Postman" proves nothing about the browser.
 - **Allowed origins:** list them exactly (`http://localhost:4200`). `*` would let any website's scripts call your API from a visitor's browser.
 - **Jackson naming:** JSON keys come from getter names, and `getPName()` becomes `"pname"`. The course's `pName` / `pPrice` fields never matched the Angular model. Plain `name` / `price` / `quantity` avoid the problem.
 - **Status codes:** POST → 201, PUT → 200, DELETE → 204 (nothing to return), missing → 404, invalid → 400. The course returned 200 plus a text message for delete.

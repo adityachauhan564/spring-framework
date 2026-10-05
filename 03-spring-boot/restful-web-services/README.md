@@ -91,7 +91,7 @@ curl -H "X-API-Version: 2" localhost:8080/person                              # 
   - Adding the security starter locks **everything**. `SecurityConfig` then opens GET requests and the docs, and asks for the `ADMIN` role for changes.
   - A missing or wrong login gives **401** (who are you?). Logged in but not allowed gives **403** (you can't do this).
   - Passwords are stored hashed (`{bcrypt}`).
-  - CSRF protection is off only because this is a stateless API that sends the login with every request. A browser app that uses session cookies must keep CSRF protection on.
+  - CSRF protection is off only because this is a stateless API, and the client sends the login with every request. A browser app that uses session cookies must keep CSRF protection on.
 
 ## Revision checklist
 - [ ] Which status code for create, delete, not found, invalid input, not logged in, and not allowed.
