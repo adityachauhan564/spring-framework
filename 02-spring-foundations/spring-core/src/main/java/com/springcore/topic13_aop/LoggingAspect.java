@@ -11,8 +11,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 /*
- * An aspect = code that applies to MANY methods (a cross-cutting concern: logging,
- * security, transactions) kept in ONE place.
+ * An aspect = code needed by MANY methods, kept in ONE place.
+ * Such code is called a "cross-cutting concern": logging, security, transactions.
+ * Like CCTV in a mall - it covers every shop, but no shop has to install its own.
  *   pointcut - WHICH methods  (here: every public method of OrderService)
  *   advice   - WHAT to run and WHEN (@Before, @AfterReturning, @AfterThrowing, @Around)
  */

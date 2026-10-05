@@ -6,8 +6,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 /*
- * @Around wraps the call: code before, proceed() runs the real method, code after.
- * The pointcut selects methods by ANNOTATION instead of by name.
+ * @Around wraps the whole call: some code before, then proceed() runs the real method, then some code after.
+ * Like a stopwatch: start it, let the runner run, stop it.
+ * This pointcut picks methods by their ANNOTATION (@Timed), not by their name.
  */
 @Aspect
 @Component
@@ -17,7 +18,7 @@ public class TimingAspect {
     public Object time(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.nanoTime();
         try {
-            return joinPoint.proceed();          // forgetting proceed() means the method never runs
+            return joinPoint.proceed();          // if you forget proceed(), the real method never runs at all
         } finally {
             long micros = (System.nanoTime() - start) / 1_000;
             System.out.println("  [timing] " + joinPoint.getSignature().getName() + " took " + micros + " us");

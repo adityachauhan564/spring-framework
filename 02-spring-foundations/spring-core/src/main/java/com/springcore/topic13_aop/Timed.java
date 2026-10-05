@@ -8,7 +8,8 @@ import java.lang.annotation.Target;
 /*
  * Topic    : AOP - Aspect-Oriented Programming
  * Read     : Timed -> OrderService -> LoggingAspect -> TimingAspect -> AopConfig -> AopDemo
- * A marker annotation: TimingAspect times every method that carries @Timed.
+ * A marker annotation (a label with no code inside): TimingAspect measures the time
+ * of every method that has @Timed on it.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
