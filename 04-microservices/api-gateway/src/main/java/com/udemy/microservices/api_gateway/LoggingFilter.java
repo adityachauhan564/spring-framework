@@ -10,9 +10,10 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /*
- * A GlobalFilter runs for EVERY request on every route (a route filter runs only on its route).
- * The gateway is REACTIVE (Spring WebFlux): filters return Mono<Void> - "work that completes
- * later" - instead of blocking a thread while the backend answers.
+ * A GlobalFilter runs for EVERY request on every route (a route filter runs only on its own route).
+ * The gateway is REACTIVE (Spring WebFlux): filters return Mono<Void> - "work that will finish
+ * later" - instead of keeping a thread waiting while the backend answers.
+ * Like a token system at a hospital: you get a token and sit down, nobody stands blocking the queue.
  */
 @Component
 public class LoggingFilter implements GlobalFilter {

@@ -13,8 +13,8 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.test.context.ActiveProfiles;
 
 /*
- * Checks the route table itself - which path goes where - without starting any backend.
- * (The routes are exercised for real by the start-all walkthrough in the stage README.)
+ * Checks the route table itself - which path goes where - without starting any backend service.
+ * (The routes are tested for real by the start-all walkthrough in the stage README.)
  */
 @SpringBootTest
 @ActiveProfiles("test")
