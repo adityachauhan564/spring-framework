@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import com.springboot.udemy.ranga.topic02_jpa_entity_manager.Course;
 
 /*
- * Runs once at startup. Each topic has a runner like this, working on its own ids
- * (topic01: 1-3, topic02: 11-13, topic03: 21-23, topic04 reads everything).
+ * Runs once, at startup. Each topic has a runner like this one, and each uses its own ids
+ * so they don't clash (topic01: 1-3, topic02: 11-13, topic03: 21-23, topic04 reads everything).
  */
 @Component
 @Order(1)
