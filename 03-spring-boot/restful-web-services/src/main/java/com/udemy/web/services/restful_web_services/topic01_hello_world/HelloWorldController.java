@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /*
  * Topic    : Your first REST endpoints
- * Key idea : @RestController methods return DATA. A String is sent as plain text;
- *            an object (record) is converted to JSON by Jackson - no configuration needed,
- *            Spring Boot set it all up (compare 02-spring-foundations/spring-mvc topic07).
+ * Key idea : @RestController methods return DATA, not pages.
+ *            - A String is sent as plain text.
+ *            - An object (record) is turned into JSON by Jackson. No configuration needed:
+ *              Spring Boot set it all up (compare 02-spring-foundations/spring-mvc topic07).
+ *            - Like a vending machine: press a button (URL), get the item (data) - no waiter, no menu card.
  * Try this : curl localhost:8080/hello-world
  *            curl localhost:8080/hello-world-bean
  */
