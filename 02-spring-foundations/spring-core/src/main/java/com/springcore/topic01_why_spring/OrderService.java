@@ -1,10 +1,12 @@
 package com.springcore.topic01_why_spring;
 
 /*
- * Business logic that depends only on the PaymentService interface.
- * It never calls 'new UpiPayment()': someone else hands it a PaymentService
- * through the constructor. That "someone else" is you (ManualWiringDemo)
+ * The business logic. It only knows the PaymentService interface,
+ * not whether the payment is UPI or card.
+ * It never writes 'new UpiPayment()' itself. Someone else gives it a PaymentService
+ * through the constructor. That "someone else" is either you (ManualWiringDemo)
  * or the Spring container (ContainerWiringDemo).
+ * Like a shopkeeper who accepts any payment - the shop does not care which app you use.
  */
 public class OrderService {
 
