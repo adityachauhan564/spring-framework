@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Loaded by the DispatcherServlet named "spring" (see web.xml).
-  The original tutorial declared everything here in XML: the view resolver, the DataSource,
-  the SessionFactory, the transaction manager. The same beans now live in Java
-  @Configuration classes (topic01 WebMvcConfig, topic04 PersistenceConfig), so this file
-  only has to point at the Java config - and the tests can load exactly the same config.
+  The original tutorial wrote everything here in XML: the view resolver, the DataSource,
+  the SessionFactory, the transaction manager.
+  The same beans now live in Java @Configuration classes (topic01 WebMvcConfig,
+  topic04 PersistenceConfig). So this file only points to the Java config -
+  and the tests can load exactly the same config.
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,7 +15,7 @@
            http://www.springframework.org/schema/context
            https://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!-- process @Configuration / @Bean in the class below -->
+    <!-- tells Spring to read @Configuration / @Bean in the class below -->
     <context:annotation-config/>
 
     <bean class="springmvc.topic01_dispatcher_and_config.WebMvcConfig"/>

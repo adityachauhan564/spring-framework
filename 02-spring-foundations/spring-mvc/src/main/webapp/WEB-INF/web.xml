@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Topic 01: the entry point of a Spring MVC web app.
-  The server (Jetty / Tomcat) reads this file at startup. It registers ONE servlet, Spring's
-  DispatcherServlet, as the "front controller": every request (url-pattern "/") goes to it,
-  and it forwards each request to the right @Controller method.
-  With no contextConfigLocation, the DispatcherServlet named "spring" loads
-  /WEB-INF/spring-servlet.xml by naming convention (<servlet-name>-servlet.xml).
+  The server (Jetty / Tomcat) reads this file when it starts. It registers ONE servlet:
+  Spring's DispatcherServlet, the "front controller" (the main gate).
+  Every request (url-pattern "/") goes to it first, and it passes each request
+  to the right @Controller method.
+  There is no contextConfigLocation here, so the DispatcherServlet named "spring" loads
+  /WEB-INF/spring-servlet.xml by a naming rule: <servlet-name>-servlet.xml.
 -->
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -13,7 +14,7 @@
          version="6.0">
   <display-name>springmvc</display-name>
 
-  <!-- decode form data as UTF-8, so names like "Anaïs" arrive intact -->
+  <!-- read form data as UTF-8, so names with special letters like "Anaïs" arrive correctly -->
   <filter>
     <filter-name>encodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
