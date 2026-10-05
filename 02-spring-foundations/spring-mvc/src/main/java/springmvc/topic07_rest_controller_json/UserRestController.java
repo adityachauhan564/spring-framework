@@ -20,12 +20,13 @@ import springmvc.topic06_exception_handling.UserNotFoundException;
 import jakarta.validation.Valid;
 
 /*
- * Key idea : @RestController = @Controller + @ResponseBody: methods return DATA, which
- *            Jackson turns into JSON - no view, no JSP. Same UserService as the web pages.
+ * Key idea : @RestController = @Controller + @ResponseBody. The methods return DATA,
+ *            and Jackson (a JSON library) turns it into JSON. No view, no JSP.
+ *            It uses the same UserService as the web pages.
  *              GET  /api/users       -> 200 + list
  *              GET  /api/users/{id}  -> 200, or 404 (RestExceptionHandler)
  *              POST /api/users       -> 201 Created + Location header, 400 if invalid, 409 if taken
- *            Spring Boot (stage 03) builds REST APIs exactly like this, minus the setup.
+ *            Spring Boot (stage 03) builds REST APIs exactly like this, just without all the setup.
  * Try this : curl http://localhost:8080/springmvc/api/users
  *            curl -X POST -H "Content-Type: application/json" \
  *                 -d "{\"userName\":\"Asha\",\"email\":\"asha@example.com\",\"password\":\"secret123\"}" \

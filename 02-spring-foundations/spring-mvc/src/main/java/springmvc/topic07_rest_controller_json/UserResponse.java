@@ -5,8 +5,9 @@ import springmvc.topic04_service_and_dao_layers.User;
 /*
  * Topic    : A JSON API with @RestController
  * Read     : UserResponse -> CreateUserRequest -> UserRestController -> RestExceptionHandler
- * What the API SENDS. Returning the User entity directly would leak passwordHash;
- * a response record lists exactly the fields clients may see.
+ * What the API SENDS back. Returning the User entity directly would leak passwordHash.
+ * A response record lists exactly the fields that clients are allowed to see.
+ * Like a bank statement: it shows your balance, not the bank's internal notes.
  */
 public record UserResponse(int id, String userName, String email) {
 
