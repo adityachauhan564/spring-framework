@@ -10,7 +10,7 @@ import com.example.udemy.limit_service_microservices.configuration.LimitsPropert
  * Try this : curl localhost:8080/limits                     -> {"minimum":5,"maximum":995} (dev, from the config server)
  *            edit ../git-local-config-repo/limit-service-microservices-dev.properties, then
  *            curl -X POST localhost:8080/actuator/refresh   -> lists the keys that changed
- *            curl localhost:8080/limits                     -> the new values, no restart
+ *            curl localhost:8080/limits                     -> the new values, without any restart
  */
 @RestController
 public class LimitsController {

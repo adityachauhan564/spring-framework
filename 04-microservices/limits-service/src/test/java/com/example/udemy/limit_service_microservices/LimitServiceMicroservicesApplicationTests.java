@@ -12,8 +12,8 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
 /*
- * No config server in tests: spring.config.import is switched off, so the service must fall
- * back to its own application.properties (3 / 997). The end-to-end check with the real config
+ * No config server in tests: spring.config.import is switched off, so the service must use
+ * its own application.properties as backup (3 / 997). The end-to-end check with the real config
  * server is in the stage README (start-all script).
  */
 @SpringBootTest(properties = {"spring.config.import=", "spring.cloud.config.enabled=false"})
