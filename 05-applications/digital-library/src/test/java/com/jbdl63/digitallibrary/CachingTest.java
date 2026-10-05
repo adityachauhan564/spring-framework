@@ -16,7 +16,7 @@ import com.jbdl63.digitallibrary.repository.AuthorRepository;
 import com.jbdl63.digitallibrary.service.AuthorService;
 
 /*
- * Proves the cache annotations work: a spy wraps the real repository and counts its calls.
+ * Proves the cache annotations work: a spy wraps the real repository and counts how often it is called.
  * (The default profile uses the in-memory cache; the same annotations work unchanged with Redis.)
  */
 @SpringBootTest
@@ -47,6 +47,6 @@ class CachingTest {
         assertThat(authorService.fetchAuthorDetailsByName("R.K. Narayan").getAuthorAddress()).isEqualTo("Chennai");
         verify(authorRepository, times(1)).findByAuthorName("R.K. Narayan");   // still no second query
 
-        authorService.updateAuthorAddress(new UpdateAuthorDto(2, "Mysore"));   // put the sample data back
+        authorService.updateAuthorAddress(new UpdateAuthorDto(2, "Mysore"));   // put the sample data back as it was
     }
 }

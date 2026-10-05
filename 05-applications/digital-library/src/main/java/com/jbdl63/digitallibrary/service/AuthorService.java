@@ -17,10 +17,11 @@ import com.jbdl63.digitallibrary.repository.AuthorRepository;
 
 /*
  * Caching: fetching an author by name is cached, with the name as the key.
- *   @Cacheable  - the first call runs the method and stores the result; later calls return the stored copy
- *   @CachePut   - always runs the method, then REPLACES the stored copy (same key!) with the result
+ * Like a shopkeeper who remembers the price of the item you asked for yesterday, instead of checking the register again.
+ *   @Cacheable  - the first call runs the method and stores the result. Later calls return the stored copy
+ *   @CachePut   - always runs the method, then REPLACES the stored copy (same key!) with the new result
  *   @CacheEvict - removes entries, so the next read goes to the database again
- * The annotations sit on the service, not the controller, so every caller gets the same caching.
+ * The annotations are on the service, not the controller, so every caller gets the same caching.
  */
 @Service
 public class AuthorService {
@@ -35,7 +36,7 @@ public class AuthorService {
 
     public Author addNewAuthor(Author author) {
         author.setAuthorId(null);             // always a new row, whatever id the client sent
-        return authorRepository.save(author); // a duplicate name breaks the unique constraint -> 409
+        return authorRepository.save(author); // a duplicate name breaks the unique rule in the database -> 409
     }
 
     @Cacheable(value = CACHE, key = "#authorName")
@@ -54,10 +55,10 @@ public class AuthorService {
         Author author = authorRepository.findById(update.authorId())
                 .orElseThrow(() -> new DataNotFoundException("Author not found: " + update.authorId()));
         author.setAuthorAddress(update.address());
-        return author;   // inside a transaction, changes to a loaded entity are saved at commit - no save() needed
+        return author;   // inside a transaction, changes to a loaded entity are saved at commit by themselves - no save() needed
     }
 
-    // The cache key is the name but only the id is known here, so the simple correct choice is to clear all
+    // The cache key is the name, but only the id is known here. So the simple, correct choice is to clear everything
     @CacheEvict(value = CACHE, allEntries = true)
     public void deleteById(Integer authorId) {
         if (!authorRepository.existsById(authorId)) {

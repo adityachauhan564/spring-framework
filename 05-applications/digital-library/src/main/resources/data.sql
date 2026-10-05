@@ -1,5 +1,5 @@
--- Sample data for the default (H2) profile. Ids are fixed here so the README's curl commands work;
--- identity columns then continue after them, so new rows get new ids.
+-- Sample data for the default (H2) profile. The ids are fixed here, so the README's curl commands work.
+-- The identity columns then continue counting after them, so new rows get new ids.
 insert into library_author (author_id, author_name, author_address) values (1, 'J.K. Rowling', 'Edinburgh');
 insert into library_author (author_id, author_name, author_address) values (2, 'R.K. Narayan', 'Mysore');
 alter table library_author alter column author_id restart with 3;

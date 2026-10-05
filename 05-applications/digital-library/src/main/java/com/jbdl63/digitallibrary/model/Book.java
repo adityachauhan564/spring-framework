@@ -29,8 +29,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 /*
- * The "many" side of Author 1..* Book: it OWNS the relationship, so the author_id foreign key is here.
- * Book *..* User is a many-to-many; User owns it (see User.issuedBooks), this side is mappedBy.
+ * The "many" side of Author 1..* Book. It OWNS the relationship, so the author_id foreign key is here.
+ * Book *..* User is a many-to-many. User owns that one (see User.issuedBooks); this side is mappedBy.
  */
 @Entity
 @Table(name = "library_book")
@@ -67,17 +67,17 @@ public class Book {
     @Column(nullable = false)
     private String bookCategory;
 
-    // In a request only {"authorId": 1} is needed; BookService loads the real author.
+    // In a request, only {"authorId": 1} is needed. BookService loads the real author.
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
 
-    // Who has this book right now. Hidden in the JSON: GET /v1/users/{id}/books gives the other direction.
+    // Who has this book right now. Hidden in the JSON: GET /v1/users/{id}/books shows it from the other side.
     @ManyToMany(mappedBy = "issuedBooks")
     @JsonIgnore
     private List<User> users = new ArrayList<>();
 
-    // Set by Hibernate, never by a client: READ_ONLY ignores them in request bodies
+    // Set by Hibernate, never by a client. READ_ONLY means they are ignored in request bodies
     @CreationTimestamp
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime creationTime;
