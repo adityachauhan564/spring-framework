@@ -11,8 +11,9 @@
 
 <h1>Reading request data</h1>
 <p>Read with: <code><c:out value="${source}"/></code></p>
-<%-- c:out escapes HTML. The value comes from the URL, so printing it raw with ${value}
-     would let anyone inject a <script> tag (XSS). Try /greet?name=<b>bold</b> --%>
+<%-- c:out escapes HTML (shows < and > as plain text instead of running them).
+     The value comes from the URL, so printing it raw with ${value} would let anyone
+     put a <script> tag into the page (this attack is called XSS). Try /greet?name=<b>bold</b> --%>
 <p class="fs-4"><c:out value="${value}"/></p>
 </body>
 </html>
