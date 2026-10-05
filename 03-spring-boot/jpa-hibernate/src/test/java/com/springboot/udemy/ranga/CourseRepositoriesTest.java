@@ -24,8 +24,9 @@ import com.springboot.udemy.ranga.topic03_spring_data_jpa.CourseSpringDataReposi
  * Test slices for the data layer:
  *   @JdbcTest    - a DataSource + JdbcTemplate + schema.sql, nothing else
  *   @DataJpaTest - JPA + Spring Data repositories + schema.sql, nothing else
- * Each test runs in a transaction that is ROLLED BACK afterwards, so tests never see each
- * other's data. The @Component runners don't run in slices either.
+ * A "slice" starts only one layer of the app, so it is fast.
+ * Each test runs in a transaction that is ROLLED BACK (undone) afterwards, so tests never see
+ * each other's data. The @Component runners don't run in slices either.
  */
 class CourseRepositoriesTest {
 

@@ -12,10 +12,11 @@ import com.springboot.udemy.ranga.topic03_spring_data_jpa.CourseSpringDataReposi
 
 /*
  * Topic    : Query methods, @Query, paging and sorting
- * Key idea : the repository interface in topic03 declares the queries; this runner calls them.
- *            Paging: PageRequest.of(pageNumber, pageSize, sort) - page numbers start at 0.
- *            A Page knows its content AND the totals, so a UI can show "page 1 of 3".
- * Try this : add findByAuthorOrderByNameDesc(String author) to the repository and call it here.
+ * Key idea : - The repository interface in topic03 lists the queries. This runner calls them.
+ *            - Paging = getting results in small pages, like Google showing 10 results per page.
+ *              PageRequest.of(pageNumber, pageSize, sort) - page numbers start at 0.
+ *            - A Page knows its own items AND the totals, so a screen can show "page 1 of 3".
+ * Try this : Add findByAuthorOrderByNameDesc(String author) to the repository and call it here.
  */
 @Component
 @Order(4)
