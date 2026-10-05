@@ -1,15 +1,15 @@
 # Digital Library
 
-> A Spring Boot REST backend for authors, books and library members: JPA relationships, validation, central error handling, issuing and returning books, and caching (in memory by default, Redis optionally). Built during the GeeksforGeeks JBDL batch 63 (package `com.jbdl63`).
+> A Spring Boot REST backend for authors, books and library members: JPA relationships, validation, error handling in one place, issuing and returning books, and caching (in memory by default, Redis if you want). Built during the GeeksforGeeks JBDL batch 63 (package `com.jbdl63`).
 
-**Before this:** [03-spring-boot](../../03-spring-boot) (REST, validation, Spring Data JPA). This is the first "real" application: the same pieces, working together on a small domain.
+**Before this:** [03-spring-boot](../../03-spring-boot) (REST, validation, Spring Data JPA). This is the first "real" application: the same pieces, working together on a small domain (one business area).
 
 ## Why it matters
-Stage 03 covered each concept on its own. A real backend combines them: three related tables, rules that span them ("you can't delete a book someone has borrowed"), errors that must become the right status code, and reads that are fast enough because they're cached.
+Stage 03 covered each idea on its own. A real backend combines them: three related tables, rules that cross tables ("you can't delete a book someone has borrowed"), errors that must become the right status code, and reads that are fast enough because they are cached (kept ready in memory).
 
 ## What it teaches
 - JPA relationships: Author 1..* Book (`@OneToMany` / `@ManyToOne`) and User *..* Book (`@ManyToMany` + a join table)
-- Which side **owns** a relationship, and why that decides where the foreign key lives
+- Which side **owns** a relationship, and why that decides where the foreign key is kept
 - Bean Validation (`@Valid`) and one `@RestControllerAdvice` for 400 / 404 / 409
 - Spring's cache abstraction: `@Cacheable` / `@CachePut` / `@CacheEvict`, the same code with an in-memory map or Redis
 - Redis data structures used directly with `RedisTemplate` (string, list, set, hash)
@@ -37,8 +37,8 @@ curl -X POST $B/authors -H "Content-Type: application/json" -d '{"authorName":""
 | Endpoint | Purpose |
 | --- | --- |
 | `POST /v1/authors`, `GET /v1/authors`, `GET /v1/authors/{name}`, `GET /v1/authors/usingParam?authorName=` | Create, list, fetch by name (cached) |
-| `PUT /v1/authors` (body `{"authorId":1,"address":"..."}`), `DELETE /v1/authors/{id}` | Change the address (refreshes the cache); delete, with their books |
-| `POST /v1/authors/upload-csv` (multipart `file`) | Bulk insert; header line, then `authorName,authorAddress` |
+| `PUT /v1/authors` (body `{"authorId":1,"address":"..."}`), `DELETE /v1/authors/{id}` | Change the address (refreshes the cache); delete, together with their books |
+| `POST /v1/authors/upload-csv` (multipart `file`) | Add many at once; a header line, then `authorName,authorAddress` |
 | `POST /v1/books`, `GET /v1/books/{id}`, `PUT /v1/books/{id}`, `DELETE /v1/books/{id}` | Books; the body needs `"author":{"authorId":1}` |
 | `GET /v1/books?author=...` / `?category=...` | Filters |
 | `POST /v1/users`, `GET/PUT/DELETE /v1/users/{id}` | Members (409 when deleting one who still has books) |
@@ -57,7 +57,7 @@ docker compose up -d                   # Redis on localhost:6379
 docker exec -it digital-library-redis redis-cli    # then: KEYS *   GET "authors::R.K. Narayan"   TTL "authors::R.K. Narayan"
 docker compose down
 ```
-Profiles combine: `--spring.profiles.active=mysql,redis`.
+Profiles can be combined: `--spring.profiles.active=mysql,redis`.
 
 ## Read the code in this order
 1. `Requirements`: the original brief
@@ -71,29 +71,29 @@ Profiles combine: `--spring.profiles.active=mysql,redis`.
 9. `src/test/java/...`: `AuthorServiceTest` (Mockito) → `RepositoryTest` (`@DataJpaTest`) → `LibraryApiTest` (MockMvc) → `CachingTest`
 
 ## Revision notes
-- **Owning side:** the side *without* `mappedBy` owns the relationship and holds the foreign key (`Book.author` → `author_id`). For a many-to-many the owner (`User.issuedBooks`) controls the join table: adding to its list inserts a row in `books_issued`. Changing only the `mappedBy` side saves nothing.
-- **Infinite loops:** Author → books → author → ... breaks both JSON and Lombok's `toString`. Hide one side from JSON (`@JsonIgnore`) and exclude relations from `@ToString`.
-- `@Builder` ignores field initialisers (`= new ArrayList<>()`) unless the field has `@Builder.Default`.
-- **Lazy loading:** a `@OneToMany` / `@ManyToMany` list is loaded when first read, which needs an open transaction. `UserService.findAllBooksIssuedToUser` is `@Transactional(readOnly = true)` and returns a copy. `spring.jpa.open-in-view=false` makes this explicit, instead of keeping a database connection open for the whole HTTP request.
-- **Dirty checking:** inside `@Transactional`, changing a loaded entity is enough; it's saved at commit, with no `save()` call.
-- **409 from the database:** a duplicate unique name, or deleting a row that another table still references, throws `DataIntegrityViolationException`. The handler turns it into 409 instead of a 500.
-- **Cache keys:** `@CachePut` must write the same key that `@Cacheable` reads (here, the author's name), or it just adds a second copy. When you can't compute the key (delete by id), `allEntries = true` is the safe choice.
+- **Owning side:** the side *without* `mappedBy` owns the relationship and holds the foreign key (`Book.author` → `author_id`). For a many-to-many, the owner (`User.issuedBooks`) controls the join table: adding to its list inserts a row in `books_issued`. Changing only the `mappedBy` side saves nothing.
+- **Infinite loops:** Author → books → author → ... goes round forever and breaks both JSON and Lombok's `toString`. Hide one side from JSON (`@JsonIgnore`), and leave relations out of `@ToString`.
+- `@Builder` ignores field starting values (`= new ArrayList<>()`) unless the field has `@Builder.Default`.
+- **Lazy loading:** a `@OneToMany` / `@ManyToMany` list is loaded only when it is first read, and that needs an open transaction. `UserService.findAllBooksIssuedToUser` is `@Transactional(readOnly = true)` and returns a copy. `spring.jpa.open-in-view=false` makes this visible, instead of keeping a database connection open for the whole HTTP request.
+- **Dirty checking:** inside `@Transactional`, changing a loaded entity is enough. It is saved at commit, with no `save()` call.
+- **409 from the database:** a duplicate unique name, or deleting a row that another table still points to, throws `DataIntegrityViolationException`. The handler turns it into 409 instead of a 500.
+- **Cache keys:** `@CachePut` must write the same key that `@Cacheable` reads (here, the author's name). Otherwise it just adds a second copy. When you can't work out the key (delete by id), `allEntries = true` is the safe choice.
 - **Cache location:** put the cache annotations on the service. They work through a Spring proxy, so a call from inside the same class skips the cache.
-- **Cache types:** `spring.cache.type=simple` (a `ConcurrentHashMap`) vs `redis`. The code doesn't change, only a property. Redis survives restarts and is shared by several instances; the in-memory cache is neither.
-- **Redis serialization:** Boot's default for the Redis cache is JDK serialization, binary data that includes the class name, so renaming a package breaks stored values. Here Author is stored as plain JSON, which is readable in `redis-cli` and has no class names. That's why the packages could be lowercased in this version.
-- **`@EnableCaching` placement:** it sits on its own `@Configuration` class, not the application class. Otherwise test slices like `@DataJpaTest` fail with "No CacheManager".
-- **Why ids are ignored on create:** a new entity with an id set is treated as an update of a row that doesn't exist. Hibernate 6.6+ throws for that, so the services clear it.
+- **Cache types:** `spring.cache.type=simple` (a `ConcurrentHashMap`) vs `redis`. The code doesn't change, only a property. Redis survives restarts and is shared by several instances. The in-memory cache does neither. Like a note on the shop's whiteboard that is wiped every night (in memory) vs a register at the head office that every branch reads (Redis).
+- **Redis serialization:** Boot's default for the Redis cache is JDK serialization: binary data that includes the class name, so renaming a package breaks stored values. Here Author is stored as plain JSON. It is readable in `redis-cli` and has no class names. That is why the packages could be made lowercase in this version.
+- **`@EnableCaching` placement:** it sits on its own `@Configuration` class, not on the application class. Otherwise test slices like `@DataJpaTest` fail with "No CacheManager".
+- **Why ids are ignored on create:** a new entity with an id set is treated as an update of a row that doesn't exist. Hibernate 6.6+ throws an error for that, so the services clear the id.
 - **Boot 4 upgrade gotchas:** Jackson 3 writes JSON properties in alphabetical order by default. Redis JSON serializers are now `JacksonJsonRedisSerializer` / `GenericJacksonJsonRedisSerializer` (Jackson 3). `RedisCacheManagerBuilderCustomizer` moved to `org.springframework.boot.cache.autoconfigure`.
 - The CSV upload splits on `\r?\n`, so Windows line endings don't leave a `\r` in the last column.
 
 ## Status
-✅ **Working.** 17 tests pass. Checked over HTTP on H2, and with the `redis` profile against Redis 7 in Docker (JSON values, 10-minute TTL, `@CachePut` refresh). The `mysql` profile was checked against MySQL 8.4 in Docker: the tables and the `books_issued` join table are created, the unique-name and foreign-key conflicts return 409, and issued books survive a restart.
+✅ **Working.** 17 tests pass. Checked over HTTP on H2, and with the `redis` profile against Redis 7 in Docker (JSON values, 10-minute TTL (how long an entry lives), `@CachePut` refresh). The `mysql` profile was checked against MySQL 8.4 in Docker: the tables and the `books_issued` join table are created, the unique-name and foreign-key conflicts return 409, and issued books are still there after a restart.
 
 Changes from the course version:
 - Boot 3.2 → 4.0 and Gradle 8.5 → 9.1
-- H2 by default instead of placeholder MySQL credentials
+- H2 by default, instead of placeholder MySQL credentials
 - lowercase packages
-- `User.getIssuedBooks()` no longer a stub that returned `null`
+- `User.getIssuedBooks()` is no longer a stub that returned `null`
 - issue/return, update-book and by-category APIs added
 - constructor injection
 - Boot's auto-configured Redis client instead of a hard-coded Jedis bean

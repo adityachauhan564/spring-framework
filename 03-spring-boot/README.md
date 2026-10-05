@@ -1,15 +1,15 @@
 # 03 - Spring Boot, REST and Persistence
 
-Spring Boot takes everything you configured by hand in [02 - Spring Foundations](../02-spring-foundations/) and does it for you, based on what's on the classpath. This stage covers how that works, then REST API design, then databases with JPA, and finishes with a complete API. Next stage: [04 - Microservices](../04-microservices/), which relies on Boot's configuration, profiles and Actuator.
+Spring Boot takes everything you set up by hand in [02 - Spring Foundations](../02-spring-foundations/) and does it for you, based on which libraries are on the classpath. This stage covers how that works, then REST API design, then databases with JPA, and ends with a complete API. Next stage: [04 - Microservices](../04-microservices/), which depends on Boot's configuration, profiles and Actuator.
 
 ## Run it (nothing to install except JDK 21)
-Every project uses in-memory H2 or no database at all, and runs on Boot's embedded Tomcat.
+Every project uses in-memory H2 or no database at all, and runs on Boot's embedded Tomcat (a web server inside the app).
 ```bash
 cd 03-spring-boot
 ./mvnw verify                                    # build and test all 4 projects (37 tests)
 cd restful-web-services && ./mvnw spring-boot:run   # or run any single project from its folder
 ```
-On Windows use `mvnw.cmd`. Each project listens on port 8080, so run one at a time.
+On Windows, use `mvnw.cmd`. Every project listens on port 8080, so run only one at a time.
 
 | # | Project | Topics | Status |
 | :- | :--- | :--- | :--- |
@@ -19,30 +19,30 @@ On Windows use `mvnw.cmd`. Each project listens on port 8080, so run one at a ti
 | 4 | [rest-first-books-api](./rest-first-books-api/) | Capstone: layers, DTOs, validation, errors, search, paging, H2/MySQL profiles, tests per layer | ✅ Working (8 tests) |
 
 ## Suggested study order
-1. **spring-boot-basics**: how Boot configures itself. Everything after this builds on it.
+1. **spring-boot-basics**: how Boot sets itself up. Everything after this builds on it.
 2. **restful-web-services**: REST design, without a database getting in the way.
-3. **jpa-hibernate**: the three persistence approaches, from most code to least.
+3. **jpa-hibernate**: the three ways to work with a database, from the most code to the least.
 4. **rest-first-books-api**: put it all together into one complete API.
 
 ## Spring Boot 4 notes
-These projects use Spring Boot **4.0** (Spring Framework 7, Hibernate 7, Jackson 3). Older tutorials differ in a few places:
+These projects use Spring Boot **4.0** (Spring Framework 7, Hibernate 7, Jackson 3). Older tutorials are different in a few places:
 - **Starters were renamed or split:** `spring-boot-starter-webmvc` (was `-web`), `spring-boot-h2console`, and one test starter per technology (`spring-boot-starter-webmvc-test`, `-data-jpa-test`, `-security-test`...).
-- **Test annotations moved packages:** for example `org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest` and `org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest`.
-- **Jackson 3:** the code lives in `tools.jackson.*`, but the annotations (`@JsonIgnore`, `@JsonView`) are still in `com.fasterxml.jackson.annotation`.
+- **Test annotations moved to new packages:** for example `org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest` and `org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest`.
+- **Jackson 3:** the code is in `tools.jackson.*`, but the annotations (`@JsonIgnore`, `@JsonView`) are still in `com.fasterxml.jackson.annotation`.
 - **API versioning is built in:** `@GetMapping(version = "2")` (restful-web-services topic06).
-- **Security in `@WebMvcTest`** needs `spring-boot-starter-security-test`; `spring-security-test` alone is no longer enough.
-- **springdoc:** the 3.x line works with Boot 4, while 2.x targets Boot 3.
+- **Security in `@WebMvcTest`** needs `spring-boot-starter-security-test`. `spring-security-test` alone is no longer enough.
+- **springdoc:** the 3.x line works with Boot 4, while 2.x is for Boot 3.
 
 ## Quick revision checklist
-- [ ] What auto-configuration is, how `@ConditionalOnMissingBean` lets your beans win, and how to see Boot's decisions
+- [ ] What auto-configuration is, how `@ConditionalOnMissingBean` lets your own beans win, and how to see Boot's decisions
 - [ ] `@ConfigurationProperties` vs `@Value`; what overrides `application.yml`
 - [ ] Profiles: profile-specific files and `@Profile` beans
 - [ ] Actuator health/info/metrics, and which endpoints must never be public
 - [ ] REST status codes: 200, 201 + `Location`, 204, 400, 401, 403, 404, 409
-- [ ] `@Valid` + `@RestControllerAdvice` + ProblemDetail for consistent errors
+- [ ] `@Valid` + `@RestControllerAdvice` + ProblemDetail, so errors have the same shape everywhere
 - [ ] DTOs vs returning entities; `@JsonIgnore` vs `@JsonView`
-- [ ] API versioning options and their trade-offs
+- [ ] API versioning options, and what each one costs
 - [ ] Spring JDBC vs JPA vs Spring Data JPA; derived queries; paging and sorting
 - [ ] `@WebMvcTest` vs `@DataJpaTest` vs `@SpringBootTest`, and what `@MockitoBean` does
-- [ ] Authentication vs authorization; when disabling CSRF is acceptable
+- [ ] Authentication (who you are) vs authorization (what you may do); when turning off CSRF is acceptable
 - [ ] How to keep DB passwords out of git (`${DB_PASSWORD}`)
