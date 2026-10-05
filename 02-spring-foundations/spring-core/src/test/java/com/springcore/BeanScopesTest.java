@@ -16,7 +16,7 @@ import com.springcore.topic08_bean_scopes.AppSettings;
 import com.springcore.topic08_bean_scopes.CheckoutService;
 import com.springcore.topic08_bean_scopes.ShoppingCart;
 
-/* @SpringJUnitConfig starts a container for the test and injects beans into it. */
+/* @SpringJUnitConfig starts a Spring container for this test, and injects its beans into the test class. */
 @SpringJUnitConfig(BeanScopesTest.Config.class)
 class BeanScopesTest {
 

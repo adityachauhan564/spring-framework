@@ -13,7 +13,7 @@ import com.springcore.topic03_constructor_injection.Person;
 import com.springcore.topic06_annotation_injection.AlertService;
 import com.springcore.topic06_annotation_injection.NotificationService;
 
-/* Checks the XML-configured topics (01-06) wire what their demos claim. */
+/* Checks that the XML-configured topics (01-06) really wire the objects the way their demos say. */
 class XmlConfigurationTest {
 
     private static ClassPathXmlApplicationContext load(String path) {
