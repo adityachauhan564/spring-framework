@@ -1,5 +1,5 @@
-# application.yml - Boot reads this automatically (application.properties works the same way;
-# YAML just groups keys by indentation instead of repeating prefixes).
+# application.yml - Boot reads this file automatically. (application.properties works the same way;
+# YAML just groups keys by indentation, so you don't repeat the same prefix again and again.)
 
 spring:
   application:
@@ -17,7 +17,7 @@ app:
     contact:
       email: support@example.com
 
-# topic05: Actuator. Only these endpoints are reachable over HTTP.
+# topic05: Actuator. Only the endpoints listed here can be opened over HTTP.
 management:
   endpoints:
     web:
@@ -34,7 +34,7 @@ info:
   app:
     description: Spring Boot basics - stage 03 of the learning path
 
-# topic04: log levels per package (default INFO)
+# topic04: log level for each package (the default is INFO)
 logging:
   level:
     com.learning.springboot.basics: info
