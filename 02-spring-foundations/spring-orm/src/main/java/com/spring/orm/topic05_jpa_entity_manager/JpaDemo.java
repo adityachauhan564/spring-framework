@@ -6,7 +6,7 @@ import com.spring.orm.topic01_entity_mapping.Student;
 
 /*
  * Run      : ./mvnw -q -pl spring-orm compile exec:java -Dexec.mainClass=com.spring.orm.topic05_jpa_entity_manager.JpaDemo
- * Key idea : same results as topic03, through the standard JPA API.
+ * Key idea : Same results as topic03, but through the standard JPA API.
  * Next     : 03-spring-boot/jpa-hibernate, where Spring Data JPA writes this repository for you.
  */
 public class JpaDemo {

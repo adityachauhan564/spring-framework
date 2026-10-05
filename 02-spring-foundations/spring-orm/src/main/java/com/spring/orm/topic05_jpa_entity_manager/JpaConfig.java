@@ -18,9 +18,11 @@ import com.spring.orm.topic02_session_factory_config.HibernateConfig;
 
 /*
  * Topic    : JPA - the standard API, with Hibernate underneath
- * Key idea : JPA (jakarta.persistence) is a specification; Hibernate is one implementation.
- *            Code written against EntityManager works with any JPA provider.
- *            The chain mirrors topic02, with JPA names:
+ * Key idea : JPA (jakarta.persistence) is a specification - a rule book that says how an ORM should work.
+ *            Hibernate is one implementation of that rule book.
+ *            - Like a driving licence: the rules are the same, whichever car brand you drive.
+ *            - Code written with EntityManager works with any JPA provider, not only Hibernate.
+ *            The chain is the same as topic02, only with JPA names:
  *              SessionFactory         -> EntityManagerFactory (LocalContainerEntityManagerFactoryBean)
  *              Session                -> EntityManager
  *              HibernateTransactionManager -> JpaTransactionManager
@@ -40,7 +42,7 @@ public class JpaConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(dataSource);
-        factory.setPackagesToScan(HibernateConfig.ENTITY_PACKAGE);   // the same Student entity
+        factory.setPackagesToScan(HibernateConfig.ENTITY_PACKAGE);   // the same Student entity as before
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter()); // "use Hibernate as the JPA provider"
         Properties props = new Properties();
         props.setProperty("hibernate.hbm2ddl.auto", "create-drop");
