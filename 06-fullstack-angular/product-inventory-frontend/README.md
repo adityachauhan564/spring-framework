@@ -1,25 +1,25 @@
 # Product Inventory (Angular frontend)
 
-> An Angular 21 app for [`../product-service-backend`](../product-service-backend): a searchable product table with the total stock value, and a create/edit form with validation. It's built from standalone components, signals, the router, `HttpClient` and reactive forms.
+> An Angular 21 app for [`../product-service-backend`](../product-service-backend): a product table you can search, with the total stock value, and a create/edit form with validation. It is built from standalone components, signals, the router, `HttpClient` and reactive forms.
 
-**Before this:** the backend README. Start the backend first; this app calls it on port 8080.
+**Before this:** the backend README. Start the backend first, because this app calls it on port 8080.
 
 ## Why it matters
-Most backends end up behind a frontend. Building one shows what the API must provide:
-- predictable JSON;
+Most backends end up behind a frontend. Building one shows what the API must give:
+- JSON that is predictable;
 - errors the user can read;
 - CORS, so the browser allows the call.
 
-It also covers the basics of a modern Angular app: routing, a service for HTTP, state in signals, and forms.
+It also covers the basics of a modern Angular app: routing, a service for HTTP, state kept in signals, and forms.
 
 ## What it teaches
-- Standalone components (no `NgModule`): each lists what it uses in `imports`
+- Standalone components (no `NgModule`): each one lists what it uses in `imports`
 - App-wide providers in `app.config.ts`: `provideRouter`, `provideHttpClient`
-- **Routing:** `app.routes.ts`, `<router-outlet>`, `routerLink`, route params delivered as component `input()`s
+- **Routing:** `app.routes.ts`, `<router-outlet>`, `routerLink`, route params given to the component as `input()`s
 - **A service for all HTTP calls:** `HttpClient` returns Observables
-- **Signals:** `signal`, `computed` and `update`. This app is **zoneless**: signals are what trigger re-rendering
+- **Signals:** `signal`, `computed` and `update`. This app is **zoneless**: signals are what make the page redraw
 - **Built-in control flow:** `@if`, `@for` (with `track`), `@empty`
-- **Reactive forms:** `FormBuilder`, validators, showing client and server errors
+- **Reactive forms:** `FormBuilder`, validators, showing errors from the form and from the server
 - **Tests with Vitest:** `HttpTestingController`, fake services with `useValue`, `vi.fn()`
 
 ## Run it
@@ -36,10 +36,10 @@ With the backend running, open http://localhost:4200.
 - **Create Product:** leave the name empty and Save stays disabled. A negative price shows a message.
 - **Edit and Delete:** work on each row.
 
-If the backend is down you see "Cannot reach the product service on port 8080". The same message appears if CORS blocks the call: the browser hides the real response, so the app only sees status 0. Open the browser console to see which one it is.
+If the backend is down, you see "Cannot reach the product service on port 8080". The same message appears if CORS blocks the call: the browser hides the real response, so the app only sees status 0. Open the browser console to see which one it is.
 
 ## Read the code in this order
-1. `src/main.ts` → `src/app/app.config.ts`: bootstrapping and providers
+1. `src/main.ts` → `src/app/app.config.ts`: starting the app (bootstrapping) and providers
 2. `src/app/app.routes.ts`, `app.ts` / `app.html`, `header/`: pages and navigation
 3. `src/app/products/product.ts` and `product.service.ts`: the model and the HTTP calls
 4. `src/app/products/product-list/`: signals, `computed`, `@for`, delete
@@ -48,18 +48,18 @@ If the backend is down you see "Cannot reach the product service on port 8080". 
 
 ## Revision notes
 - **Where providers go:** a standalone app has no `AppModule`, so app-wide providers go in `app.config.ts`. `HttpClient` can only be injected after `provideHttpClient()`.
-- **Observables are lazy:** `http.get(...)` sends nothing until something subscribes. The service returns the Observable, and the component subscribes and stores the result in a signal.
-- **Zoneless change detection:** there is no zone.js watching every event, so Angular re-renders when a signal read by the template changes (`products.set(...)`). Plain fields changed in a callback would **not** update the page.
-- **`computed`** caches its value and recalculates only when a signal it reads changes; `totalValue` depends on `products()`. **`update(fn)`** sets a signal from its previous value.
-- **`@for` needs `track`:** tracking by `product.id` lets Angular keep the DOM rows of unchanged items. `@empty` renders when the list is empty.
-- **Route params as inputs:** `withComponentInputBinding()` copies `:id` from `/products/:id/edit` into `id = input<string>()`. One form component then handles both new and edit.
+- **Observables are lazy:** `http.get(...)` sends nothing until something subscribes. Like a newspaper that is delivered only after you subscribe. The service returns the Observable, and the component subscribes and keeps the result in a signal.
+- **Zoneless change detection:** there is no zone.js watching every event. So Angular redraws the page when a signal used in the template changes (`products.set(...)`). Plain fields changed in a callback would **not** update the page.
+- **`computed`** remembers its value and works it out again only when a signal it reads changes. `totalValue` depends on `products()`. **`update(fn)`** sets a signal from its old value.
+- **`@for` needs `track`:** tracking by `product.id` lets Angular keep the DOM rows of items that didn't change. `@empty` shows when the list is empty.
+- **Route params as inputs:** `withComponentInputBinding()` copies `:id` from `/products/:id/edit` into `id = input<string>()`. Then one form component handles both new and edit.
 - **Validation happens twice:** in the form (Validators) for instant feedback, and in the backend, which has the final say. Show the backend's `errors` too, because it may know rules the form doesn't.
-- **Status 0** in `HttpErrorResponse` means no response reached the app: server down, network error, or CORS.
-- **Component templates are fragments:** never put `<html>` or `<body>` in them, only in `src/index.html`.
+- **Status 0** in `HttpErrorResponse` means no response reached the app: the server is down, a network error, or CORS.
+- **Component templates are fragments (pieces of a page):** never put `<html>` or `<body>` in them, only in `src/index.html`.
 - **Testing:**
   - fake the service (`{ provide: ProductService, useValue: {...} }`) to test a component without HTTP;
   - use `HttpTestingController` to test the service without a server;
   - test behaviour (rows shown, button disabled), not exact text.
 
 ## Status
-✅ **Working.** 12 tests pass and the production build succeeds. The list page was rendered in headless Chrome against the running backend: 4 products and the correct stock value, loaded across origins.
+✅ **Working.** 12 tests pass and the production build succeeds. The list page was rendered in headless Chrome (Chrome with no window) against the running backend: 4 products and the correct stock value, loaded across origins.
