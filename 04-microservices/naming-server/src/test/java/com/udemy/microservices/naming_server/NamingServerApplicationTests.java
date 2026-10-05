@@ -13,8 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 /*
- * Starts the real Eureka server on a random port and talks to it over HTTP, the way the
- * microservices do. (Eureka's REST API isn't a Spring MVC controller, so MockMvc can't reach it.)
+ * Starts the real Eureka server (the naming server - a phone directory where every service
+ * writes its address) on a random port, and talks to it over HTTP the same way the microservices do.
+ * (Eureka's REST API is not a Spring MVC controller, so MockMvc cannot reach it.)
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class NamingServerApplicationTests {
@@ -34,7 +35,7 @@ class NamingServerApplicationTests {
     void registryApiAnswersAndStartsEmpty() throws Exception {
         HttpResponse<String> apps = get("/eureka/apps");
         assertEquals(200, apps.statusCode());
-        // register-with-eureka=false: the server does not list itself
+        // register-with-eureka=false: the server does not write its own name in the directory
         assertTrue(!apps.body().toUpperCase().contains("NAMING-SERVER"));
     }
 
