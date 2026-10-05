@@ -4,12 +4,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /*
  * Topic    : Constructor injection with XML
- * Key idea : <constructor-arg> values are passed to the constructor. Match them by
- *            position (default), index, parameter name or type - or use the c: namespace.
- *            Constructor injection = required dependencies, immutable objects.
- *            Setter injection (topic02) = optional dependencies that may change.
+ * Key idea : Constructor injection = Spring passes the values straight into the constructor.
+ *            - Each <constructor-arg> in the XML becomes one constructor argument.
+ *            - Spring matches them by position (the default), by index, by parameter name,
+ *              or by type. The c: namespace is a short way to write the same thing.
+ *            - Use constructor injection for REQUIRED things. The object can never be half-built.
+ *            - Use setter injection (topic02) for OPTIONAL things that may change later.
+ *            - Like an Aadhaar card: name and number are printed when it is made, not filled in later.
  * Run      : ./mvnw -q -pl spring-core compile exec:java -Dexec.mainClass=com.springcore.topic03_constructor_injection.ConstructorInjectionDemo
- * Try this : remove one <constructor-arg> from person1 and read the error.
+ * Try this : Remove one <constructor-arg> from person1 and read the error.
  */
 public class ConstructorInjectionDemo {
 
