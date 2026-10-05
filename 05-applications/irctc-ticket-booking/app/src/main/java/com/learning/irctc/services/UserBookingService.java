@@ -14,10 +14,10 @@ import com.learning.irctc.entities.User;
 import com.learning.irctc.store.JsonStore;
 
 /*
- * Sign up, log in, book, cancel: what Spring gave you for free in the other projects, by hand.
+ * Sign up, log in, book, cancel - written by hand. In the other projects Spring gave you these for free.
  *   - no @Service / dependency injection: App creates the objects and passes them in
- *   - no @Transactional: a booking changes two files (trains.json, users.json) and there is nothing
- *     to undo the first write if the second fails. A database transaction would.
+ *   - no @Transactional: a booking changes two files (trains.json, users.json), and nothing can
+ *     undo the first write if the second one fails. A database transaction would do that.
  *   - no Spring Security: passwords are hashed and checked with BCrypt directly
  * ponytail: seats belong to the train, not to a date - booking 1A on Monday also takes it on Tuesday.
  *   A real system stores one seat map per train per travel date.
@@ -38,7 +38,7 @@ public class UserBookingService {
         if (users.stream().anyMatch(u -> u.name().equalsIgnoreCase(name))) {
             throw new IllegalArgumentException("User name already taken: " + name);
         }
-        // hashpw adds a random salt, so two users with the same password get different hashes
+        // hashpw mixes in a random salt (extra random text), so two users with the same password get different hashes
         User user = new User(UUID.randomUUID().toString(), name, BCrypt.hashpw(password, BCrypt.gensalt()), new ArrayList<>());
         users.add(user);
         store.saveUsers(users);
@@ -48,7 +48,7 @@ public class UserBookingService {
     public Optional<User> login(String name, String password) {
         return store.loadUsers().stream()
                 .filter(u -> u.name().equalsIgnoreCase(name))
-                .filter(u -> BCrypt.checkpw(password, u.hashedPassword()))   // re-hashes with the stored salt and compares
+                .filter(u -> BCrypt.checkpw(password, u.hashedPassword()))   // hashes the typed password with the stored salt, then compares
                 .findFirst();
     }
 

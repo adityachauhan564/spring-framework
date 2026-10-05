@@ -15,16 +15,17 @@ import com.learning.irctc.services.UserBookingService;
 import com.learning.irctc.store.JsonStore;
 
 /*
- * The console menu. It only reads input and prints results; every rule lives in the services.
- * Here "wiring" is two constructor calls, which Spring's dependency injection does in the other projects.
- * Data is kept in ./data (created on the first run, next to where you start the app).
+ * The console menu. It only reads input and prints results. Every rule lives in the services.
+ * Like the clerk at a railway reservation counter: takes your form, the system does the real work.
+ * Here the "wiring" is just two constructor calls - in the other projects Spring's dependency injection does this.
+ * Data is kept in ./data (created on the first run, in the folder where you start the app).
  */
 public class App {
 
     private final Scanner in = new Scanner(System.in);
     private final UserBookingService bookings;
     private final TrainService trains;
-    private User user;                                   // null until someone logs in
+    private User user;                                   // stays null until someone logs in
 
     App(JsonStore store) {
         this.bookings = new UserBookingService(store);
@@ -55,7 +56,7 @@ public class App {
                     default -> System.out.println("Unknown option");
                 }
             } catch (IllegalArgumentException | IllegalStateException e) {
-                System.out.println("! " + e.getMessage());          // a rule was broken: say why, keep the menu running
+                System.out.println("! " + e.getMessage());          // a rule was broken: say why, and keep the menu running
             }
         }
     }
@@ -68,7 +69,7 @@ public class App {
     private void logIn() {
         Optional<User> found = bookings.login(ask("Name"), ask("Password"));
         found.ifPresentOrElse(u -> System.out.println("Logged in as " + (user = u).name()),
-                () -> System.out.println("! Wrong name or password"));  // never say which one was wrong
+                () -> System.out.println("! Wrong name or password"));  // never say WHICH one was wrong - that would help an attacker
     }
 
     private void search() {
@@ -87,7 +88,7 @@ public class App {
         String trainId = ask("Train id");
         Train train = trains.findById(trainId).orElseThrow(() -> new IllegalArgumentException("No train " + trainId));
         printSeats(train);
-        int row = Integer.parseInt(ask("Row")) - 1;               // people count from 1, lists from 0
+        int row = Integer.parseInt(ask("Row")) - 1;               // people count from 1, Java lists count from 0
         int seat = Integer.parseInt(ask("Seat")) - 1;
         Ticket ticket = bookings.book(user.userId(), train.trainId(), row, seat, from, to, date(ask("Date (yyyy-mm-dd)")));
         System.out.println("Booked! Ticket " + ticket.ticketId());
@@ -131,7 +132,7 @@ public class App {
 
     private String ask(String prompt) {
         System.out.print(prompt + ": ");
-        if (!in.hasNextLine()) System.exit(0);                  // input closed (Ctrl+D / end of a piped file)
+        if (!in.hasNextLine()) System.exit(0);                  // no more input (Ctrl+D, or the end of a piped file)
         return in.nextLine().trim();
     }
 }
