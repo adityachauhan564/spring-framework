@@ -5,10 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /*
- * What the HTML form sends - kept separate from the User entity (a "form object" / DTO):
- * it carries the raw password, which must never be stored, and its own validation rules.
- * Field names must match the form's input names (email, userName, password).
- * A class with getters/setters (not a record) so the JSP form tags can read it.
+ * What the HTML form sends. It is kept separate from the User entity
+ * (this is called a "form object" or DTO - Data Transfer Object), because:
+ * it carries the raw password, which must never be stored, and it has its own validation rules.
+ * The field names must match the form's input names (email, userName, password).
+ * It is a class with getters/setters (not a record), so the JSP form tags can read it.
  */
 public class SignupForm {
 

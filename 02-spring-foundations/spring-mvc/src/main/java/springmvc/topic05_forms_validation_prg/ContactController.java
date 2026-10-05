@@ -16,14 +16,16 @@ import jakarta.validation.Valid;
 /*
  * Topic    : Forms - binding, validation and Post/Redirect/Get
  * Key idea : 1. GET shows an empty form.
- *            2. POST binds the fields into SignupForm (@ModelAttribute) and checks the
- *               annotations on it (@Valid). Problems land in BindingResult - it must come
- *               RIGHT AFTER the form parameter, or Spring throws instead.
- *            3. Errors -> show the SAME form again, with messages and the typed values kept.
- *            4. Success -> REDIRECT to a GET page. Refreshing that page can't re-submit the form
- *               (without the redirect, F5 would register the user twice). Flash attributes
- *               carry data across the redirect exactly once.
- * Try this : submit an empty form, then a short password, then the same email twice.
+ *            2. POST copies the form fields into a SignupForm (@ModelAttribute), and checks
+ *               the rules written on it (@Valid). Any problems go into BindingResult.
+ *               BindingResult must come RIGHT AFTER the form parameter, or Spring throws an exception instead.
+ *            3. Errors -> show the SAME form again, with the messages, and keep what the user typed.
+ *            4. Success -> REDIRECT to a GET page. Now refreshing that page cannot submit the form again
+ *               (without the redirect, pressing F5 would register the user twice).
+ *               Like a railway ticket counter giving you a printed receipt - showing the receipt
+ *               again does not book a second ticket.
+ *               Flash attributes carry data across the redirect, exactly once.
+ * Try this : Submit an empty form, then a short password, then the same email twice.
  */
 @Controller
 public class ContactController {
@@ -48,7 +50,7 @@ public class ContactController {
             errors.rejectValue("email", "duplicate", "this email is already registered");
         }
         if (errors.hasErrors()) {
-            return "contact";                              // same page, with the error messages
+            return "contact";                              // the same page again, now with the error messages
         }
 
         User user = userService.register(form.getUserName(), form.getEmail(), form.getPassword());
@@ -59,7 +61,7 @@ public class ContactController {
     @GetMapping("/success")
     public String success(Model model) {
         if (!model.containsAttribute("user")) {
-            return "redirect:/contact";                    // opened directly or refreshed: nothing to show
+            return "redirect:/contact";                    // opened directly or refreshed: there is nothing to show
         }
         return "success";
     }
