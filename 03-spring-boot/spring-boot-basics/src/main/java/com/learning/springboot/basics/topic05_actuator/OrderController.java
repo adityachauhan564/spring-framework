@@ -9,9 +9,10 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 
 /*
- * A custom METRIC: count how often something happens.
- * Actuator uses Micrometer; a Counter registered on the MeterRegistry shows up at
- * /actuator/metrics/shop.orders.placed - and could be sent to Prometheus/Grafana unchanged.
+ * A custom METRIC: a number that counts how often something happens.
+ * Like the counter on a toll plaza that counts every car going through.
+ * Actuator uses Micrometer (a metrics library). A Counter registered on the MeterRegistry shows up at
+ * /actuator/metrics/shop.orders.placed - and could be sent to Prometheus/Grafana without any change.
  * Try this : curl -X POST http://localhost:8080/orders   (a few times)
  *            curl http://localhost:8080/actuator/metrics/shop.orders.placed
  */

@@ -8,12 +8,14 @@ import com.learning.springboot.basics.topic02_configuration_properties.ShopPrope
 
 /*
  * Topic    : Actuator - production-ready endpoints for free
- * Key idea : the actuator starter adds /actuator/health, /info, /metrics... that operators and
- *            tools (load balancers, Kubernetes, monitoring) call to check the app.
- *            A HealthIndicator bean adds your OWN check to /actuator/health.
- *            Only endpoints listed in management.endpoints.web.exposure.include are reachable
- *            over HTTP - never expose env or heapdump publicly, they leak secrets.
- * Try this : open http://localhost:8080/actuator/health , then set discount-percent to 80 and reopen.
+ * Key idea : - The actuator starter adds ready-made URLs like /actuator/health, /info, /metrics...
+ *              The support team and tools (load balancers, Kubernetes, monitoring) call them
+ *              to check whether the app is fine.
+ *            - Like a doctor's check-up report for your app: pulse, BP, temperature.
+ *            - A HealthIndicator bean adds your OWN check to /actuator/health.
+ *            - Only endpoints listed in management.endpoints.web.exposure.include can be
+ *              opened over HTTP. Never make env or heapdump public - they leak secrets.
+ * Try this : Open http://localhost:8080/actuator/health , then set discount-percent to 80 and open it again.
  */
 @Component("shop")
 public class ShopHealthIndicator implements HealthIndicator {
