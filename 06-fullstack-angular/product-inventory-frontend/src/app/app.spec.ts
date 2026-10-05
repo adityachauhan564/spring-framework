@@ -7,7 +7,7 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter([])],   // the header's routerLinks need a router
+      providers: [provideRouter([])],   // the header's routerLinks need a router to work
     }).compileComponents();
   });
 

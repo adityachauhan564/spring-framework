@@ -1,7 +1,7 @@
 <section>
   <div class="toolbar">
     <h1>Products</h1>
-    <!-- #searchBox is a template reference: the <input> element itself, usable in this template -->
+    <!-- #searchBox is a template reference: a name for the <input> element itself, usable anywhere in this template -->
     <input #searchBox type="search" placeholder="Search by name" (input)="load(searchBox.value)" />
     <a routerLink="/products/new" class="button">+ New product</a>
   </div>
@@ -16,7 +16,7 @@
         <tr><th>Name</th><th class="number">Price</th><th class="number">Quantity</th><th></th></tr>
       </thead>
       <tbody>
-        <!-- track: how Angular recognises a row between renders, so only changed rows are redrawn -->
+        <!-- track: how Angular recognises the same row each time it redraws, so only the changed rows are redrawn -->
         @for (product of products(); track product.id) {
           <tr [class.out-of-stock]="product.quantity === 0">
             <td>{{ product.name }}</td>

@@ -22,7 +22,7 @@ describe('ProductForm', () => {
     const input = page.querySelector<HTMLInputElement>(`input[formControlName="${name}"]`)!;
     input.value = value;
     input.dispatchEvent(new Event('input'));
-    input.dispatchEvent(new Event('blur'));                  // "touched": now errors may show
+    input.dispatchEvent(new Event('blur'));                  // the user left the field, so it is "touched": now errors may show
   }
 
   it('keeps Save disabled until the form is valid, then creates and goes home', async () => {
