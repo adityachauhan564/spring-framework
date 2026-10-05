@@ -11,12 +11,14 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 
 /*
  * Topic    : API documentation with OpenAPI
- * Key idea : springdoc scans your controllers at startup and generates an OpenAPI description
- *            (/v3/api-docs, JSON) plus an interactive page (/swagger-ui.html) where you can
- *            call every endpoint. The docs are generated from the CODE, so they can't drift.
- *            This bean only adds the title/description and declares HTTP Basic login, so the
- *            Swagger page gets an "Authorize" button for the secured endpoints (topic09).
- * Try this : open http://localhost:8080/swagger-ui.html , click Authorize, log in as admin.
+ * Key idea : - springdoc reads your controllers at startup and creates an OpenAPI description
+ *              (/v3/api-docs, in JSON), plus an interactive page (/swagger-ui.html) where you
+ *              can try every endpoint.
+ *            - The docs are made from the CODE itself, so they can never go out of date.
+ *              Like a restaurant menu that updates by itself whenever the chef adds a dish.
+ *            - This bean only adds the title and description, and declares HTTP Basic login,
+ *              so the Swagger page gets an "Authorize" button for the secured endpoints (topic09).
+ * Try this : Open http://localhost:8080/swagger-ui.html , click Authorize, and log in as admin.
  */
 @Configuration
 public class OpenApiConfig {
