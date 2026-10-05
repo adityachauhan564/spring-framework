@@ -1,5 +1,6 @@
 -- Sample data for the default (H2) profile. The ids are fixed here, so the README's curl commands work.
--- The identity columns then continue counting after them, so new rows get new ids.
+-- Inserting a fixed id does NOT move the identity counter on: without the "restart with" lines below, the next
+-- new row would also get id 1 and fail (duplicate primary key). So each table's counter is moved past the sample ids.
 insert into library_author (author_id, author_name, author_address) values (1, 'J.K. Rowling', 'Edinburgh');
 insert into library_author (author_id, author_name, author_address) values (2, 'R.K. Narayan', 'Mysore');
 alter table library_author alter column author_id restart with 3;
