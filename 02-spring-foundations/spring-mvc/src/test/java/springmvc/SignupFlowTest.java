@@ -57,7 +57,7 @@ class SignupFlowTest {
 
         User saved = userService.findAll().stream().filter(u -> u.getEmail().equals("asha@example.com")).findFirst().orElseThrow();
         assertFalse(saved.getPasswordHash().contains("secret123"));
-        assertTrue(saved.getPasswordHash().startsWith("$2a$"));                // BCrypt format
+        assertTrue(saved.getPasswordHash().startsWith("$2a$"));                // every BCrypt hash starts like this
         assertTrue(userService.checkPassword(saved.getId(), "secret123"));
     }
 

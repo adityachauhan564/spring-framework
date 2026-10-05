@@ -19,10 +19,11 @@ import springmvc.topic01_dispatcher_and_config.WebMvcConfig;
 
 /*
  * MockMvc sends requests through the real DispatcherServlet, without starting a server.
- * It doesn't render JSPs, so tests check the view name, the model and the status instead.
+ * Like a practice match: real rules, but no stadium.
+ * It does not render JSPs, so the tests check the view name, the model and the status instead.
  */
 @SpringJUnitWebConfig(WebMvcConfig.class)          // the same config the server loads
-@TestPropertySource(properties = "DB_URL=")          // always in-memory H2
+@TestPropertySource(properties = "DB_URL=")          // always use the in-memory H2 database
 class PagesTest {
 
     @Autowired
