@@ -8,7 +8,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 /*
- * Same rule as spring-jdbc: in-memory H2 unless DB_URL is set
+ * Same rule as spring-jdbc: use the in-memory H2 database, unless DB_URL is set
  * (e.g. DB_URL=jdbc:mysql://localhost:3306/springorm?createDatabaseIfNotExist=true,
  * plus DB_USERNAME / DB_PASSWORD).
  */

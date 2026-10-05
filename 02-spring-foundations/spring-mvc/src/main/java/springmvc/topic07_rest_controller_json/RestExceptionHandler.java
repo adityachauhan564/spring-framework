@@ -16,9 +16,9 @@ import springmvc.topic06_exception_handling.UserNotFoundException;
 
 /*
  * The JSON twin of topic06's PageExceptionHandler.
- *   basePackageClasses - applies only to controllers in THIS package (the API)
- *   @Order(highest)    - checked before the page handler, which would otherwise answer with HTML
- * ProblemDetail (RFC 9457) is the standard JSON error format:
+ *   basePackageClasses - works only for controllers in THIS package (the API)
+ *   @Order(highest)    - checked before the page handler, which would otherwise answer with an HTML page
+ * ProblemDetail (RFC 9457) is the standard JSON format for errors, so every client knows how to read it:
  *   {"type":"about:blank","title":"Not Found","status":404,"detail":"No user with id 999"}
  */
 @RestControllerAdvice(basePackageClasses = UserRestController.class)

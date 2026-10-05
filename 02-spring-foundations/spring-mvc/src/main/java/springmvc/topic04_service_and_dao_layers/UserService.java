@@ -9,13 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 /*
  * Topic    : Layers - controller -> service -> DAO -> database
- * Key idea : each layer has ONE job:
+ * Key idea : Each layer has ONE job:
  *              controller - HTTP: read the request, pick the view            (topic02/05/07)
- *              service    - business rules and the transaction boundary      (here)
+ *              service    - business rules, and where the transaction starts (here)
  *              DAO        - SQL / Hibernate calls only                        (UserDao)
- *            Both the web form (topic05) and the JSON API (topic07) reuse this same service.
- *            Passwords are hashed with BCrypt before they reach the DAO: a hash can be
- *            checked (matches) but not reversed, and every hash has its own random salt.
+ *            - Like a restaurant: waiter (controller), chef (service), store room (DAO).
+ *            - Both the web form (topic05) and the JSON API (topic07) reuse this same service.
+ *            - Passwords are hashed with BCrypt before they reach the DAO. A hash can be
+ *              checked (matches) but never turned back into the password,
+ *              and every hash has its own random salt (extra random text mixed in).
  */
 @Service
 @Transactional

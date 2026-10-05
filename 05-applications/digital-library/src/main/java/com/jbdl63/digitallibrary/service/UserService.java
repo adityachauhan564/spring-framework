@@ -14,7 +14,7 @@ import com.jbdl63.digitallibrary.repository.UserRepository;
 
 /*
  * Issuing a book = adding it to user.issuedBooks. User owns the many-to-many, so when the transaction
- * commits Hibernate turns that list change into an insert (or delete) in the books_issued join table.
+ * commits, Hibernate turns that list change into an insert (or delete) in the books_issued join table.
  */
 @Service
 public class UserService {
@@ -55,7 +55,8 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    // issuedBooks is LAZY: it must be read while the transaction is still open, hence the copy
+    // issuedBooks is LAZY (loaded only when first used): it must be read while the transaction
+    // is still open. That is why we make a copy here
     @Transactional(readOnly = true)
     public List<Book> findAllBooksIssuedToUser(Integer userId) {
         return List.copyOf(findById(userId).getIssuedBooks());

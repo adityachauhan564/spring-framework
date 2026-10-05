@@ -20,8 +20,8 @@ import com.learning.irctc.services.UserBookingService;
 import com.learning.irctc.store.JsonStore;
 
 /*
- * JUnit 5. @TempDir gives each test a fresh empty folder (deleted afterwards), so every test starts
- * from the shipped default data and tests never see each other's bookings.
+ * JUnit 5. @TempDir gives each test a fresh, empty folder (deleted afterwards), so every test starts
+ * from the default data, and tests never see each other's bookings.
  */
 class AppTest {
 
@@ -48,8 +48,8 @@ class AppTest {
 
     @Test
     void searchRespectsTheDirectionOfTravel() {
-        assertEquals("bacs", trains.search("Bangalore", "Delhi").get(0).trainId());   // case doesn't matter
-        assertTrue(trains.search("Delhi", "Bangalore").isEmpty());                    // wrong way
+        assertEquals("bacs", trains.search("Bangalore", "Delhi").get(0).trainId());   // capital or small letters don't matter
+        assertTrue(trains.search("Delhi", "Bangalore").isEmpty());                    // wrong direction
         assertTrue(trains.search("Delhi", "Mumbai").isEmpty());
     }
 
@@ -58,10 +58,10 @@ class AppTest {
         User user = bookings.signUp("ravi", "secret-pass");
 
         assertTrue(user.hashedPassword().startsWith("$2a$"));
-        assertFalse(Files.readString(dataDir.resolve("users.json")).contains("secret-pass"));  // not in the file
+        assertFalse(Files.readString(dataDir.resolve("users.json")).contains("secret-pass"));  // the real password is not in the file
         assertTrue(bookings.login("ravi", "secret-pass").isPresent());
         assertTrue(bookings.login("ravi", "wrong").isEmpty());
-        assertTrue(bookings.login("aditya", "password123").isPresent());                   // the shipped demo user
+        assertTrue(bookings.login("aditya", "password123").isPresent());                   // the demo user that comes with the app
         assertThrows(IllegalArgumentException.class, () -> bookings.signUp("RAVI", "another-pass"));
     }
 

@@ -17,7 +17,7 @@ import com.jbdl63.digitallibrary.dto.RangeDataDto;
 import com.jbdl63.digitallibrary.model.Author;
 import com.jbdl63.digitallibrary.service.RedisService;
 
-// A playground for the Redis data structures; exists only with the "redis" profile. See RedisService.
+// A playground to try the Redis data structures. It exists only with the "redis" profile. See RedisService.
 @RestController
 @Profile("redis")
 @RequestMapping(value = "/v1/redis", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -6,8 +6,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /*
  * Run      : ./mvnw -q -pl spring-orm compile exec:java -Dexec.mainClass=com.spring.orm.topic02_session_factory_config.SessionFactoryDemo
- * Key idea : Java config and XML config build the same SessionFactory with the same entities.
- * Try this : add -Dshow.sql=true to see the CREATE TABLE statement Hibernate generates.
+ * Key idea : Java config and XML config build the same SessionFactory, with the same entities.
+ *            Two ways of writing it, one result.
+ * Try this : Add -Dshow.sql=true to see the CREATE TABLE statement that Hibernate generates.
  */
 public class SessionFactoryDemo {
 

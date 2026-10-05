@@ -45,7 +45,7 @@ public class Theater {
 	@Builder.Default
 	private List<Show> shows = new ArrayList<>();
 
-	// The physical seats. Each show copies them into its own ShowSeats (with price and booked flag).
+	// The real, physical seats. Each show copies them into its own ShowSeats (with a price and a booked flag).
 	@OneToMany(mappedBy = "theater", cascade = CascadeType.ALL)
 	@Builder.Default
 	private List<TheaterSeats> seats = new ArrayList<>();

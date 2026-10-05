@@ -51,8 +51,8 @@ public class Ticket {
 	@ManyToOne
 	private Show show;
 
-	// mappedBy names the field in ShowSeat that points back HERE ("ticket").
-	// The course had mappedBy = "show", which maps a ticket's seats to... the show's seats.
+	// mappedBy gives the name of the field in ShowSeat that points back HERE ("ticket").
+	// The course had mappedBy = "show", which wrongly linked a ticket's seats to... ALL the show's seats.
 	@OneToMany(mappedBy = "ticket")
 	@Builder.Default
 	private List<ShowSeat> seats = new ArrayList<>();

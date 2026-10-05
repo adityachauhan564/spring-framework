@@ -12,8 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 /*
  * Try this : curl localhost:8000/currency-exchange/from/USD/to/INR
  *            curl -i localhost:8000/currency-exchange/from/USD/to/XYZ   -> 404 (the course returned a 500)
- * The log line carries [traceId,spanId]: call through the conversion service or the gateway and
- * the SAME traceId appears in their logs too (distributed tracing).
+ * The log line carries [traceId,spanId]. Call through the conversion service or the gateway, and
+ * the SAME traceId appears in their logs too. This is distributed tracing -
+ * like a courier tracking number that follows one parcel through every hub.
  */
 @RestController
 public class CurrencyExchangeController {
@@ -33,7 +34,7 @@ public class CurrencyExchangeController {
         log.info("retrieveExchangeValue called with {} to {}", from, to);
         CurrencyExchange exchange = repository.findByFromAndTo(from.toUpperCase(), to.toUpperCase())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No exchange rate from " + from + " to " + to));
-        // local.server.port is the port THIS instance actually listens on
+        // local.server.port is the port that THIS running copy of the service actually listens on
         return ExchangeValue.of(exchange, environment.getProperty("local.server.port"));
     }
 }

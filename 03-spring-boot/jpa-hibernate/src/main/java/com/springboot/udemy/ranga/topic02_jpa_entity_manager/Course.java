@@ -4,11 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 /*
- * The course table as a JPA entity, used by topics 02-04 (topic01 maps rows by hand instead).
- * No @Table / @Column needed: the class name "Course" matches table "course", and the field
- * names match the column names. The id is chosen by the application (no @GeneratedValue),
- * like the course's INSERT statements.
- * Topic01 builds Course objects from rows itself, with a RowMapper lambda.
+ * The course table as a JPA entity, used by topics 02-04 (topic01 turns rows into objects by hand instead).
+ * No @Table / @Column needed: the class name "Course" matches the table "course", and the field
+ * names match the column names.
+ * The id is chosen by our code (no @GeneratedValue), just like in the course's INSERT statements.
+ * Topic01 builds Course objects from rows by itself, with a RowMapper lambda.
  */
 @Entity
 public class Course {
@@ -19,7 +19,7 @@ public class Course {
     private String author;
 
     protected Course() {
-        // required by JPA
+        // needed by JPA: it creates an empty object first, then fills the fields
     }
 
     public Course(long id, String name, String author) {

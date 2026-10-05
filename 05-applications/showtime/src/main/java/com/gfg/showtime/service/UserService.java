@@ -41,7 +41,7 @@ public class UserService {
                 .name(request.name())
                 .email(request.email())
                 .mobile(request.mobile())
-                .password(passwordEncoder.encode(request.password()))   // store only the hash
+                .password(passwordEncoder.encode(request.password()))   // store only the hash, never the real password
                 .role(role)
                 .build());
     }

@@ -30,7 +30,7 @@ public class ShowService {
 		this.theaterRepository = theaterRepository;
 	}
 
-	// A show copies the theatre's seats into its own ShowSeats: the same numbers, plus a price and a booked flag
+	// A show copies the theatre's seats into its own ShowSeats: the same seat numbers, plus a price and a booked flag
 	@Transactional
 	public ShowResource addShow(ShowResource request) {
 		Movie movie = movieRepository.findById(request.movieId())
@@ -50,7 +50,7 @@ public class ShowService {
 		return Show.toResource(showRepository.save(show));
 	}
 
-	// City is required; movie and theatre narrow it down. Blank strings count as "not given".
+	// City is required. Movie and theatre are optional, and narrow the search down. Blank strings count as "not given".
 	@Transactional(readOnly = true)
 	public List<ShowResource> searchShows(String city, String movieTitle, String theaterName) {
 		return showRepository.search(city, blankToNull(movieTitle), blankToNull(theaterName)).stream()

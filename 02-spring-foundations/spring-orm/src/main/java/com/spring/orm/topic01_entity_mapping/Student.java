@@ -9,14 +9,15 @@ import jakarta.persistence.Table;
 
 /*
  * Topic    : Entity mapping - a Java class that IS a table
- * Key idea : with JDBC (spring-jdbc) you wrote SQL and mapped rows by hand. With an ORM
- *            (Object-Relational Mapper) like Hibernate you annotate the class once and it
- *            writes the SQL for you.
+ * Key idea : With JDBC (spring-jdbc) you wrote the SQL and turned rows into objects by hand.
+ *            With an ORM (Object-Relational Mapper) like Hibernate, you add annotations to
+ *            the class once, and Hibernate writes the SQL for you.
+ *            Like a translator: you speak Java objects, the translator speaks SQL to the database.
  *              @Entity         - this class is stored in the database
  *              @Table          - which table (default: the class name)
  *              @Id             - the primary key
- *              @GeneratedValue - let the database choose the id
- *              @Column         - column name / constraints (default: the field name)
+ *              @GeneratedValue - let the database pick the id
+ *              @Column         - column name and rules like "not null" (default name: the field name)
  * Run      : see EntityMappingDemo
  */
 @Entity
@@ -35,7 +36,7 @@ public class Student {
     private String studentCity;
 
     protected Student() {
-        // required by JPA/Hibernate (it creates the object, then fills the fields)
+        // needed by JPA/Hibernate: it first creates an empty object, then fills the fields
     }
 
     public Student(String studentName, String studentCity) {

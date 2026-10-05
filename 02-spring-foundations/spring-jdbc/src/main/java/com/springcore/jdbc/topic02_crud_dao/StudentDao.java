@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 /*
- * The contract: callers depend on this interface, never on SQL. You could swap in a
- * Hibernate (spring-orm) or Spring Data (stage 03) version without changing them.
+ * The contract (a list of promises). Callers depend only on this interface, never on SQL.
+ * So you could swap in a Hibernate (spring-orm) or Spring Data (stage 03) version
+ * without changing a single caller.
  */
 public interface StudentDao {
 
@@ -15,7 +16,7 @@ public interface StudentDao {
 
     int delete(int studentId);
 
-    Optional<Student> findById(int studentId);   // Optional: the student may not exist
+    Optional<Student> findById(int studentId);   // Optional, because a student with this id may not exist
 
     List<Student> findAll();
 }

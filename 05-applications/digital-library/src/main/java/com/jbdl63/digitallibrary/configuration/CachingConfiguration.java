@@ -4,9 +4,10 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 
 /*
- * @EnableCaching turns the @Cacheable/@CachePut/@CacheEvict annotations on.
- * It lives here and not on the application class: test slices such as @DataJpaTest load the
- * application class but skip @Configuration classes, so they don't need a cache at all.
+ * @EnableCaching switches on the @Cacheable / @CachePut / @CacheEvict annotations.
+ * (A cache = a quick copy kept close by, like keeping your phone's most-used numbers on speed dial.)
+ * It is placed here, not on the application class, on purpose: test slices such as @DataJpaTest
+ * load the application class but skip @Configuration classes, so those tests don't need a cache at all.
  */
 @Configuration
 @EnableCaching

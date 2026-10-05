@@ -11,11 +11,13 @@ import com.learning.springboot.basics.BasicsApplication;
 
 /*
  * Topic    : Packaging - one executable jar with the server inside
- * Key idea : ./mvnw package builds target/spring-boot-basics-0.0.1-SNAPSHOT.jar containing your
- *            classes, every dependency AND the embedded Tomcat. Deploying = copying one file
- *            and running `java -jar` - no server to install (compare the WAR in stage 02).
- *            The build-info goal in pom.xml records the version and build time, which Boot
- *            exposes as a BuildProperties bean and in /actuator/info.
+ * Key idea : - ./mvnw package builds target/spring-boot-basics-0.0.1-SNAPSHOT.jar. Inside it:
+ *              your classes, every library, AND the Tomcat server itself (embedded).
+ *            - So deploying = copy one file and run `java -jar`. No server to install
+ *              (compare this with the WAR file in stage 02).
+ *            - Like a ready-to-eat meal packet: everything is inside, just heat and eat.
+ *            - The build-info goal in pom.xml writes down the version and build time.
+ *              Boot shows them as a BuildProperties bean and in /actuator/info.
  * Try this : ./mvnw package  then  java -jar target/spring-boot-basics-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
  */
 @Component
@@ -25,7 +27,7 @@ public class PackagingRunner implements ApplicationRunner {
     private final ObjectProvider<BuildProperties> buildProperties;
 
     public PackagingRunner(ObjectProvider<BuildProperties> buildProperties) {
-        this.buildProperties = buildProperties;   // missing when build-info hasn't run (e.g. some IDE runs)
+        this.buildProperties = buildProperties;   // missing when build-info has not run (for example, some IDE runs)
     }
 
     @Override

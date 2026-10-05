@@ -23,9 +23,9 @@ import com.gfg.showtime.service.TheaterService;
 import com.gfg.showtime.service.UserService;
 
 /*
- * Sample data at startup, created through the normal services (so passwords are hashed and show seats
- * are generated). Runs only on an empty database, so a MySQL database isn't seeded twice.
- * These accounts are for local demos only.
+ * Adds sample data at startup, through the normal services (so passwords get hashed and show seats
+ * get generated, just like for real data). It runs only on an empty database, so a MySQL database
+ * is never filled twice. These accounts are for local demos only.
  */
 @Configuration
 public class DataSeeder {

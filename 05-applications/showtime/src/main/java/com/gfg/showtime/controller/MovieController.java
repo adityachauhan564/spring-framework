@@ -44,7 +44,7 @@ public class MovieController {
 		return movieService.getMovie(title);
 	}
 
-	// The 5 best-rated movies of a genre:  /movie/top?genre=SCI_FI
+	// The 5 best-rated movies of one genre:  /movie/top?genre=SCI_FI
 	@GetMapping("/top")
 	public List<MovieResource> topRated(@RequestParam Genre genre) {
 		return movieService.topRated(genre);

@@ -1,6 +1,6 @@
 package com.springcore.topic11_java_config;
 
-/* Built in DealershipConfig, which AppConfig pulls in with @Import. */
+/* Built in DealershipConfig. AppConfig brings that config in with @Import. */
 public class Dealership {
 
     private final Car car;

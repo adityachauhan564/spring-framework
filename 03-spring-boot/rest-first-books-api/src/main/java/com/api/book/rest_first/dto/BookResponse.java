@@ -3,8 +3,9 @@ package com.api.book.rest_first.dto;
 import com.api.book.rest_first.entities.Book;
 
 /*
- * DTO layer: what the API SENDS back. Keeping it separate from the entity means the database
- * design can change without breaking clients, and internal fields can't leak by accident.
+ * DTO layer: what the API SENDS back. It is kept separate from the entity, so:
+ *   - the database design can change without breaking clients, and
+ *   - internal fields can never leak out by mistake.
  */
 public record BookResponse(int id, String title, String author) {
 

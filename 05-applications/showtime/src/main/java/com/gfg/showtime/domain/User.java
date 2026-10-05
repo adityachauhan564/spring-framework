@@ -28,9 +28,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /*
- * The user entity doubles as Spring Security's UserDetails, so the security layer can use it directly.
- * The login name is the EMAIL: it's unique. (The course looked users up by name but returned the
- * email as the username, so no one could log in, and two people can share a name anyway.)
+ * The user entity is also Spring Security's UserDetails, so the security layer can use it directly.
+ * The login name is the EMAIL, because it is unique. (The course looked users up by name but returned
+ * the email as the username, so nobody could log in - and two people can have the same name anyway.)
  */
 @Entity
 @Table(name = "users")
@@ -49,7 +49,7 @@ public class User implements UserDetails {
 	private String name;
 
 	@Column(nullable = false)
-	private String password;               // a BCrypt hash, never the password itself
+	private String password;               // a BCrypt hash - never the password itself
 
 	@Column(nullable = false, unique = true)
 	private String mobile;
@@ -70,7 +70,7 @@ public class User implements UserDetails {
 				Ticket.toResource(user.getTickets()));
 	}
 
-	// "ADMIN" or "USER"; the security rules check these with hasAuthority(...)
+	// "ADMIN" or "USER". The security rules check these with hasAuthority(...)
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority(role.name()));

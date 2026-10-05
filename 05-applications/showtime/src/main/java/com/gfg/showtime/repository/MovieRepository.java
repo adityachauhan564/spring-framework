@@ -14,7 +14,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
 	Optional<Movie> findByTitle(String title);
 
-	// "Top 5 movies by genre" from design.txt, written as a method name:
+	// "Top 5 movies by genre" from design.txt, written just as a method name. Spring Data turns it into:
 	// where genre = ? and rating is not null order by rating desc limit 5
 	List<Movie> findTop5ByGenreAndRatingNotNullOrderByRatingDesc(Genre genre);
 }

@@ -21,7 +21,8 @@ import com.jbdl63.digitallibrary.service.UserService;
 import jakarta.validation.Valid;
 
 /*
- * Issued books are a sub-resource of the user:
+ * Issued books are a sub-resource of the user (they live "under" a user in the URL),
+ * like a library card that lists the books you have borrowed:
  *   GET    /v1/users/{id}/books           the books this user has
  *   POST   /v1/users/{id}/books/{bookId}  issue a book    (409 if they already have it)
  *   DELETE /v1/users/{id}/books/{bookId}  return it       (404 if they don't have it)

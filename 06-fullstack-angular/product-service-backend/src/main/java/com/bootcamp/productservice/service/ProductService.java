@@ -27,7 +27,7 @@ public class ProductService {
 	}
 
 	public Product findById(Integer id) {
-		// ResponseStatusException is the quickest correct 404; a plain RuntimeException would be a 500
+		// ResponseStatusException is the quickest correct way to send a 404. A plain RuntimeException would become a 500
 		return repository.findById(id)
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No product with id " + id));
 	}
@@ -37,8 +37,8 @@ public class ProductService {
 		return repository.save(product);
 	}
 
-	// PUT replaces the product's fields (all are validated as required).
-	// Inside @Transactional the changes to the loaded entity are saved at commit: no save() needed.
+	// PUT replaces the product's fields (every field is checked as required).
+	// Inside @Transactional, changes to the loaded entity are saved by themselves at commit: no save() needed.
 	@Transactional
 	public Product update(Integer id, Product changes) {
 		Product existing = findById(id);

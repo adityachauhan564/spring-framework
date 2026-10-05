@@ -17,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import com.springcore.topic13_aop.AopConfig;
 import com.springcore.topic13_aop.OrderService;
 
-/* Proves the aspects really run, by capturing what they print. */
+/* Proves that the aspects really run, by catching what they print to the console. */
 @SpringJUnitConfig(AopConfig.class)
 class AopTest {
 

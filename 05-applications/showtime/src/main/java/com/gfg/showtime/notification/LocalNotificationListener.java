@@ -8,7 +8,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
  * Default (no "kafka" profile): the booking event is handled inside this same application.
  * @TransactionalEventListener runs only AFTER the booking transaction commits (phase AFTER_COMMIT
  * by default). If the booking rolls back, nobody gets an email for a ticket that doesn't exist.
- * A plain @EventListener would run immediately, inside the transaction, before we know it succeeds.
+ * A plain @EventListener would run straight away, inside the transaction, before we know if it succeeds.
  */
 @Component
 @Profile("!kafka")

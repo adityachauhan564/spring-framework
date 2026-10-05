@@ -18,8 +18,8 @@ import com.jayway.jsonpath.JsonPath;
 
 /*
  * The whole app over HTTP (MockMvc, no real server), on H2 with the data.sql sample data.
- * No @Transactional here on purpose: every request commits like a real one, so database constraint
- * errors (the 409s) really happen. Each test creates its own users to stay independent of the others.
+ * No @Transactional here on purpose: every request commits like a real one, so database rule
+ * errors (the 409s) really happen. Each test creates its own users, so it doesn't depend on the others.
  */
 @SpringBootTest
 @AutoConfigureMockMvc

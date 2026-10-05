@@ -12,9 +12,9 @@
 <h1 class="text-center">Registration form</h1>
 
 <%--
-  Spring's form tags bind to the "form" model attribute (a SignupForm):
-    path="email"      -> the input's name and its current value (kept after an error)
-    <form:errors .../> -> the validation message for that field, if any
+  Spring's form tags are connected to the "form" value in the Model (a SignupForm):
+    path="email"      -> gives the input its name and its current value (kept after an error)
+    <form:errors .../> -> shows the validation message for that field, if there is one
 --%>
 <form:form modelAttribute="form" action="processform" method="post" class="mx-auto" style="max-width: 32rem">
   <div class="mb-3">
@@ -29,7 +29,7 @@
   </div>
   <div class="mb-3">
     <label for="password" class="form-label">Password</label>
-    <%-- form:password never re-displays the typed password --%>
+    <%-- form:password never shows the typed password again, even after an error --%>
     <form:password path="password" class="form-control" placeholder="At least 8 characters"/>
     <form:errors path="password" cssClass="text-danger small"/>
   </div>

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-/* A bean whose properties the SpEL expressions in SpelExamples read, by bean name "pricing". */
+/* A simple bean named "pricing". The SpEL expressions in SpelExamples read its values using that name. */
 @Component
 public class Pricing {
 

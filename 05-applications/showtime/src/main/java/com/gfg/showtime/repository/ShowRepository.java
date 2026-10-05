@@ -9,7 +9,8 @@ import com.gfg.showtime.domain.Show;
 
 public interface ShowRepository extends JpaRepository<Show, Long> {
 
-    // One query instead of three: an optional filter is "(:param is null or field = :param)".
+    // One query instead of three. An optional filter is written as "(:param is null or field = :param)":
+    // if the value is not given, that part is simply true.
     // (The course had three native SQL queries, one per combination.)
     @Query("""
             select s from Show s

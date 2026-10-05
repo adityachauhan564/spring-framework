@@ -15,7 +15,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /*
- * Every error leaves as a ProblemDetail: {"status":404,"title":"Not Found","detail":"No product with id 9"}.
+ * Every error goes out as a ProblemDetail: {"status":404,"title":"Not Found","detail":"No product with id 9"}.
  * Validation errors also get "errors": {"field": "message"}, which the Angular form shows next to each field.
  */
 @RestControllerAdvice

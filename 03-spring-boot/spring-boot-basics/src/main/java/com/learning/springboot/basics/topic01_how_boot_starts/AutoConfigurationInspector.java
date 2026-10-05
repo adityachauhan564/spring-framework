@@ -18,19 +18,23 @@ import com.learning.springboot.basics.BasicsApplication;
 
 /*
  * Topic    : How Spring Boot starts - @SpringBootApplication and auto-configuration
- * Key idea : Boot looks at the CLASSPATH and your settings, then creates the beans you would
- *            otherwise write by hand (a DispatcherServlet, a JSON mapper, a DataSource...).
- *            Every auto-configuration class is guarded by conditions such as
- *            @ConditionalOnClass ("only if this library is present") and
- *            @ConditionalOnMissingBean ("only if you didn't define one yourself" - so your own
- *            bean always wins). The ConditionEvaluationReport records every decision.
+ * Key idea : Auto-configuration = Boot sets things up for you.
+ *            - Boot looks at the CLASSPATH (the libraries in your project) and your settings.
+ *            - Then it creates the beans you would otherwise write by hand
+ *              (a DispatcherServlet, a JSON mapper, a DataSource...).
+ *            - Like a new flat that comes "fully furnished": you only bring what you want different.
+ *            - Every auto-configuration class has conditions, such as
+ *              @ConditionalOnClass ("only if this library is present") and
+ *              @ConditionalOnMissingBean ("only if you did not make one yourself" - so your own
+ *              bean always wins).
+ *            - The ConditionEvaluationReport writes down every one of these decisions.
  * Run      : ./mvnw spring-boot:run            (this runner prints first)
  *            ./mvnw spring-boot:run -Dspring-boot.run.arguments=--debug   (the FULL report)
  *            or open http://localhost:8080/actuator/conditions while the app runs
- * Compare  : 02-spring-foundations/spring-mvc/.../WebMvcConfig.java - there you declared this by hand.
+ * Compare  : 02-spring-foundations/spring-mvc/.../WebMvcConfig.java - there you set all this up by hand.
  */
-// Not named "AutoConfigurationReport": Boot already registers a bean called "autoConfigurationReport"
-// (the report itself), and a @Component with the same default name would silently never be created.
+// Not named "AutoConfigurationReport" on purpose: Boot already has a bean called "autoConfigurationReport"
+// (the report itself). A @Component with the same default name would silently never be created.
 @Component
 @Order(1)
 public class AutoConfigurationInspector implements ApplicationRunner {
@@ -56,8 +60,8 @@ public class AutoConfigurationInspector implements ApplicationRunner {
 
         show(outcomes, "DispatcherServletAutoConfiguration");   // web starter on the classpath -> applied
         show(outcomes, "JacksonAutoConfiguration");             // JSON library on the classpath -> applied
-        show(outcomes, "BeansEndpointAutoConfiguration");       // /actuator/beans not in the exposure list -> skipped
-        show(outcomes, "DataSourceAutoConfiguration");          // no database library at all -> never even checked
+        show(outcomes, "BeansEndpointAutoConfiguration");       // /actuator/beans is not in the exposure list -> skipped
+        show(outcomes, "DataSourceAutoConfiguration");          // no database library at all -> not even checked
     }
 
     private static boolean has(Class<? extends java.lang.annotation.Annotation> annotation) {

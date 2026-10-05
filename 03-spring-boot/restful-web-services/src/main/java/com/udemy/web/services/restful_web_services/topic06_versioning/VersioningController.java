@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
  *            curl -H "X-API-Version: 2" localhost:8080/person    -> v2
  *            curl localhost:8080/v1/person  and  /v2/person      -> URI versioning, the classic
  *                                                                  way (just two different paths)
- * Trade-off: URI versions are easy to test in a browser and to cache; header versions keep
- *            the URL stable. Pick ONE style per API and stick to it.
+ * Trade-off: URI versions are easy to test in a browser and easy to cache. Header versions keep
+ *            the URL the same. Pick ONE style for an API and stick to it.
  */
 @RestController
 public class VersioningController {

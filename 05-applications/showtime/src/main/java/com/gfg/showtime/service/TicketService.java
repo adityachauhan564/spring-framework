@@ -26,12 +26,13 @@ import com.gfg.showtime.resource.BookingResource;
 import com.gfg.showtime.resource.TicketResource;
 
 /*
- * Booking, the heart of the app. Three things make it correct:
- *  1. @Transactional: the ticket and every seat change are saved together, or nothing is.
+ * Booking - the heart of the app. Like BookMyShow, it must never sell one seat twice.
+ * Three things make it correct:
+ *  1. @Transactional: the ticket and every seat change are saved together, or nothing is saved.
  *  2. ShowSeat's @Version: if two people book the same seat at the same moment, one commit fails
- *     (ObjectOptimisticLockingFailureException -> 409) instead of both getting a ticket.
- *  3. The notification is an EVENT, handled only after the commit (see notification/): no email for a
- *     booking that was rolled back, and a mail or Kafka problem can't undo a booking.
+ *     (ObjectOptimisticLockingFailureException -> 409), instead of both getting a ticket.
+ *  3. The notification is an EVENT, handled only after the commit (see notification/). So there is no
+ *     email for a booking that was rolled back, and a mail or Kafka problem cannot undo a booking.
  */
 @Service
 public class TicketService {
@@ -73,7 +74,7 @@ public class TicketService {
 				.allottedSeats(seats.stream().map(ShowSeat::getSeatNumber).collect(Collectors.joining(" ")))
 				.build());
 		Date now = new Date();
-		for (ShowSeat seat : seats) {              // loaded in this transaction: the changes are saved at commit
+		for (ShowSeat seat : seats) {              // loaded in this transaction, so the changes are saved by themselves at commit
 			seat.setBooked(true);
 			seat.setBookedAt(now);
 			seat.setTicket(ticket);
@@ -87,7 +88,7 @@ public class TicketService {
 		return Ticket.toResource(ticket);
 	}
 
-	// A ticket is visible to its owner and to admins; anyone else gets 403
+	// Only the ticket's owner and admins can see a ticket. Anyone else gets 403
 	@Transactional(readOnly = true)
 	public TicketResource getTicket(long id, String userEmail, boolean isAdmin) {
 		Ticket ticket = ticketRepository.findById(id)

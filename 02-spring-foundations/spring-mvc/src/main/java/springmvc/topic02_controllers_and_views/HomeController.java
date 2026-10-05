@@ -10,12 +10,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 /*
  * Topic    : Controllers, Model and views
- * Key idea : a @Controller method handles one URL and returns the NAME of a view.
- *            Data for the page goes into the Model; the JSP reads it with ${...} (EL).
+ * Key idea : - A @Controller method handles one URL and returns the NAME of a view (a page).
+ *            - Data for the page goes into the Model. The JSP reads it with ${...} (EL = Expression Language).
+ *            - Like a waiter: takes the order (URL), puts food on the plate (Model),
+ *              and tells which table to serve (view name).
  *              Model        - you add data, and return the view name as a String
- *              ModelAndView - one object holding both the data and the view name
- *            @GetMapping is the short form of @RequestMapping(path = ..., method = GET).
- * Try this : open /springmvc/ , /springmvc/about and /springmvc/help, then add a /team page.
+ *              ModelAndView - one object that holds both the data and the view name
+ *            - @GetMapping is the short form of @RequestMapping(path = ..., method = GET).
+ * Try this : Open /springmvc/ , /springmvc/about and /springmvc/help, then add a /team page.
  */
 @Controller
 public class HomeController {
@@ -30,7 +32,7 @@ public class HomeController {
 
     @GetMapping("/about")
     public String about() {
-        return "about";                                   // a page with no data at all
+        return "about";                                   // a page that needs no data at all
     }
 
     @GetMapping("/help")

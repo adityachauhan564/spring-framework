@@ -4,12 +4,15 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 /*
  * Topic    : AOP with @Aspect
- * Key idea : the bean you get is a PROXY around OrderService. Calls go through the proxy,
- *            which runs the matching advice around the real method. Spring's @Transactional,
- *            @Cacheable and @Async all work this way - which is why they don't apply when a
- *            method calls another method of the same object (self-invocation).
+ * Key idea : The bean you get is not the real OrderService. It is a PROXY wrapped around it.
+ *            - Every call goes through the proxy first. The proxy runs the matching extra code
+ *              ("advice") around the real method.
+ *            - Like a receptionist: every visitor signs the register first, then meets the doctor.
+ *            - Spring's @Transactional, @Cacheable and @Async all work this way.
+ *            - That is also why they do NOT work when a method calls another method
+ *              of the same object (self-invocation): that call never passes the receptionist.
  * Run      : ./mvnw -q -pl spring-core compile exec:java -Dexec.mainClass=com.springcore.topic13_aop.AopDemo
- * Try this : write an aspect that prints a warning whenever cancelOrder is called.
+ * Try this : Write an aspect that prints a warning whenever cancelOrder is called.
  */
 public class AopDemo {
 

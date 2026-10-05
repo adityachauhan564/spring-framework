@@ -5,8 +5,8 @@ import { TestBed } from '@angular/core/testing';
 import { API_URL, ProductService } from './product.service';
 
 /*
- * HttpTestingController replaces the network: the test sees each request the service makes
- * (method, URL, body) and decides the response with flush(). No backend needs to run.
+ * HttpTestingController replaces the network: the test sees every request the service makes
+ * (method, URL, body) and decides the answer with flush(). No backend needs to be running.
  */
 describe('ProductService', () => {
   let service: ProductService;
@@ -18,7 +18,7 @@ describe('ProductService', () => {
     http = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => http.verify());   // fails if a request was made that the test didn't expect
+  afterEach(() => http.verify());   // fails if the service made a request that the test did not expect
 
   it('lists products, with the search as a query parameter', () => {
     let names: string[] = [];

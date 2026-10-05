@@ -18,17 +18,17 @@ import com.learning.irctc.entities.Train;
 import com.learning.irctc.entities.User;
 
 /*
- * Two JSON files as a tiny "database": users.json and trains.json in a data folder.
+ * Two JSON files used as a tiny "database": users.json and trains.json in a data folder.
  *
- * The starting data ships inside the jar (src/main/resources/localDb) and is read as a CLASSPATH
- * resource, which works from any working directory. A jar can't be written to, so on the first run the
- * files are copied to the data folder, and all later reads and writes use that copy.
+ * The starting data comes inside the jar (src/main/resources/localDb) and is read as a CLASSPATH
+ * resource, which works from any folder. A jar cannot be written to, so on the first run the
+ * files are copied to the data folder, and every later read and write uses that copy.
  * (The course read "src/main/resources/..." by relative path, which only works from one folder.)
  */
 public class JsonStore {
 
-    private static final TypeReference<List<User>> USERS = new TypeReference<>() {};    // the {} captures List<User>
-    private static final TypeReference<List<Train>> TRAINS = new TypeReference<>() {};  // despite type erasure
+    private static final TypeReference<List<User>> USERS = new TypeReference<>() {};    // the {} keeps the full type List<User>
+    private static final TypeReference<List<Train>> TRAINS = new TypeReference<>() {};  // even though Java erases generic types at runtime
 
     private final ObjectMapper mapper = new ObjectMapper()
             .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)   // trainNo <-> "train_no"
@@ -69,13 +69,13 @@ public class JsonStore {
 
     private <T> List<T> read(Path file, TypeReference<List<T>> type) {
         try {
-            return new ArrayList<>(mapper.readValue(file.toFile(), type));   // a mutable copy
+            return new ArrayList<>(mapper.readValue(file.toFile(), type));   // a copy that we are allowed to change
         } catch (IOException e) {
             throw new UncheckedIOException("Cannot read " + file, e);
         }
     }
 
-    // Write to a temporary file, then move it over the old one: a crash mid-write can't leave half a file
+    // Write to a temporary file first, then move it over the old one. A crash in the middle can't leave half a file
     private void write(Path file, Object value) {
         try {
             Path temp = file.resolveSibling(file.getFileName() + ".tmp");

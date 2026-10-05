@@ -11,15 +11,16 @@ import com.springboot.udemy.ranga.topic02_jpa_entity_manager.Course;
 
 /*
  * Topic    : Spring Data JPA - you write NO implementation at all
- * Key idea : extend JpaRepository<Entity, IdType> and Spring generates the class at startup:
- *            save, findById, findAll, deleteById, count, existsById... are all there.
- *            Topic02's CourseJpaRepository, written by hand, is now ONE interface.
+ * Key idea : - Just extend JpaRepository<Entity, IdType>, and Spring writes the class for you at startup.
+ *            - save, findById, findAll, deleteById, count, existsById... are all ready to use.
+ *            - Topic02's CourseJpaRepository, written by hand, is now just ONE interface.
+ *            - Like buying a ready-made shirt instead of stitching one yourself.
  *
- * Topic04  : query methods - Spring reads the METHOD NAME and writes the query:
+ * Topic04  : query methods - Spring reads the METHOD NAME and writes the query from it:
  *              findByAuthor(a)                   -> where author = ?
  *              findByNameContainingIgnoreCase(t) -> where upper(name) like upper('%t%')
  *              countByAuthor(a)                  -> select count(*) ... where author = ?
- *            @Query for anything a name can't express, written in JPQL (entity/field names).
+ *            @Query is for anything a method name cannot say. It is written in JPQL (entity and field names).
  *            A Pageable parameter adds paging and sorting to any query.
  */
 public interface CourseSpringDataRepository extends JpaRepository<Course, Long> {

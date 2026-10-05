@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.api.book.rest_first.entities.Book;
 
 /*
- * DATA layer: Spring Data writes the implementation (see jpa-hibernate topic03).
- * JpaRepository already has findById(Integer) returning Optional<Book>. The old version added
- * its own findById(int) returning Book - an overload that hid the Optional one and invited
- * NullPointerExceptions. It's gone; use the inherited method.
+ * DATA layer: Spring Data writes the code for you (see jpa-hibernate topic03).
+ * JpaRepository already has findById(Integer), which returns Optional<Book>.
+ * The old version added its own findById(int) that returned a plain Book - a second method with
+ * the same name, which hid the Optional one and easily caused NullPointerExceptions.
+ * It has been removed. Use the method you get from JpaRepository.
  */
 public interface BookRepository extends JpaRepository<Book, Integer> {
 

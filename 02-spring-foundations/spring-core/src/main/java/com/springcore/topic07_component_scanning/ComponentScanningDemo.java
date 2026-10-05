@@ -7,12 +7,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /*
  * Topic    : Component scanning and stereotypes
- * Key idea : Spring searches a package for @Component classes and makes each one a bean.
+ * Key idea : Component scanning = Spring searches a package for classes marked @Component,
+ *            and makes a bean of each one. You don't list them yourself any more.
+ *            Like a teacher taking attendance: whoever has raised a hand (@Component) is counted.
  *            Two ways to switch scanning on - both give the same beans:
  *              XML:  <context:component-scan base-package="..."/>
  *              Java: new AnnotationConfigApplicationContext("base.package")   (used from topic08 on)
  * Run      : ./mvnw -q -pl spring-core compile exec:java -Dexec.mainClass=com.springcore.topic07_component_scanning.ComponentScanningDemo
- * Try this : remove @Component from Teacher and read the error from ClassroomService.
+ * Try this : Remove @Component from Teacher and read the error from ClassroomService.
  */
 public class ComponentScanningDemo {
 
@@ -28,7 +30,7 @@ public class ComponentScanningDemo {
         }
     }
 
-    // hide Spring's own internal beans so only ours are listed
+    // hides Spring's own internal beans (their names have dots), so only our beans are listed
     private static String myBeans(String[] names) {
         return Arrays.stream(names).filter(name -> !name.contains(".")).sorted().toList().toString();
     }

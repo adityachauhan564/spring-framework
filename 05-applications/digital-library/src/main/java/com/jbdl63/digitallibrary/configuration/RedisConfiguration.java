@@ -17,19 +17,19 @@ import com.jbdl63.digitallibrary.model.Author;
 import com.jbdl63.digitallibrary.service.AuthorService;
 
 /*
- * Only with the "redis" profile. The connection itself needs no code: Boot builds the
- * RedisConnectionFactory (Lettuce client) from spring.data.redis.host/port.
+ * Used only with the "redis" profile. The connection itself needs no code: Boot builds the
+ * RedisConnectionFactory (the Lettuce client) from spring.data.redis.host/port.
  *
- * Serialization = how a Java object becomes the bytes Redis stores.
+ * Serialization = how a Java object is turned into the bytes that Redis stores.
  *   JDK serialization (Boot's default for the cache) stores binary data that includes the full
- *   class name, so renaming a package makes stored values unreadable, and redis-cli shows gibberish.
- *   JSON for one known type (Author) stores plain readable JSON with no class names in it.
+ *   class name. So renaming a package makes the stored values unreadable, and redis-cli shows gibberish.
+ *   JSON for one known type (Author) stores plain, readable JSON with no class names in it.
  */
 @Configuration
 @Profile("redis")
 public class RedisConfiguration {
 
-    // The "authors" @Cacheable cache: JSON values that expire after 10 minutes
+    // The "authors" @Cacheable cache: values stored as JSON, and thrown away after 10 minutes
     @Bean
     public RedisCacheManagerBuilderCustomizer authorsCacheAsJson() {
         return builder -> builder.withCacheConfiguration(AuthorService.CACHE,
@@ -38,7 +38,7 @@ public class RedisConfiguration {
                         .serializeValuesWith(SerializationPair.fromSerializer(new JacksonJsonRedisSerializer<>(Author.class))));
     }
 
-    // For the /v1/redis playground: String keys, Author values as JSON
+    // For the /v1/redis playground: String keys, and Author values stored as JSON
     @Bean
     public RedisTemplate<String, Author> authorRedisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Author> template = new RedisTemplate<>();

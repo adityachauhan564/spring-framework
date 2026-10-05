@@ -18,14 +18,15 @@ import jakarta.validation.Valid;
 
 /*
  * Topic    : A complete CRUD resource with the right HTTP status codes
- * Key idea : a REST resource is a noun (/users); the HTTP METHOD is the verb.
+ * Key idea : A REST resource is a noun (/users). The HTTP METHOD is the verb (what to do with it).
+ *            Like a library: the book is the noun; borrow, return, renew are the verbs.
  *   GET    /users       200 + list
  *   GET    /users/{id}  200, or 404 if missing
  *   POST   /users       201 Created + Location header pointing at the new user
  *   PUT    /users/{id}  200 + the replaced user, or 404
  *   DELETE /users/{id}  204 No Content, or 404
- *   @Valid (topic04) rejects bad input with 400 before the method even runs.
- * Try this : curl -i -X DELETE localhost:8080/users/2   (topic09: needs a login - see its notes)
+ *   @Valid (topic04) rejects bad input with 400, before the method even runs.
+ * Try this : curl -i -X DELETE localhost:8080/users/2   (since topic09 this needs a login - see its notes)
  */
 @RestController
 @RequestMapping("/users")
@@ -50,7 +51,7 @@ public class UserResource {
     @PostMapping
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User saved = store.save(user);
-        // build /users/{id} from the CURRENT request, so host and port are never hard-coded
+        // build /users/{id} from the CURRENT request, so the host and port are never hard-coded
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(saved.id())

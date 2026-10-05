@@ -19,7 +19,7 @@ import com.gfg.showtime.repository.TheaterRepository;
 
 /*
  * @DataJpaTest: only JPA (no web, no security, no DataSeeder), a fresh H2 database, and a rollback
- * after each test. The data is built here, so each query is checked against exactly known rows.
+ * (undo) after each test. The data is built here, so each query is checked against rows we know exactly.
  */
 @DataJpaTest
 class RepositoryQueryTest {

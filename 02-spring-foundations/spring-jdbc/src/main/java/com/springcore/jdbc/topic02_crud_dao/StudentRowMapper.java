@@ -6,9 +6,10 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 
 /*
- * Turns ONE row of the ResultSet into ONE Student. JdbcTemplate calls it for every row.
- * Read columns by NAME, not by position (rs.getInt(1)): a reordered SELECT would
- * silently put the wrong value in the wrong field.
+ * Turns ONE row of the result into ONE Student. JdbcTemplate calls it once for every row.
+ * Read columns by NAME, not by position (like rs.getInt(1)).
+ * If someone changes the column order in the SELECT, reading by position would
+ * silently put the wrong value in the wrong field - with no error at all.
  */
 public class StudentRowMapper implements RowMapper<Student> {
 

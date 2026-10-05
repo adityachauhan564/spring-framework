@@ -25,13 +25,15 @@ import com.udemy.web.services.restful_web_services.topic09_security.SecurityConf
 
 /*
  * Topic    : Testing a REST controller (topic08)
- * Key idea : @WebMvcTest starts ONLY the web layer - this controller, @ControllerAdvice classes
- *            and MVC configuration - not the whole app, so it's fast. Anything else it needs is
- *            added explicitly with @Import (or replaced by a mock with @MockitoBean).
- *            MockMvc sends requests without a real server; jsonPath checks the JSON response.
+ * Key idea : - @WebMvcTest starts ONLY the web layer: this controller, the @ControllerAdvice classes
+ *              and the MVC configuration. Not the whole app, so it is fast.
+ *            - Anything else it needs is added by hand with @Import
+ *              (or replaced by a mock - a fake stand-in - with @MockitoBean).
+ *            - MockMvc sends requests without a real server. jsonPath checks the JSON response.
+ *            - Like testing only the car's brakes on a test bench, without driving the whole car.
  * Gotcha   : Spring reuses one context for all tests in a class, so the in-memory UserStore is
- *            SHARED - a test that deletes user 1 breaks a later test that counts users.
- *            Tests must not depend on their order: @DirtiesContext gives each one a fresh store.
+ *            SHARED. A test that deletes user 1 breaks a later test that counts users.
+ *            Tests must never depend on their order: @DirtiesContext gives each test a fresh store.
  */
 @WebMvcTest(UserResource.class)
 @Import({UserStore.class, SecurityConfig.class})

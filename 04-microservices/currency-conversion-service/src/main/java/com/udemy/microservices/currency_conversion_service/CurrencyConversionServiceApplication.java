@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /*
- * @EnableFeignClients: find @FeignClient interfaces (CurrencyExchangeProxy) and generate their
- * implementations at startup - without it, the proxy bean simply doesn't exist.
+ * @EnableFeignClients: find the @FeignClient interfaces (CurrencyExchangeProxy) and write their
+ * code at startup. Without it, the proxy bean simply does not exist.
  */
 @SpringBootApplication
 @EnableFeignClients

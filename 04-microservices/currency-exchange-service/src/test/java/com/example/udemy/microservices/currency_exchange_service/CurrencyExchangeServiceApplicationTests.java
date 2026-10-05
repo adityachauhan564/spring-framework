@@ -15,7 +15,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-/* The whole service with H2 and data.sql (Eureka and the config server are off in tests). */
+/* Starts the whole service with H2 and data.sql (Eureka and the config server are switched off in tests). */
 @SpringBootTest(properties = "local.server.port=8000")
 @AutoConfigureMockMvc
 @ActiveProfiles("test")

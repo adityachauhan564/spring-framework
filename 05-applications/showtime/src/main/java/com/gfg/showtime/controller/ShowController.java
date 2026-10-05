@@ -37,6 +37,6 @@ public class ShowController {
 	@PostMapping("/add")                          // ADMIN only
 	@ResponseStatus(HttpStatus.CREATED)
 	public ShowResource addShow(@RequestBody @Valid ShowResource showResource) {
-		return showService.addShow(showResource);    // the course returned the request instead of the saved show
+		return showService.addShow(showResource);    // the course returned the request back, instead of the saved show
 	}
 }

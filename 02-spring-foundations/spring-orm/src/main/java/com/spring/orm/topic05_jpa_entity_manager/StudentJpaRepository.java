@@ -12,10 +12,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 /*
- * The same repository as topic03, written only with jakarta.persistence types.
- * @PersistenceContext injects a proxy that hands each transaction its own EntityManager
- * (so this singleton bean is safe to share between threads).
- * JPQL, like HQL, queries entity and field names.
+ * The same repository as topic03, but written only with jakarta.persistence types.
+ * @PersistenceContext injects a proxy (a stand-in) that gives each transaction its own EntityManager.
+ * So this one singleton bean is safe to share between many threads.
+ * JPQL (the JPA query language), like HQL, uses entity and field names - not table names.
  */
 @Repository
 @Transactional

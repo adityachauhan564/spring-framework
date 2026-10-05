@@ -5,9 +5,12 @@ import org.springframework.dao.DataAccessException;
 
 /*
  * Run      : ./mvnw -q -pl spring-jdbc compile exec:java -Dexec.mainClass=com.springcore.jdbc.topic05_transactions.TransactionsDemo
- * Key idea : a failing transfer WITH @Transactional leaves both balances unchanged;
- *            WITHOUT it, the receiver keeps money the sender never paid.
- * Try this : make transfer() throw a checked exception - does it still roll back?
+ * Key idea : A transaction = a group of steps that either ALL happen, or NONE happen.
+ *            - A failing transfer WITH @Transactional leaves both balances as they were.
+ *            - WITHOUT it, the receiver keeps money that the sender never paid.
+ *            - Like a payment that fails midway: with a transaction, the money never actually
+ *              leaves your account - nobody ever sees a half-done transfer.
+ * Try this : Make transfer() throw a checked exception. Does it still roll back?
  */
 public class TransactionsDemo {
 

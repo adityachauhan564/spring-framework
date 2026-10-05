@@ -12,10 +12,11 @@ import com.jbdl63.digitallibrary.dto.RangeDataDto;
 import com.jbdl63.digitallibrary.model.Author;
 
 /*
- * Redis used directly (not as a cache): its four basic data structures, one key each.
+ * Redis used directly (not as a cache). Redis = a very fast store that keeps data in memory.
+ * Here are its four basic data structures, one key each:
  *   String  AUTHOR::<id>        one value per key, here with a 30 s expiry
- *   List    AUTHOR::_List       ordered, duplicates allowed (a queue or a stack)
- *   Set     AUTHOR::_Set        unordered, no duplicates, can return random members
+ *   List    AUTHOR::_List       in order, duplicates allowed (works as a queue or a stack)
+ *   Set     AUTHOR::_Set        no order, no duplicates, can give back random members
  *   Hash    AUTHOR::_DataInHash a map inside one key: field -> value
  * Watch it happen:  docker exec -it digital-library-redis redis-cli   then  KEYS *   GET "AUTHOR::1"
  */
@@ -33,7 +34,7 @@ public class RedisService {
 
     public boolean addNewData(Author author) {
         Boolean stored = redisTemplate.opsForValue().setIfAbsent(KEY + author.getAuthorId(), author, Duration.ofSeconds(30));
-        return Boolean.TRUE.equals(stored);      // false = the key already existed, nothing was changed
+        return Boolean.TRUE.equals(stored);      // false = the key was already there, so nothing was changed
     }
 
     public Author getAuthorDetailsUsingId(Integer id) {
@@ -54,7 +55,7 @@ public class RedisService {
     }
 
     public void addNewDataToSet(Author author) {
-        redisTemplate.opsForSet().add(KEY + "_Set", author);   // the same author twice is stored once
+        redisTemplate.opsForSet().add(KEY + "_Set", author);   // adding the same author twice still stores it only once
     }
 
     public List<Author> getRandomMembers(int count) {

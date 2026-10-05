@@ -7,7 +7,7 @@
            http://www.springframework.org/schema/util
            https://www.springframework.org/schema/util/spring-util.xsd">
 
-    <!-- 1. collections defined inline, inside one bean -->
+    <!-- 1. Collections written inline, inside one bean. Only this bean can use them. -->
     <bean id="employee" class="com.springcore.topic04_injecting_collections.Employee">
         <property name="name" value="Radhe"/>
         <property name="phones">
@@ -20,7 +20,7 @@
             <set>
                 <value>Mau</value>
                 <value>Lucknow</value>
-                <value>Lucknow</value>  <!-- duplicate: a Set keeps only one -->
+                <value>Lucknow</value>  <!-- duplicate on purpose: a Set keeps only one copy -->
             </set>
         </property>
         <property name="courses">
@@ -37,7 +37,8 @@
         </property>
     </bean>
 
-    <!-- 2. standalone collections: their own beans, with a chosen implementation class -->
+    <!-- 2. Standalone collections: each one is its own bean, so other beans can share it.
+         list-class / map-class choose the exact Java class (e.g. LinkedList instead of ArrayList, TreeMap so the keys come out sorted). -->
     <util:list id="memberList" list-class="java.util.LinkedList">
         <value>Aditya</value>
         <value>Roshan</value>

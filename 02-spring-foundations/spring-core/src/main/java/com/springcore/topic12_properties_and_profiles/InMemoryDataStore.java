@@ -3,7 +3,7 @@ package com.springcore.topic12_properties_and_profiles;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-/* Only created when the "dev" profile is active. */
+/* Created only when the "dev" profile is active. */
 @Component
 @Profile("dev")
 public class InMemoryDataStore implements DataStore {

@@ -8,8 +8,8 @@ import { ProductService } from '../product.service';
 import { ProductList } from './product-list';
 
 /*
- * The component with a FAKE ProductService (useValue): the test controls exactly what "the backend"
- * returns, and checks what ends up on the page.
+ * The component with a FAKE ProductService (useValue): the test decides exactly what "the backend"
+ * returns, and checks what shows up on the page.
  */
 describe('ProductList', () => {
   const products: Product[] = [

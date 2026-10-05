@@ -3,7 +3,7 @@ package com.springcore.topic13_aop;
 import org.springframework.stereotype.Service;
 
 /*
- * Pure business logic: no logging, no timing code. The aspects add those from outside.
+ * Only business logic here: no logging code, no timing code. The aspects add those from outside.
  */
 @Service
 public class OrderService {
@@ -19,8 +19,8 @@ public class OrderService {
         }
     }
 
-    // Self-invocation pitfall: this.placeOrder(...) calls the REAL object, not the proxy,
-    // so no aspect runs for that inner call. The same is true for @Transactional.
+    // Self-invocation trap: this.placeOrder(...) calls the REAL object directly, not the proxy,
+    // so no aspect runs for that inner call. The same problem happens with @Transactional.
     public String placeTwoOrders() {
         return placeOrder("book") + " / " + this.placeOrder("pen");
     }

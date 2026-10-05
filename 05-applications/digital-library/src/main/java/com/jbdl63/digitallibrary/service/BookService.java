@@ -46,7 +46,7 @@ public class BookService {
         return book;
     }
 
-    // An issued book still has a row in books_issued, so the delete fails with a constraint error -> 409
+    // An issued book still has a row in books_issued, so the delete fails with a database rule error -> 409
     public void deleteBookById(Integer bookId) {
         bookRepository.delete(findById(bookId));
     }

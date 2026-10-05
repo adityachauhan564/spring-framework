@@ -3,8 +3,9 @@ package com.springcore.jdbc.topic02_crud_dao;
 /*
  * Topic    : CRUD with a DAO (Data Access Object)
  * Read     : Student -> StudentDao -> StudentRowMapper -> StudentDaoImpl -> CrudDemo
- * A plain class matching one row of the student table. The no-arg constructor and
- * setters are what topic03's BeanPropertyRowMapper needs.
+ * A plain class: one Student object = one row of the student table.
+ * The no-arg constructor and the setters are there because topic03's
+ * BeanPropertyRowMapper needs them.
  */
 public class Student {
 

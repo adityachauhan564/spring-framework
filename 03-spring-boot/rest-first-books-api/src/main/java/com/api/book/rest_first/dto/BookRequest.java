@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 /*
  * DTO layer: what a client SENDS to create or replace a book.
- * No id (the database assigns it) - so a client can't overwrite another book by sending an id.
+ * There is no id here (the database gives it) - so a client cannot overwrite another book by sending an id.
  */
 public record BookRequest(
         @NotBlank(message = "title is required") @Size(max = 200, message = "title is at most 200 characters") String title,

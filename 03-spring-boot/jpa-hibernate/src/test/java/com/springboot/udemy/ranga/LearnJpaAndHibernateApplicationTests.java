@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.springboot.udemy.ranga.topic03_spring_data_jpa.CourseSpringDataRepository;
 
-/* The whole app, with every startup runner: 3 topics x 3 inserts, minus 3 deletes = 6 rows. */
+/* Starts the whole app, with every startup runner: 3 topics x 3 inserts, minus 3 deletes = 6 rows left. */
 @SpringBootTest
 class LearnJpaAndHibernateApplicationTests {
 

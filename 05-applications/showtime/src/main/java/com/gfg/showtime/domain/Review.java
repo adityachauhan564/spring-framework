@@ -39,11 +39,11 @@ public class Review {
     private double rating;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)   // without @JoinColumn the column would be "movie_id" too: <field>_<id column>
+    @JoinColumn(name = "movie_id", nullable = false)   // even without @JoinColumn the column would be "movie_id": <field>_<id column>
     private Movie movie;
 
     @ManyToOne
-    private User user;                                  // who wrote it: the logged-in user
+    private User user;                                  // who wrote it: the user who is logged in
 
     @CreationTimestamp
     private Date createdDate;

@@ -15,8 +15,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /*
- * Every error leaves the API in ONE format - ProblemDetail JSON (same idea as
- * restful-web-services topic04). The service just throws BookNotFoundException.
+ * Every error leaves the API in ONE format: ProblemDetail JSON (the same idea as
+ * restful-web-services topic04). The service only throws BookNotFoundException; this class does the rest.
  */
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {

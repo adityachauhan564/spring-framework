@@ -4,10 +4,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 /*
  * Topic    : Java configuration - @Configuration, @Bean, @Import
- * Key idea : the whole container is described in Java: type-safe, refactor-friendly, no XML.
- *            This is how Spring Boot apps are configured.
+ * Key idea : The whole container is described in Java code, with no XML at all.
+ *            - Type-safe: a spelling mistake is caught by the compiler, not at runtime.
+ *            - Refactor-friendly: rename a class in your IDE and the config updates too.
+ *            - This is how Spring Boot apps are configured.
  * Run      : ./mvnw -q -pl spring-core compile exec:java -Dexec.mainClass=com.springcore.topic11_java_config.JavaConfigDemo
- * Try this : change @Configuration to @Component on AppConfig - the "same Engine" line turns false.
+ * Try this : Change @Configuration to @Component on AppConfig - the "same Engine" line becomes false.
  */
 public class JavaConfigDemo {
 

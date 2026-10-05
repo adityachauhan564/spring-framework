@@ -43,12 +43,12 @@ class TransferServiceTest {
     void failedTransferRollsBackTheCredit() {
         assertThrows(DataAccessException.class, () -> transfers.transfer(1, 2, 1000));
         assertEquals(500, accounts.balance(1));
-        assertEquals(100, accounts.balance(2));   // the credit to Ravi was undone
+        assertEquals(100, accounts.balance(2));   // the money added to Ravi was taken back (rolled back)
     }
 
     @Test
     void withoutATransactionTheCreditIsKept() {
         assertThrows(DataAccessException.class, () -> transfers.transferWithoutTransaction(1, 2, 1000));
-        assertEquals(1100, accounts.balance(2));  // money created from nothing - the bug transactions prevent
+        assertEquals(1100, accounts.balance(2));  // money created out of nothing - exactly the bug that transactions prevent
     }
 }

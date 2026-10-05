@@ -12,7 +12,7 @@ import org.springframework.data.domain.Sort;
 import com.api.book.rest_first.dao.BookRepository;
 import com.api.book.rest_first.entities.Book;
 
-/* Only the data layer, on H2, with the 7 sample books from data.sql. Rolled back after each test. */
+/* Only the data layer, on H2, with the 7 sample books from data.sql. Every test is rolled back (undone) afterwards. */
 @DataJpaTest
 class BookRepositoryTest {
 

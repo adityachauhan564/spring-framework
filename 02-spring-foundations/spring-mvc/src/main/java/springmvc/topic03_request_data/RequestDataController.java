@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /*
  * Topic    : Reading data from the request
- * Key idea : Spring converts request text into typed method parameters for you:
- *   @RequestParam  - query string:  /greet?name=Asha
- *   @PathVariable  - part of the path: /students/7  (identifies ONE resource)
- *   @ModelAttribute - many parameters into one object: /search?city=Pune&minAge=18
- *   The old way was request.getParameter("name") on an HttpServletRequest, as a String.
- * Try this : open /springmvc/students/abc - why does Spring answer 400 Bad Request?
+ * Key idea : Everything in a request arrives as text. Spring turns that text into
+ *            method parameters of the right type (int, String, objects) for you:
+ *   @RequestParam  - from the query string:  /greet?name=Asha
+ *   @PathVariable  - from a part of the path: /students/7  (points to ONE thing, like a roll number)
+ *   @ModelAttribute - many parameters packed into one object: /search?city=Pune&minAge=18
+ *   The old way was request.getParameter("name") on an HttpServletRequest - always a String.
+ * Try this : Open /springmvc/students/abc. Why does Spring answer 400 Bad Request?
  */
 @Controller
 public class RequestDataController {

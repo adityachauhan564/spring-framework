@@ -22,9 +22,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 /*
- * One author writes many books: the "one" side of a one-to-many.
- * mappedBy = "author" says Book.author owns the relationship (the author_id column lives in
- * library_book), so this list is just the other view of the same foreign key.
+ * One author writes many books: this is the "one" side of a one-to-many.
+ * mappedBy = "author" says Book.author owns the relationship (the author_id column is in
+ * library_book). So this list is only another view of the same foreign key.
+ * Like a teacher and students: the link is written in each student's record ("class teacher: X").
  */
 @Entity
 @Table(name = "library_author")
@@ -33,7 +34,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = "booksList")   // Book.toString prints its author: printing the books here too would loop forever
+@ToString(exclude = "booksList")   // Book.toString prints its author. Printing the books here too would go round and round forever
 public class Author {
 
     @Id
@@ -47,9 +48,9 @@ public class Author {
     private String authorAddress;
 
     // Deleting an author deletes their books too (CascadeType.ALL).
-    // Not in the JSON: a book already shows its author, and author -> books -> author would never end.
+    // Not in the JSON: a book already shows its author, and author -> books -> author -> ... would never end.
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     @JsonIgnore
-    @Builder.Default                 // without it, the builder ignores "= new ArrayList<>()" and leaves null
+    @Builder.Default                 // without it, the builder ignores "= new ArrayList<>()" and leaves the list null
     private List<Book> booksList = new ArrayList<>();
 }

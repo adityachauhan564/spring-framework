@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 
 import { Header } from './header/header';
 
-// The root component: the header on every page, then whatever the router picks (see app.routes.ts)
+// The root component: the header on every page, and below it whatever page the router picks (see app.routes.ts)
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, Header],

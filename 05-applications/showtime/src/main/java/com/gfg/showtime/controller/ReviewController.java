@@ -26,7 +26,7 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    // @AuthenticationPrincipal = the logged-in user, taken from the security context, not from the request body
+    // @AuthenticationPrincipal = the logged-in user, taken from Spring Security - never from the request body
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public ReviewResource addReview(@RequestBody @Valid ReviewResource reviewRequest, @AuthenticationPrincipal UserDetails user) {

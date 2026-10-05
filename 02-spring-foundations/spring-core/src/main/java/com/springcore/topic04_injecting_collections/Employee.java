@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-/* Receives each collection type through a setter. */
+/* Gets each kind of collection (List, Set, Map, Properties) through its own setter. */
 public class Employee {
 
     private String name;

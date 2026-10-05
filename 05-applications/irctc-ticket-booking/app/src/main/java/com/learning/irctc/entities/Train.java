@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 /*
- * A train as stored in trains.json. A record gives the constructor, getters, equals and toString,
+ * A train, as stored in trains.json. A record gives you the constructor, getters, equals and toString,
  * and Jackson (2.12+) can read JSON straight into it.
  *
  *   seats         a grid, one list per coach row: 0 = free, 1 = booked
  *   stations      in the order the train visits them
  *   stationTimes  station -> departure time
- * Field names are camelCase here and snake_case in the file (train_no); JsonStore maps between them.
+ * Field names are camelCase here (trainNo) and snake_case in the file (train_no). JsonStore converts between them.
  */
 public record Train(String trainId, String trainNo, List<List<Integer>> seats,
                     Map<String, String> stationTimes, List<String> stations) {

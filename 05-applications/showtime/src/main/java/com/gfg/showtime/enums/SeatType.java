@@ -1,6 +1,6 @@
 package com.gfg.showtime.enums;
 
-// An enum can carry data: each seat type knows its price (the course hard-coded 100 for every seat)
+// An enum can carry data: each seat type knows its own price (the course hard-coded 100 for every seat)
 public enum SeatType {
 	REGULAR(150),
 	RECLINER(300);

@@ -7,7 +7,7 @@
            http://www.springframework.org/schema/context
            https://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!-- find every @Component / @Service / @Repository / @Controller in this package
-         (also switches on annotation-config, so @Autowired and @Value work) -->
+    <!-- Finds every @Component / @Service / @Repository / @Controller class in this package.
+         It also switches on annotation-config, so @Autowired and @Value work too. -->
     <context:component-scan base-package="com.springcore.topic07_component_scanning"/>
 </beans>

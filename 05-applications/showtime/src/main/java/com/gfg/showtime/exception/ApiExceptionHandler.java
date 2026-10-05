@@ -20,7 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 /*
  * Every error leaves as a ProblemDetail (RFC 9457): {"status":404,"title":"Not Found","detail":"..."}.
  * Extending ResponseEntityExceptionHandler gives Spring MVC's own errors (bad JSON, wrong method...)
- * the same format; the handlers below add this app's exceptions.
+ * the same format. The handlers below add this app's own exceptions.
  * Without an advice like this, a NotFoundException would reach the client as a 500.
  */
 @RestControllerAdvice
@@ -36,7 +36,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
     }
 
-    // Two bookings raced for the same seat and this one lost (see ShowSeat's @Version)
+    // Two bookings went for the same seat at the same time, and this one lost (see ShowSeat's @Version)
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     public ProblemDetail lostRace(ObjectOptimisticLockingFailureException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Seats were just booked by someone else, please try again");
@@ -47,7 +47,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Conflicts with existing data");
     }
 
-    // @Valid failed: 400 with one message per broken field
+    // @Valid failed: 400, with one message for each field that broke a rule
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
             HttpHeaders headers, HttpStatusCode status, WebRequest request) {

@@ -25,9 +25,10 @@ import com.api.book.rest_first.exceptions.BookNotFoundException;
 import com.api.book.rest_first.services.BookService;
 
 /*
- * Only the web layer. @MockitoBean replaces the real BookService with a Mockito mock, so this
- * test checks HTTP behaviour (status codes, JSON, validation) without any database.
- * when(...).thenReturn(...) scripts the mock; verify(...) checks how it was called.
+ * Only the web layer. @MockitoBean replaces the real BookService with a Mockito mock
+ * (a fake object that returns whatever we tell it to), so this test checks HTTP behaviour
+ * (status codes, JSON, validation) without any database.
+ * when(...).thenReturn(...) tells the mock what to answer. verify(...) checks how it was called.
  */
 @WebMvcTest(BookController.class)
 class BookControllerTest {

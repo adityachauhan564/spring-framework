@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /*
- * One place that turns exceptions into HTTP responses, instead of try/catch in every controller.
+ * ONE place that turns exceptions into HTTP responses, instead of try/catch in every controller.
  * Each handler's parameter type must match the exception it handles.
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // @Valid failed: answer 400 with {"field": "message"} for every broken field
+    // @Valid failed: answer 400 with {"field": "message"} for every field that broke a rule
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException exception) {
         Map<String, String> errors = new LinkedHashMap<>();
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
 
-    // The database refused: a duplicate unique value, or deleting a row others still point to
+    // The database said no: a duplicate unique value, or deleting a row that other rows still point to
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleConstraint(DataIntegrityViolationException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT)

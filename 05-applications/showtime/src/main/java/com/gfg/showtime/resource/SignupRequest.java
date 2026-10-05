@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-// No role field: everyone who signs up is a USER. Letting the client send "role":"ADMIN" would be a hole.
+// No role field: everyone who signs up is a USER. Letting the client send "role":"ADMIN" would be a security hole.
 public record SignupRequest(
         @NotBlank(message = "Name is mandatory") String name,
         @NotBlank @Size(min = 8, message = "Password needs at least 8 characters") String password,

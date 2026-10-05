@@ -7,8 +7,8 @@ import com.spring.orm.topic02_session_factory_config.HibernateConfig;
 
 /*
  * Run      : ./mvnw -q -pl spring-orm compile exec:java -Dexec.mainClass=com.spring.orm.topic03_hibernate_crud_and_hql.HibernateCrudDemo
- *            add -Dshow.sql=true to see every SQL statement Hibernate writes for you
- * Try this : add findByNameStartingWith(String prefix) using HQL "like".
+ *            Add -Dshow.sql=true to see every SQL statement Hibernate writes for you.
+ * Try this : Add findByNameStartingWith(String prefix) using HQL "like".
  */
 public class HibernateCrudDemo {
 

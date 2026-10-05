@@ -25,14 +25,14 @@ import com.api.book.rest_first.services.BookService;
 import jakarta.validation.Valid;
 
 /*
- * CONTROLLER layer: HTTP only - read the request, call the service, choose the status code.
+ * CONTROLLER layer: only HTTP work - read the request, call the service, choose the status code.
  *   GET    /books?author=&page=&size=&sort=   200, one page of books
  *   GET    /books/{id}                        200 or 404
  *   POST   /books                             201 + Location, or 400
  *   PUT    /books/{id}                        200, 400 or 404
  *   DELETE /books/{id}                        204 or 404
  * Paging: Spring fills Pageable from ?page=0&size=3&sort=title,desc (page numbers start at 0).
- * PagedModel gives stable JSON: {"content":[...], "page":{"size","number","totalElements","totalPages"}}.
+ * PagedModel gives JSON whose shape never changes: {"content":[...], "page":{"size","number","totalElements","totalPages"}}.
  */
 @RestController
 @RequestMapping("/books")

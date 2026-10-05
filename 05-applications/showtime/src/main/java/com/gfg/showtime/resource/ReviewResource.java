@@ -5,8 +5,8 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-// A record has a constructor with every field, which Jackson uses to read JSON: no setters needed.
-// (The course's Lombok class had no no-args constructor, so POST /review/add couldn't read its body.)
+// A record has a constructor with every field, and Jackson uses it to read JSON - no setters needed.
+// (The course's Lombok class had no no-args constructor, so POST /review/add could not read its body.)
 public record ReviewResource(
         Long id,
         @NotNull(message = "movieId is mandatory") Long movieId,

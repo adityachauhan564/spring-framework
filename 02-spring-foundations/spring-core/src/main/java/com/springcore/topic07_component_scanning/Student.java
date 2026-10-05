@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /*
- * @Component = "Spring, create a bean of this class for me" - no XML <bean> needed.
- * The default bean name is the class name with a lower-case first letter: "student".
- * @Value injects a literal (topic10 uses it for SpEL, topic12 for properties).
+ * @Component = "Spring, please create a bean of this class for me". No XML <bean> needed.
+ * The default bean name is the class name with a small first letter: "student".
+ * @Value puts a fixed value into the field
+ * (topic10 uses it for SpEL expressions, topic12 for values from a properties file).
  */
 @Component
 public class Student {

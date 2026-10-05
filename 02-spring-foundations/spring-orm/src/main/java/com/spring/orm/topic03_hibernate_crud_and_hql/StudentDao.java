@@ -12,14 +12,16 @@ import com.spring.orm.topic01_entity_mapping.Student;
 
 /*
  * Topic    : CRUD and HQL with the SessionFactory - the modern native-Hibernate way
- * Key idea : inject the SessionFactory; inside a @Transactional method,
- *            getCurrentSession() returns the Session bound to that transaction.
- *            No SQL for CRUD - Hibernate generates it from the @Entity mapping.
- *            HQL queries use CLASS and FIELD names (Student, studentCity), not table/column names.
+ * Key idea : - Inject the SessionFactory. Inside a @Transactional method,
+ *              getCurrentSession() gives you the Session that belongs to that transaction.
+ *              (A Session = one conversation with the database.)
+ *            - No SQL for CRUD - Hibernate writes it from the @Entity mapping.
+ *            - HQL (Hibernate Query Language) looks like SQL, but uses CLASS and FIELD names
+ *              (Student, studentCity), not table and column names.
  * Compare  : spring-jdbc topic02 does the same CRUD with hand-written SQL.
  */
 @Repository
-@Transactional                      // every public method runs in a transaction
+@Transactional                      // every public method runs inside a transaction
 public class StudentDao {
 
     private final SessionFactory sessionFactory;
@@ -33,11 +35,11 @@ public class StudentDao {
     }
 
     public Student save(Student student) {
-        session().persist(student);         // INSERT; the generated id is set on the object
+        session().persist(student);         // INSERT. After this, the new id is already set on the object
         return student;
     }
 
-    @Transactional(readOnly = true)         // a hint: no changes expected, Hibernate can skip dirty checks
+    @Transactional(readOnly = true)         // a hint: "this only reads", so Hibernate can skip checking for changes
     public Optional<Student> findById(int id) {
         return Optional.ofNullable(session().get(Student.class, id));
     }
@@ -59,7 +61,7 @@ public class StudentDao {
         if (student == null) {
             return false;
         }
-        student.setStudentCity(newCity);    // no update() call: Hibernate saves the change at commit
+        student.setStudentCity(newCity);    // no update() call needed: Hibernate saves the change by itself at commit
         return true;
     }
 

@@ -23,7 +23,7 @@ import com.jayway.jsonpath.JsonPath;
 
 /*
  * The whole API over HTTP (MockMvc) on H2 with the data.sql sample products.
- * @DirtiesContext: tests change the data, so each test method gets a fresh application (and database).
+ * @DirtiesContext: the tests change the data, so each test method gets a fresh application (and a fresh database).
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -78,7 +78,7 @@ class ProductApiTest {
 		mvc.perform(delete("/api/products/999")).andExpect(status().isNotFound());
 	}
 
-	// What the browser does before a cross-origin PUT: ask permission with an OPTIONS "preflight"
+	// What the browser does before a cross-origin PUT: it first asks permission with an OPTIONS "preflight" request
 	@Test
 	void corsAllowsOnlyTheAngularDevServer() throws Exception {
 		mvc.perform(options("/api/products/1")

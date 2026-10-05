@@ -21,8 +21,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 /*
- * The owning side of User *..* Book. A many-to-many needs a third table: books_issued has one row
- * per (user_id, book_id) pair. Adding a book to issuedBooks inserts a row; removing it deletes the row.
+ * The owning side of User *..* Book. A many-to-many needs a third table (a join table):
+ * books_issued has one row for each (user_id, book_id) pair - like the library's issue register.
+ * Adding a book to issuedBooks inserts a row. Removing it deletes the row.
  */
 @Entity
 @Table(name = "library_user")
@@ -45,7 +46,7 @@ public class User {
     @Email(message = "Email is not valid")
     private String userEmailId;
 
-    // Managed through POST/DELETE /v1/users/{id}/books/{bookId}, never set directly by a client
+    // Changed only through POST/DELETE /v1/users/{id}/books/{bookId}, never set directly by a client
     @ManyToMany
     @JoinTable(
             name = "books_issued",

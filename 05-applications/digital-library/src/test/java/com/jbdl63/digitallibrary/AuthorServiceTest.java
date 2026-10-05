@@ -24,8 +24,8 @@ import com.jbdl63.digitallibrary.repository.AuthorRepository;
 import com.jbdl63.digitallibrary.service.AuthorService;
 
 /*
- * A plain unit test: no Spring, no database. The repository is a Mockito mock, so each test decides
- * what it returns (when...thenReturn) and checks how the service used it (verify / ArgumentCaptor).
+ * A plain unit test: no Spring, no database. The repository is a Mockito mock (a fake), so each test
+ * decides what it returns (when...thenReturn) and checks how the service used it (verify / ArgumentCaptor).
  */
 @ExtendWith(MockitoExtension.class)
 class AuthorServiceTest {
@@ -43,7 +43,7 @@ class AuthorServiceTest {
 
         Author saved = authorService.addNewAuthor(author);
 
-        assertThat(saved.getAuthorId()).isNull();     // the database will generate it
+        assertThat(saved.getAuthorId()).isNull();     // the database will give it an id
     }
 
     @Test

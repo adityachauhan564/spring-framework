@@ -23,8 +23,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /*
- * Entities use @Getter/@Setter, not @Data: @Data also generates equals/hashCode/toString over every
- * field, relationships included, which loads lazy collections and can loop forever (Movie -> Show -> Movie).
+ * Entities use @Getter/@Setter, not @Data. @Data also generates equals/hashCode/toString over EVERY
+ * field, relationships included. That loads lazy collections, and can go round in a loop forever
+ * (Movie -> Show -> Movie -> ...).
  */
 @Entity
 @Table(name = "movies")
@@ -42,10 +43,10 @@ public class Movie {
 	@Column(nullable = false, unique = true)
 	private String title;
 
-	@Enumerated(EnumType.STRING)      // stored as "ACTION", not as a number that changes if the enum is reordered
+	@Enumerated(EnumType.STRING)      // stored as "ACTION", not as a number (a number would change if someone reorders the enum)
 	private Genre genre;
 
-	private Double rating;            // the average of its reviews, null until the first review
+	private Double rating;            // the average of its reviews; null until the first review comes in
 
 	@OneToMany(mappedBy = "movie")
 	@Builder.Default

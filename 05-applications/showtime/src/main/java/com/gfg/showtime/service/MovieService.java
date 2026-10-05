@@ -13,9 +13,9 @@ import com.gfg.showtime.repository.MovieRepository;
 import com.gfg.showtime.resource.MovieResource;
 
 /*
- * Services return resources (DTOs), not entities, and read inside a transaction.
- * spring.jpa.open-in-view=false closes the database session when the service returns,
- * so lazy lists (a movie's reviews) must be read here.
+ * Services return resources (DTOs), not entities, and read the data inside a transaction.
+ * spring.jpa.open-in-view=false closes the database session as soon as the service returns,
+ * so lazy lists (like a movie's reviews) must be read here, before that happens.
  */
 @Service
 @Transactional(readOnly = true)

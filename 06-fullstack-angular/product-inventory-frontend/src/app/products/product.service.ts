@@ -4,16 +4,17 @@ import { Observable } from 'rxjs';
 
 import { Product } from './product';
 
-// Where product-service-backend runs. Calling another port is a cross-origin call: the backend's
-// CorsConfig must allow http://localhost:4200, or the browser blocks the response.
+// Where product-service-backend runs. Calling another port is a cross-origin call, so the backend's
+// CorsConfig must allow http://localhost:4200 - otherwise the browser blocks the response.
 export const API_URL = 'http://localhost:8080/api/products';
 
 /*
  * All HTTP calls for products, in one place. Components never build URLs themselves.
- * HttpClient methods return an Observable: nothing is sent until someone subscribes,
- * and the JSON body arrives already parsed into the given type.
+ * HttpClient methods return an Observable: nothing is sent until someone subscribes
+ * (like a newspaper that is delivered only after you subscribe), and the JSON body
+ * arrives already converted into the given type.
  */
-@Injectable({ providedIn: 'root' })   // one shared instance for the whole app
+@Injectable({ providedIn: 'root' })   // one shared object for the whole app
 export class ProductService {
   private readonly http = inject(HttpClient);
 

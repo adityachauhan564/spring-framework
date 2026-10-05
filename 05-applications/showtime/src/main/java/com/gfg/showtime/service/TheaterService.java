@@ -20,7 +20,7 @@ public class TheaterService {
 	}
 
 	// Every theatre gets the same small layout: row 1 regular (1A-1E), row 2 recliners (2A-2E).
-	// cascade = ALL on Theater.seats saves the seats together with the theatre.
+	// cascade = ALL on Theater.seats means saving the theatre also saves its seats.
 	@Transactional
 	public TheaterResource addTheater(TheaterResource request) {
 		Theater theater = Theater.toEntity(request);

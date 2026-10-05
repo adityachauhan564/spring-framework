@@ -15,8 +15,8 @@ import com.jbdl63.digitallibrary.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 
 /*
- * @DataJpaTest starts only the JPA part (entities, repositories, H2, data.sql) and rolls every
- * test back afterwards. It checks the derived queries and the relationship mapping against real SQL.
+ * @DataJpaTest starts only the JPA part (entities, repositories, H2, data.sql), and rolls back (undoes)
+ * every test afterwards. It checks the derived queries and the relationship mapping against real SQL.
  */
 @DataJpaTest
 class RepositoryTest {
@@ -48,7 +48,7 @@ class RepositoryTest {
         Integer rows = jdbc.queryForObject("select count(*) from books_issued where user_id = 1 and book_id = 3", Integer.class);
         assertThat(rows).isEqualTo(1);
 
-        entityManager.clear();                        // forget loaded objects: the next read comes from the database
+        entityManager.clear();                        // forget the loaded objects, so the next read really comes from the database
         assertThat(userRepository.findById(1).orElseThrow().getIssuedBooks()).extracting(Book::getBookId).containsExactly(3);
     }
 }

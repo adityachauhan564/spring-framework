@@ -7,9 +7,10 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 /*
- * The resource. A record: immutable, so the store replaces users instead of editing them.
+ * The resource. It is a record, so it is immutable (cannot be changed after creation).
+ * That is why the store REPLACES a user instead of editing it.
  * The validation annotations are used by topic04 (@Valid in UserResource).
- * id is Integer, not int: a user sent in a POST body has no id yet (null).
+ * id is Integer, not int: a user sent in a POST body has no id yet, so it is null.
  */
 public record User(
         Integer id,

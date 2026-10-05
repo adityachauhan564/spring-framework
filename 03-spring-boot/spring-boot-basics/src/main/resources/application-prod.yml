@@ -1,5 +1,5 @@
 # Loaded IN ADDITION to application.yml when the "prod" profile is active (topic03).
-# Only the keys that differ are listed; they override the defaults.
+# Only the keys that are different are listed here. They win over the defaults.
 app:
   environment-label: PRODUCTION
   greeting:

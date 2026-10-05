@@ -25,9 +25,10 @@ import lombok.Setter;
 /*
  * One seat for one show: the thing people actually book.
  *
- * @Version = optimistic locking. Hibernate adds "where version = ?" to every update and increments it.
- * Two customers who both read this seat as free can both try to book it; the first update wins,
- * the second finds the version changed, updates 0 rows and fails -> TicketService answers 409.
+ * @Version = optimistic locking. Hibernate adds "where version = ?" to every update, and increases the version.
+ * Two customers who both see this seat as free can both try to book it. The first update wins.
+ * The second finds the version has changed, updates 0 rows and fails -> TicketService answers 409.
+ * Like two people grabbing the last samosa: whoever reaches first gets it, the other is told "sorry, gone".
  * Without it, the second booking would silently overwrite the first: one seat, two tickets.
  */
 @Entity
@@ -57,7 +58,7 @@ public class ShowSeat {
 	private boolean booked;
 
 	@Column(name = "booked_at")
-	private Date bookedAt;                 // set when booked (the course used @CreationTimestamp: the time the seat was created)
+	private Date bookedAt;                 // set when the seat is booked (the course used @CreationTimestamp: the time the seat was created)
 
 	@Version
 	private long version;
@@ -66,7 +67,7 @@ public class ShowSeat {
 	private Show show;
 
 	@ManyToOne
-	private Ticket ticket;                 // null while the seat is free
+	private Ticket ticket;                 // stays null while the seat is free
 
 	public static List<ShowSeatsResource> toResource(List<ShowSeat> seats) {
 		return seats == null ? List.of() : seats.stream().map(ShowSeat::toResource).toList();

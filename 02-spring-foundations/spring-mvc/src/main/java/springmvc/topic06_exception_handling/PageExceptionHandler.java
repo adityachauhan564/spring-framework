@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /*
  * @ControllerAdvice = shared code for many controllers. Its @ExceptionHandler methods
- * catch exceptions thrown by ANY controller method and choose the response instead.
- *   - a known problem (UserNotFoundException) -> 404 with a helpful message
- *   - anything else                          -> 500 with a generic message: never show
- *     stack traces or internal details to users (log them instead)
- * The JSON API (topic07) has its own advice returning JSON, so this one returns pages.
+ * catch exceptions thrown by ANY controller method, and decide what to send back instead.
+ * Like a bank's complaint desk: every counter sends its problems to one desk.
+ *   - a known problem (UserNotFoundException) -> 404, with a helpful message
+ *   - anything else                          -> 500, with a general message. Never show
+ *     stack traces or internal details to users (write them to the log instead)
+ * The JSON API (topic07) has its own advice that returns JSON, so this one returns pages.
  */
 @ControllerAdvice
 public class PageExceptionHandler {
@@ -29,12 +30,12 @@ public class PageExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String unexpected(Exception e, Model model) throws Exception {
         if (e.getClass().getName().startsWith("org.springframework.")) {
-            // Spring's own request errors (bad parameter type, unknown URL, wrong HTTP method,
-            // unreadable JSON...) keep their proper 400/404/405 status: rethrowing hands them
-            // back to Spring's default handling instead of turning them into a 500.
+            // Spring's own request errors (wrong parameter type, unknown URL, wrong HTTP method,
+            // broken JSON...) must keep their proper 400/404/405 status. Throwing them again
+            // gives them back to Spring's default handling, instead of turning them into a 500.
             throw e;
         }
-        System.err.println("Unexpected error: " + e);      // a real app would use a logger
+        System.err.println("Unexpected error: " + e);      // a real app would use a logger here
         model.addAttribute("status", 500);
         model.addAttribute("message", "Sorry, something went wrong. Please try again later.");
         return "error";

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 /*
  * The response: the exchange rate from the other service, multiplied by the quantity.
- * "environment" says which currency-exchange INSTANCE answered, plus how it was called.
+ * "environment" says which currency-exchange INSTANCE answered, and how it was called.
  */
 public record CurrencyConversion(Long id, String from, String to, BigDecimal quantity,
                                  BigDecimal conversionMultiple, BigDecimal totalCalculatedAmount, String environment) {

@@ -4,9 +4,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 
 /*
- * Way 3: @PostConstruct / @PreDestroy (jakarta.annotation) - the recommended way.
- * Needs annotation processing: <context:annotation-config/>, component scanning,
- * or an AnnotationConfigApplicationContext.
+ * Way 3: @PostConstruct / @PreDestroy (from jakarta.annotation) - the recommended way.
+ * @PostConstruct = "run this right after the bean is ready". @PreDestroy = "run this just before it is removed".
+ * Spring must be told to read annotations: use <context:annotation-config/>,
+ * component scanning, or an AnnotationConfigApplicationContext.
  */
 public class ReportScheduler {
 

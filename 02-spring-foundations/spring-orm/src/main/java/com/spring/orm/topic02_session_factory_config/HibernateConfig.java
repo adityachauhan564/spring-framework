@@ -14,13 +14,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /*
  * Topic    : Wiring Hibernate into Spring - the bean chain
- * Key idea : DataSource -> LocalSessionFactoryBean -> SessionFactory -> HibernateTransactionManager
- *              DataSource          : connections (same as spring-jdbc)
- *              SessionFactory      : Hibernate's engine; knows your @Entity classes
- *              TransactionManager  : lets @Transactional begin/commit/rollback Hibernate sessions
- *            hibernate-config.xml in resources is the SAME chain in XML (what the original
- *            tutorial used); compare them side by side.
- *            The package is still called "hibernate5", but Spring 6.2 runs it on Hibernate 6.
+ * Key idea : Hibernate needs a chain of beans, each one built from the one before:
+ *              DataSource -> LocalSessionFactoryBean -> SessionFactory -> HibernateTransactionManager
+ *              DataSource          : gives database connections (same as spring-jdbc)
+ *              SessionFactory      : Hibernate's engine. It knows all your @Entity classes.
+ *              TransactionManager  : lets @Transactional begin / commit / roll back Hibernate sessions
+ *            - Like a car: fuel line (DataSource) -> engine (SessionFactory) -> gearbox (TransactionManager).
+ *            - hibernate-config.xml in resources is the SAME chain written in XML
+ *              (the original tutorial used XML). Compare the two side by side.
+ *            - The package is still called "hibernate5", but Spring 6.2 runs it on Hibernate 6.
  */
 @Configuration
 @EnableTransactionManagement
@@ -37,7 +39,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean factory = new LocalSessionFactoryBean();
         factory.setDataSource(dataSource);
-        factory.setPackagesToScan(ENTITY_PACKAGE);          // find the @Entity classes
+        factory.setPackagesToScan(ENTITY_PACKAGE);          // look in this package for the @Entity classes
         factory.setHibernateProperties(hibernateProperties());
         return factory;                                     // Spring turns this into a SessionFactory bean
     }
@@ -49,13 +51,13 @@ public class HibernateConfig {
 
     static Properties hibernateProperties() {
         Properties props = new Properties();
-        // create the tables from the entities at startup, drop them at shutdown (learning only;
-        // real apps use "validate" plus a migration tool such as Flyway)
+        // create the tables from the entities at startup, and drop them at shutdown. Only for learning!
+        // Real apps use "validate" plus a migration tool such as Flyway (which keeps versioned SQL scripts).
         props.setProperty("hibernate.hbm2ddl.auto", "create-drop");
         props.setProperty("hibernate.show_sql", System.getProperty("show.sql", "false"));
-        // lets topic04 count how many SQL statements Hibernate really sent
+        // lets topic04 count how many SQL statements Hibernate really sent to the database
         props.setProperty("hibernate.generate_statistics", "true");
-        // no hibernate.dialect needed: Hibernate 6 detects the database itself
+        // no hibernate.dialect needed: Hibernate 6 finds out which database it is talking to by itself
         return props;
     }
 }
