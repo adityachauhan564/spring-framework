@@ -9,7 +9,7 @@
 <body class="container py-4">
 <%@ include file="nav.jspf" %>
 
-<%-- chosen by PageExceptionHandler; the HTTP status code is set by @ResponseStatus --%>
+<%-- PageExceptionHandler chooses this page. The HTTP status code is set by @ResponseStatus --%>
 <h1 class="text-danger">Error ${status}</h1>
 <p><c:out value="${message}"/></p>
 <p><a href="<c:url value='/'/>">Back to the home page</a></p>

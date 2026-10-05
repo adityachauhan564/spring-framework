@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import springmvc.topic04_service_and_dao_layers.UserService;
 
 /*
- * The controller just THROWS - it contains no try/catch and no error-page code.
+ * The controller only THROWS. It has no try/catch and no error-page code.
  * PageExceptionHandler turns the exception into a proper 404 page.
- * Try this : open /springmvc/users/999 and /springmvc/error-demo.
+ * Try this : Open /springmvc/users/999 and /springmvc/error-demo.
  */
 @Controller
 public class UserPageController {
@@ -33,7 +33,7 @@ public class UserPageController {
         return "user";
     }
 
-    // an unexpected bug, to show the catch-all handler
+    // a bug on purpose, to show the catch-all handler at work
     @GetMapping("/error-demo")
     public String errorDemo() {
         throw new IllegalStateException("something broke inside the application");
