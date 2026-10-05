@@ -14,6 +14,10 @@ target/
 build/
 .gradle/
 *.class
+out/
+
+# AI-assistant scratch space (Superpowers workflow workspaces)
+.superpowers/
 
 # Node / Angular
 node_modules/
