@@ -18,8 +18,8 @@ import com.learning.springboot.basics.topic01_how_boot_starts.GreetingService;
 import com.learning.springboot.basics.topic02_configuration_properties.ShopProperties;
 
 /*
- * ApplicationContextRunner starts a tiny, fast context with only the classes and properties
- * you give it - the standard way to test conditions and configuration binding.
+ * ApplicationContextRunner starts a tiny, fast Spring context with only the classes and properties
+ * you give it. This is the standard way to test conditions and configuration binding.
  */
 class ConditionsAndPropertiesTest {
 
@@ -51,7 +51,7 @@ class ConditionsAndPropertiesTest {
     void relaxedBindingFillsTheRecord() {
         shop.withPropertyValues("app.shop.discount-percent=10").run(context -> {
             ShopProperties properties = context.getBean(ShopProperties.class);
-            assertEquals(20, properties.maxItems());       // max-items -> maxItems
+            assertEquals(20, properties.maxItems());       // max-items in the config filled maxItems (relaxed binding)
             assertEquals("a@example.com", properties.contact().email());
         });
     }
