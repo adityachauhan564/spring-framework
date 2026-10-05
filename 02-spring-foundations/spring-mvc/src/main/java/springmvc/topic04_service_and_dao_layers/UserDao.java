@@ -7,7 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 /*
- * DATA layer: only talks to the database (the spring-orm topic03 style).
+ * DATA layer: its only job is talking to the database (the spring-orm topic03 style).
  * No @Transactional here - the service decides where a transaction starts and ends.
  */
 @Repository

@@ -8,11 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 /*
- * The database row. It stores a password HASH, never the password itself:
- * the old version saved the plain password and success.jsp printed it back.
+ * One row of the user table. It stores a password HASH, never the password itself.
+ * (A hash is a scrambled one-way version: you can check a password against it,
+ * but you cannot get the password back from it.)
+ * The old version saved the plain password, and success.jsp even printed it back!
  */
 @Entity
-@Table(name = "app_user")               // "user" is a reserved word in several databases
+@Table(name = "app_user")               // not "user": that is a reserved word in several databases
 public class User {
 
     @Id
@@ -55,6 +57,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User[id=" + id + ", userName=" + userName + ", email=" + email + "]";   // never log password data
+        return "User[id=" + id + ", userName=" + userName + ", email=" + email + "]";   // never print or log password data
     }
 }
